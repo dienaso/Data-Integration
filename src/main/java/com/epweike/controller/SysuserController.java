@@ -27,7 +27,7 @@ import javax.validation.Valid;
  * @author wuxp
  */
 @Controller
-public class SysuserController {
+public class SysuserController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(SysuserController.class);
 
     @Autowired

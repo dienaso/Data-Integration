@@ -92,7 +92,7 @@
 				jQuery(grid_selector).trigger("reloadGrid");
 				alert(12);
 			}
-			,1000);
+			,1000000);
 			
 			//enable search/filter toolbar
 			//jQuery(grid_selector).jqGrid('filterToolbar',{defaultSearch:true,stringResult:true})
@@ -107,6 +107,9 @@
 				}, 0);
 			}
 			//enable datepicker
+			
+			
+			
 			function pickDate( cellvalue, options, cell ) {
 				setTimeout(function(){
 					$(cell) .find('input[type=text]')

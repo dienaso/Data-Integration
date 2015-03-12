@@ -25,7 +25,7 @@ import javax.validation.Valid;
  * @author wuxp
  */
 @Controller
-public class MenuController {
+public class MenuController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
