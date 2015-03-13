@@ -55,20 +55,6 @@
 
 							<div class="space-6"></div>
 							
-							<div class="alert alert-danger">
-								<button type="button" class="close" data-dismiss="alert">
-									<i class="icon-remove"></i>
-								</button>
-
-								<strong>
-									<i class="icon-remove"></i>
-									Oh snap!
-								</strong>
-
-								Change a few things up and try submitting again.
-								<br />
-							</div>
-
 							<div class="position-relative">
 								<div id="login-box" class="login-box visible widget-box no-border">
 									<div class="widget-body">
@@ -80,7 +66,7 @@
 
 											<div class="space-6"></div>
 
-											<form action="/login.action" method="post">
+											<form action="/j_spring_security_check" method="post">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -99,11 +85,6 @@
 													<div class="space"></div>
 
 													<div class="clearfix">
-														<label class="inline">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"> Remember Me</span>
-														</label>
-
 														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="icon-key"></i>
 															登陆

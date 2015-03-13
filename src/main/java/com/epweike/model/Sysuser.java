@@ -16,9 +16,8 @@ public class Sysuser extends BaseModel {
 	 * @param userName
 	 * @param password
 	 */
-	public Sysuser(String userName, String password) {
+	public Sysuser(String userName) {
 		this.userName = userName;
-		this.password = password;
 	}
 	
 	public Sysuser() {
