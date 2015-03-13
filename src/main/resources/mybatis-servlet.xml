@@ -43,8 +43,9 @@
       <ref bean="mappingJackson2HttpMessageConverter"/>
     </mvc:message-converters>
   </mvc:annotation-driven>
-  <!--
-  <mvc:resources mapping="/js/**" location="/js/" />
+  
+  <mvc:resources mapping="/common/**" location="/common/" />
+  <!--<mvc:resources mapping="/js/**" location="/js/" />
   <mvc:resources mapping="/images/**" location="/images/" />
   <mvc:resources mapping="/css/**" location="/css/" />
 	-->
