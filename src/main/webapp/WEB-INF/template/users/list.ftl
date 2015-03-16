@@ -28,7 +28,7 @@
 	
 	<script type="text/javascript">
 		
-		var grid_data = ${sysuser};
+		var grid_data = ${users};
 		
 		jQuery(function($) {
 			var grid_selector = "#grid-table";

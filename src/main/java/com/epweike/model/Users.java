@@ -5,7 +5,7 @@ import javax.persistence.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class Sysuser extends BaseModel {
+public class Users extends BaseModel {
 	
     /**
 	 * 
@@ -16,11 +16,11 @@ public class Sysuser extends BaseModel {
 	 * @param userName
 	 * @param password
 	 */
-	public Sysuser(String userName) {
+	public Users(String userName) {
 		this.userName = userName;
 	}
 	
-	public Sysuser() {
+	public Users() {
 	}
 	
     @Id
@@ -30,7 +30,6 @@ public class Sysuser extends BaseModel {
     @Column(name = "nick_name")
     private String nickName;
 
-    //@Email(message="邮箱不合法！")
     private String email;
 
     private String tel;
@@ -38,16 +37,15 @@ public class Sysuser extends BaseModel {
     /**
      * 即登陆账号
      */
-   // @NotBlank(message="用户名不能为空！")
-    @Column(name = "user_name")
+    @Column(name = "username")
     private String userName;
 
     private String password;
 
     /**
-     * 0:正常 1:禁用
+     * 1:正常 0:禁用
      */
-    private String status;
+    private String enabled;
 
     @Column(name = "last_login_time")
     private String lastLoginTime;
@@ -150,21 +148,21 @@ public class Sysuser extends BaseModel {
     }
 
     /**
-     * 获取0:正常 1:禁用
+     * 获取1:正常 0:禁用
      *
-     * @return status - 0:正常 1:禁用
+     * @return enabled - 1:正常 0:禁用
      */
-    public String getStatus() {
-        return status;
+    public String getEnabled() {
+        return enabled;
     }
 
     /**
      * 设置0:正常 1:禁用
      *
-     * @param status 0:正常 1:禁用
+     * @param enabled 0:正常 1:禁用
      */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
 
     /**

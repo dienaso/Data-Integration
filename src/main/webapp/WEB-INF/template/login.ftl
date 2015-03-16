@@ -63,21 +63,35 @@
 												<i class="icon-coffee green"></i>
 												Please Enter Your Information
 											</h4>
-
+											
 											<div class="space-6"></div>
 
-											<form action="/j_spring_security_check" method="post">
+											<div class="alert alert-danger">
+												<button type="button" class="close" data-dismiss="alert">
+													<i class="icon-remove"></i>
+												</button>
+
+												<strong>
+													<i class="icon-remove"></i>
+													Oh snap!
+												</strong>
+
+												${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message}  <!-- 输出异常信息 -->
+												<br />
+											</div>
+											
+											<form action="/springAuthority/j_spring_security_check" method="post">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" name="username" class="form-control" placeholder="用户名" />
+															<input type="text" name="j_username" class="form-control" placeholder="用户名" />
 															<i class="icon-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" name="password" class="form-control" placeholder="密码" />
+															<input type="password" name="j_password" class="form-control" placeholder="密码" />
 															<i class="icon-lock"></i>
 														</span>
 													</label>
@@ -245,10 +259,10 @@
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='/common/bootstrap/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='/common/bootstrap/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
 
 		<script type="text/javascript">
 			if("ontouchend" in document) document.write("<script src='/common/bootstrap/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");

@@ -1,8 +1,9 @@
 package com.epweike.controller;
 
-import com.epweike.model.Role;
-import com.epweike.service.RoleService;
+import com.epweike.model.Users;
+import com.epweike.service.UsersService;
 import com.epweike.util.DateUtils;
+import com.epweike.util.MD5Utils;
 
 import net.sf.json.JSONArray;
 
@@ -15,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.List;
@@ -26,59 +26,63 @@ import javax.validation.Valid;
  * @author wuxp
  */
 @Controller
-public class RoleController extends BaseController {
-	private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
+public class UsersController extends BaseController {
+	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @Autowired
-    private RoleService roleService;
+    private UsersService usersService;
     
-    public List<Role> roleList;
+    public List<Users> usersList;
     
-    @RequestMapping(value="/role/oper", method=RequestMethod.POST)  
-    public String oper(@Valid Role role,
+    @RequestMapping(value="/users/oper", method=RequestMethod.POST)  
+    public String oper(@Valid Users users,
     		@RequestParam(value = "oper", required = true) String oper,
     		BindingResult binding){  
         
-    	logger.info("本次操作为：" +oper+ "," +role.toString() +"！！！");
+    	logger.info("本次操作为：" +oper+ "," +users.toString() +"！！！");
     	
         if(oper.equals("add")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "role/list";  
+                return "users/list";  
             } else {
-            	
+            	users.setOnTime(DateUtils.formatDateTime(new Date()));
+            	//密码MD5加密
+            	String md5 = MD5Utils.getMD5(users.getPassword());
+            	users.setPassword(md5);
+            	this.usersService.insert(users);
             }
         	
         } else if (oper.equals("del")) {
         	
-        	
+        	this.usersService.delete(users.getId());
         	
         } else if (oper.equals("edit")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "role/list";  
+                return "users/list";  
             } else {
-            	
+            	this.usersService.update(users);
             }
         	
         }
         
-        return "redirect:/role/list";  
+        return "redirect:/users/list";  
     }
     
-    @RequestMapping(value = {"/role/list"})
+    @RequestMapping(value = {"/users/list"})
     public String list(Model model) {
     	
-    	Role role = new Role();
-    	roleList = this.roleService.select(role);
-    	JSONArray json = JSONArray.fromObject(roleList); 
-    	model.addAttribute("role", json.toString());
+    	Users users = new Users();
+    	usersList = this.usersService.select(users);
+    	JSONArray json = JSONArray.fromObject(usersList); 
+    	model.addAttribute("users", json.toString());
     	
-    	logger.info("获取角色列表！！！"+json.toString());
+    	logger.info("获取用户列表！！！"+json.toString());
     	
-        return "role/list";
+        return "users/list";
     }
     
 }

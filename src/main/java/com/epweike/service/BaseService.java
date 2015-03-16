@@ -3,6 +3,7 @@ package com.epweike.service;
 import com.github.abel533.mapper.Mapper;
 import com.github.pagehelper.PageHelper;
 
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,17 @@ public abstract class BaseService<T> {
 	
 	public List<T> select(T record) {
 		return mapper.select(record);
+	}
+
+	public T selectOne(T record) {
+		List<T> list = mapper.select(record);
+		if(list.size() == 1) {
+			return list.get(0);
+		} else if (list.size() > 1) {
+            throw new TooManyResultsException("Expected one result (or null) to be returned by selectOne(), but found: " + list.size());
+        } else {
+            return null;
+        }
 	}
 
 	/**

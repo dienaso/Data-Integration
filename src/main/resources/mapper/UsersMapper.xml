@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.epweike.mapper.SysuserMapper">
-  <resultMap id="BaseResultMap" type="com.epweike.model.Sysuser">
+<mapper namespace="com.epweike.mapper.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.Users">
     <!--
       WARNING - @mbggenerated
     -->
@@ -9,9 +9,9 @@
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="username" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="enabled" jdbcType="CHAR" property="enabled" />
     <result column="last_login_time" jdbcType="VARCHAR" property="lastLoginTime" />
     <result column="login_count" jdbcType="INTEGER" property="loginCount" />
     <result column="on_time" jdbcType="VARCHAR" property="onTime" />

@@ -1,8 +1,8 @@
 package com.epweike.controller;
 
 import com.epweike.common.Constants;
-import com.epweike.model.Sysuser;
-import com.epweike.service.SysuserService;
+import com.epweike.model.Users;
+import com.epweike.service.UsersService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class LoginController extends BaseController {
 			.getLogger(LoginController.class);
 
 	@Autowired
-	private SysuserService sysuserService;
+	private UsersService sysuserService;
 
 	@RequestMapping(value = {"/"})
     public String index(Model model) {
