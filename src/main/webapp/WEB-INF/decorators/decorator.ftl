@@ -332,7 +332,12 @@
 				<i class="icon-double-angle-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
+		
+		<!-- inline scripts related to this page -->
 
+		<script type="text/javascript">
+		
+		</script>
 </body>
 </html>
 
