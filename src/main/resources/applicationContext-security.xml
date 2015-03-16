@@ -38,6 +38,13 @@
 		<beans:property name="passwordEncoder" ref="passwordEncode" />
 		<beans:property name="saltSource" ref="saltSource" />
 	</beans:bean>
+	
+	<!--国际化-->
+    <beans:bean id="messageSource"
+    class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<beans:property name="basename" value="classpath:/messages/messages_zh_CN" />
+    </beans:bean>
+	
 	<beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
 		<beans:property name="dataSource" ref="dataSource"/>
     </beans:bean>

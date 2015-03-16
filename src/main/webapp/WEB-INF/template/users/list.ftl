@@ -39,7 +39,7 @@
 				data: grid_data,
 				datatype: "local",
 				height: "auto",
-				colNames:[' ','ID', '昵称', '用户名', '联系电话', '邮箱', '状态', '注册时间', '上次登录时间'],
+				colNames:[' ','ID', '昵称', '用户名', '密码', '联系电话', '邮箱', '状态', '注册时间', '上次登录时间'],
 				colModel:[
 					{name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
 						formatter:'actions', 
@@ -53,6 +53,7 @@
 					{name:'id', index:'id',width:20, editable:false, defaulValue:null},
 					{name:'nickName', index:'nickName', width:70, editable:true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'userName', index:'userName', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
+					{name:'password', index:'password', hidden:true, width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'tel',index:'tel', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{number:true, required:false}},
 					{name:'email',index:'email', width:50, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{email:true, required:false}},
 					{name:'enabled',index:'enabled', width:20, editable: true, edittype:"select", formatter:'select', editoptions:{value:"1:正常;0:禁用"}},

@@ -5,8 +5,6 @@ package com.epweike.util;
 
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
-import com.epweike.common.Constants;
-
 /**
  * @author wuxp
  */

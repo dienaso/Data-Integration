@@ -92,12 +92,6 @@
     </property>
   </bean>
 
-  <!--国际化-->
-  <bean id="messageSource"
-    class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-	<property name="basename" value="classpath:/messages/messages_zh_CN" />
-  </bean>
-
   <!--文件上传-->
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <property name="maxUploadSize" value="100000"/>

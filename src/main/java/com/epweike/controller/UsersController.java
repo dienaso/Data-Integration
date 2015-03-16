@@ -70,7 +70,7 @@ public class UsersController extends BaseController {
         	
         }
         
-        return "redirect:/users/list";  
+        return "/users/list";  
     }
     
     @RequestMapping(value = {"/users/list"})

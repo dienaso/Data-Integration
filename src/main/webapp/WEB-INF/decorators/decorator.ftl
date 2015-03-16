@@ -209,14 +209,14 @@
 
 					<ul class="nav nav-list">
 						<li>
-							<a href="index.jsp">
+							<a href="/">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 控制台 </span>
 							</a>
 						</li>
 
 						<li class="active">
-							<a href="#">
+							<a href="/users/list">
 								<i class="icon-user"></i>
 								<span class="menu-text"> 用户管理 </span>
 							</a>
@@ -225,7 +225,7 @@
 						<li>
 							<a href="#">
 								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 插件 </span>
+								<span class="menu-text"> 菜单管理 </span>
 							</a>
 						</li>
 
