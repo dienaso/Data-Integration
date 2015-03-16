@@ -16,7 +16,7 @@
 	</http>
 	
 	<!-- 配置认证管理器 -->
-	<authentication-manager>
+	<!-- <authentication-manager>
       <authentication-provider user-service-ref="userDetailsService">
       	<password-encoder hash="md5" base64="true">
             <salt-source system-wide="salt"/>
@@ -25,5 +25,30 @@
    	</authentication-manager>
    	<beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
 		<beans:property name="dataSource" ref="dataSource"/>
+    </beans:bean>-->
+    
+    <authentication-manager>
+		<authentication-provider ref="authenticationProvider" />
+	</authentication-manager>
+	
+	<beans:bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<beans:property name="hideUserNotFoundExceptions" value="false" />
+		<beans:property name="messageSource" ref="messageSource" />
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="passwordEncoder" ref="passwordEncode" />
+		<beans:property name="saltSource" ref="saltSource" />
+	</beans:bean>
+	<beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<beans:property name="dataSource" ref="dataSource"/>
     </beans:bean>
+	
+	<!-- 配置密码加密类 -->
+	<beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	<beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<beans:property name="userPropertyToUse" value="username"/>
+	</beans:bean>
+    
+    
+    
+    
 </beans:beans>

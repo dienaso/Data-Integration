@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.SessionScope;
 
 import java.util.Date;
 import java.util.List;
@@ -49,7 +50,7 @@ public class UsersController extends BaseController {
             } else {
             	users.setOnTime(DateUtils.formatDateTime(new Date()));
             	//密码MD5加密
-            	String md5 = MD5Utils.getMD5(users.getPassword());
+            	String md5 = MD5Utils.getMD5(users.getPassword(), users.getUserName());
             	users.setPassword(md5);
             	this.usersService.insert(users);
             }
@@ -79,7 +80,6 @@ public class UsersController extends BaseController {
     	usersList = this.usersService.select(users);
     	JSONArray json = JSONArray.fromObject(usersList); 
     	model.addAttribute("users", json.toString());
-    	
     	logger.info("获取用户列表！！！"+json.toString());
     	
         return "users/list";

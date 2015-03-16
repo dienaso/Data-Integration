@@ -12,13 +12,12 @@ import com.epweike.common.Constants;
  */
 public class MD5Utils {
 	// MD5加密。32位
-	public static String getMD5(String source) {
+	public static String getMD5(String source, String salt) {
 		Md5PasswordEncoder md5 = new Md5PasswordEncoder();
-		md5.setEncodeHashAsBase64(true);
-		return md5.encodePassword(source, Constants.SALT);
+		return md5.encodePassword(source, salt);
 	}
 
 	public static void main(String args[]) {
-		System.out.println("加密后的：" + getMD5("admin"));
+		System.out.println("加密后的：" + getMD5("admin", "ping6"));
 	}
 }
