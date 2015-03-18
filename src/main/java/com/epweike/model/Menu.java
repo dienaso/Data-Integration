@@ -3,7 +3,12 @@ package com.epweike.model;
 import javax.persistence.*;
 
 public class Menu extends BaseModel {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private Integer id;
 
     private Integer pid;

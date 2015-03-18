@@ -16,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.SessionScope;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +27,7 @@ import javax.validation.Valid;
  */
 @Controller
 public class UsersController extends BaseController {
+	
 	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @Autowired

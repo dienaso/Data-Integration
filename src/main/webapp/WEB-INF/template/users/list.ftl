@@ -39,7 +39,7 @@
 				data: grid_data,
 				datatype: "local",
 				height: "auto",
-				colNames:[' ','ID', '昵称', '用户名', '密码', '联系电话', '邮箱', '状态', '注册时间', '上次登录时间'],
+				colNames:[' ','ID', '昵称', '用户名', '密码', '联系电话', '邮箱', '状态', '注册时间'],
 				colModel:[
 					{name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
 						formatter:'actions', 
@@ -57,8 +57,7 @@
 					{name:'tel',index:'tel', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{number:true, required:false}},
 					{name:'email',index:'email', width:50, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{email:true, required:false}},
 					{name:'enabled',index:'enabled', width:20, editable: true, edittype:"select", formatter:'select', editoptions:{value:"1:正常;0:禁用"}},
-					{name:'onTime', index:'onTime', width:70, editable: false, sorttype:"date",unformat: pickDate},
-					{name:'lastLoginTime', index:'lastLoginTime', width:70, editable: false, sorttype:"date",unformat: pickDate} 
+					{name:'onTime', index:'onTime', width:70, editable: false, sorttype:"date",unformat: pickDate}
 				],
 				viewrecords : true,
 				rowNum:10,

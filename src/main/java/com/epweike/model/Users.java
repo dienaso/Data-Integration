@@ -2,9 +2,6 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-
 public class Users extends BaseModel {
 	
     /**
@@ -46,12 +43,6 @@ public class Users extends BaseModel {
      * 1:正常 0:禁用
      */
     private String enabled;
-
-    @Column(name = "last_login_time")
-    private String lastLoginTime;
-
-    @Column(name = "login_count")
-    private Integer loginCount;
 
     @Column(name = "on_time")
     private String onTime;
@@ -163,34 +154,6 @@ public class Users extends BaseModel {
      */
     public void setEnabled(String enabled) {
         this.enabled = enabled;
-    }
-
-    /**
-     * @return last_login_time
-     */
-    public String getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    /**
-     * @param lastLoginTime
-     */
-    public void setLastLoginTime(String lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    /**
-     * @return login_count
-     */
-    public Integer getLoginCount() {
-        return loginCount;
-    }
-
-    /**
-     * @param loginCount
-     */
-    public void setLoginCount(Integer loginCount) {
-        this.loginCount = loginCount;
     }
 
     /**

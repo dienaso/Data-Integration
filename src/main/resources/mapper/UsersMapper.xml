@@ -12,8 +12,6 @@
     <result column="username" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="enabled" jdbcType="CHAR" property="enabled" />
-    <result column="last_login_time" jdbcType="VARCHAR" property="lastLoginTime" />
-    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
     <result column="on_time" jdbcType="VARCHAR" property="onTime" />
     <result column="uer_icon" jdbcType="VARCHAR" property="uerIcon" />
   </resultMap>

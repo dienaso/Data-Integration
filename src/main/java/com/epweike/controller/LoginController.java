@@ -1,7 +1,5 @@
 package com.epweike.controller;
 
-import com.epweike.common.Constants;
-import com.epweike.model.Users;
 import com.epweike.service.UsersService;
 
 import org.slf4j.Logger;
@@ -16,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class LoginController extends BaseController {
-	private static final Logger logger = LoggerFactory
-			.getLogger(LoginController.class);
 
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+	
 	@Autowired
 	private UsersService sysuserService;
 
@@ -30,6 +28,12 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = {"/login"})
     public String login(Model model) {
         return "login";
+    }
+	
+	@RequestMapping(value = {"/admin"})
+    public String list(Model model) {
+    	logger.info("管理员控制台！！！");
+        return "admin";
     }
 
 }

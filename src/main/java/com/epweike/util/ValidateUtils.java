@@ -2,14 +2,10 @@ package com.epweike.util;
 
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 /**
  * @author wuxp
  */
 public class ValidateUtils {
-
-	private static final Logger logger = Logger.getLogger(ValidateUtils.class);
 
 	public ValidateUtils() {
 	}
