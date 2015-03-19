@@ -7,7 +7,7 @@
           
     <http pattern="/favicon.ico" security="none" />
     <http auto-config="true" access-denied-page="/403.jsp">
-    	<intercept-url pattern="/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<intercept-url pattern="/favicon.ico" access="ROLE_ANONYMOUS" />
     	<intercept-url pattern="/common/**" access="ROLE_ANONYMOUS" />
     	<intercept-url pattern="/login*" access="ROLE_ANONYMOUS" />
 	    <!-- 当系统一直需要用户从首页进入时，可以设置always-use-default-target -->
