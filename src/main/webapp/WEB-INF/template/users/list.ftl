@@ -54,8 +54,8 @@
 					{name:'nickName', index:'nickName', width:70, editable:true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'userName', index:'userName', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'password', index:'password', hidden:true, width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
-					{name:'tel',index:'tel', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{number:true, required:false}},
-					{name:'email',index:'email', width:50, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{email:true, required:false}},
+					{name:'tel',index:'tel', width:50, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{number:true, required:false}},
+					{name:'email',index:'email', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{email:true, required:false}},
 					{name:'enabled',index:'enabled', width:20, editable: true, edittype:"select", formatter:'select', editoptions:{value:"1:正常;0:禁用"}},
 					{name:'onTime', index:'onTime', width:70, editable: false, sorttype:"date",unformat: pickDate}
 				],

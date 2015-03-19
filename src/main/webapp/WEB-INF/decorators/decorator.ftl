@@ -224,8 +224,8 @@
 
 						<li>
 							<a href="#">
-								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 菜单管理 </span>
+								<i class="icon-search"></i>
+								<span class="menu-text"> 索引管理 </span>
 							</a>
 						</li>
 
