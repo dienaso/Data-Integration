@@ -76,7 +76,6 @@ public class UsersController extends BaseController {
     @RequestMapping(value = {"/users/list"})
     public String list(Model model) {
     	
-    	Users users = new Users();
     	usersList = this.usersService.selectPage(pageNum, pageSize);
     	JSONArray json = JSONArray.fromObject(usersList); 
     	model.addAttribute("users", json.toString());

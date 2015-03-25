@@ -71,7 +71,6 @@ public class MenuController extends BaseController {
     @RequestMapping(value = {"/menu/list"})
     public String list(Model model) {
     	
-    	Menu menu = new Menu();
     	menuList = this.menuService.selectPage(pageNum, pageSize);
     	JSONArray json = JSONArray.fromObject(menuList); 
     	model.addAttribute("menu", json.toString());

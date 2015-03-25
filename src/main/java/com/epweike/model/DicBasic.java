@@ -4,7 +4,12 @@ import javax.persistence.*;
 
 @Table(name = "dic_basic")
 public class DicBasic extends BaseModel {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private Integer id;
 
     private String word;
