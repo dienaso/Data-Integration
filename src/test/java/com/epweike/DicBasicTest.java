@@ -17,7 +17,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.epweike.model.DicBasic;
 import com.epweike.service.DicBasicService;
-import com.github.pagehelper.PageHelper;
 
 public class DicBasicTest {
 
