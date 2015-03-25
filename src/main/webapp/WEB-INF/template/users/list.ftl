@@ -6,6 +6,21 @@
 
 <body>
 
+	<#if (SPRING_SECURITY_LAST_EXCEPTION.message)?if_exists>
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert">
+				<i class="icon-remove"></i>
+			</button>
+
+			<strong>
+				<i class="icon-remove"></i>
+				Oh snap!
+			</strong>
+			${SPRING_SECURITY_LAST_EXCEPTION.message}  <!-- 输出异常信息 -->
+			<br />
+		</div>
+	</#if>	
+
 	<table id="grid-table"></table>
 
 	<div id="grid-pager"></div>
@@ -50,7 +65,7 @@
 							//editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
 						}
 					},
-					{name:'id', index:'id',width:20, editable:false, defaulValue:null},
+					{name:'id', index:'id',width:10, editable:false, defaulValue:null},
 					{name:'nickName', index:'nickName', width:70, editable:true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'userName', index:'userName', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
 					{name:'password', index:'password', hidden:true, width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},

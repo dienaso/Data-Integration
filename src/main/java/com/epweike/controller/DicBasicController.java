@@ -1,9 +1,8 @@
 package com.epweike.controller;
 
-import com.epweike.model.Users;
-import com.epweike.service.UsersService;
+import com.epweike.model.DicBasic;
+import com.epweike.service.DicBasicService;
 import com.epweike.util.DateUtils;
-import com.epweike.util.MD5Utils;
 
 import net.sf.json.JSONArray;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,63 +24,57 @@ import javax.validation.Valid;
  * @author wuxp
  */
 @Controller
-public class UsersController extends BaseController {
+public class DicBasicController extends BaseController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DicBasicController.class);
 
     @Autowired
-    private UsersService usersService;
+    private DicBasicService dicBasicService;
     
-    public List<Users> usersList;
+    public List<DicBasic> dicBasicList;
     
-    @RequestMapping(value="/users/oper", method=RequestMethod.POST)  
-    public String oper(@Valid Users users,
+    @RequestMapping(value="/dicBasic/oper", method=RequestMethod.POST)  
+    public String oper(@Valid DicBasic dicBasic,
     		@RequestParam(value = "oper", required = true) String oper,
     		BindingResult binding){  
         
-    	logger.info("本次操作为：" +oper+ "," +users.toString() +"！！！");
+    	logger.info("本次操作为：" +oper+ "," +dicBasic.toString() +"！！！");
     	
         if(oper.equals("add")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "users/list";  
+                return "dicBasic/list";  
             } else {
-            	users.setOnTime(DateUtils.formatDateTime(new Date()));
-            	//密码MD5加密
-            	String md5 = MD5Utils.getMD5(users.getPassword(), users.getUserName());
-            	users.setPassword(md5);
-            	this.usersService.insert(users);
             }
         	
         } else if (oper.equals("del")) {
         	
-        	this.usersService.delete(users.getId());
+        	this.dicBasicService.delete(dicBasic.getId());
         	
         } else if (oper.equals("edit")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "users/list";  
+                return "dicBasic/list";  
             } else {
-            	this.usersService.update(users);
+            	this.dicBasicService.update(dicBasic);
             }
         	
         }
         
-        return "/users/list";  
+        return "/dicBasic/list";  
     }
     
-    @RequestMapping(value = {"/users/list"})
+    @RequestMapping(value = {"/dicBasic/list"})
     public String list(Model model) {
     	
-    	Users users = new Users();
-    	usersList = this.usersService.selectPage(pageNum, pageSize);
-    	JSONArray json = JSONArray.fromObject(usersList); 
-    	model.addAttribute("users", json.toString());
-    	logger.info("获取用户列表！！！"+json.toString());
+    	dicBasicList = this.dicBasicService.selectPage(pageNum, pageSize);
+    	JSONArray json = JSONArray.fromObject(dicBasicList); 
+    	model.addAttribute("dicBasic", json.toString());
+    	logger.info("获取词语列表！！！"+json.toString());
     	
-        return "users/list";
+        return "dicBasic/list";
     }
     
 }

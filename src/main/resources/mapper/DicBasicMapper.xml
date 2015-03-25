@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epweike.mapper.DicBasicMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.DicBasic">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="word" jdbcType="VARCHAR" property="word" />
+    <result column="w_frequency" jdbcType="INTEGER" property="wFrequency" />
+    <result column="w_class" jdbcType="VARCHAR" property="wClass" />
+  </resultMap>
+  
+  <insert id="insertDicBasicBatch" parameterType="java.util.List">  
+    insert into dic_basic (word,w_frequency,w_class)   
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.word},#{item.wFrequency},#{item.wClass})  
+    </foreach>  
+  </insert>  
+  
+</mapper>

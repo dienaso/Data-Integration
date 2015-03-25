@@ -1,10 +1,25 @@
 <html>
 
 <head>
-	<title>角色管理</title>
+	<title>词库管理</title>
 </head>
 
 <body>
+
+	<#if (SPRING_SECURITY_LAST_EXCEPTION.message)?if_exists>
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert">
+				<i class="icon-remove"></i>
+			</button>
+
+			<strong>
+				<i class="icon-remove"></i>
+				Oh snap!
+			</strong>
+			${SPRING_SECURITY_LAST_EXCEPTION.message}  <!-- 输出异常信息 -->
+			<br />
+		</div>
+	</#if>	
 
 	<table id="grid-table"></table>
 
@@ -28,7 +43,7 @@
 	
 	<script type="text/javascript">
 		
-		var grid_data = ${sysuser};
+		var grid_data = ${dicBasic};
 		
 		jQuery(function($) {
 			var grid_selector = "#grid-table";
@@ -39,7 +54,7 @@
 				data: grid_data,
 				datatype: "local",
 				height: "auto",
-				colNames:[' ','ID', '昵称', '用户名', '联系电话', '邮箱', '状态', '注册时间', '上次登录时间'],
+				colNames:[' ','ID', '词条', '词频', '词性'],
 				colModel:[
 					{name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
 						formatter:'actions', 
@@ -50,14 +65,10 @@
 							//editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
 						}
 					},
-					{name:'id', index:'id',width:20, editable:false, defaulValue:null},
-					{name:'nickName', index:'nickName', width:70, editable:true, editoptions:{size:"20", maxlength:"30"}},
-					{name:'userName', index:'userName', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}},
-					{name:'tel',index:'tel', width:70, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{number:true, required:false}},
-					{name:'email',index:'email', width:50, editable: true, editoptions:{size:"20", maxlength:"30"}, editrules:{email:true, required:false}},
-					{name:'status',index:'status', width:20, editable: true, edittype:"select", formatter:'select', editoptions:{value:"0:正常;1:禁用"}},
-					{name:'onTime', index:'onTime', width:70, editable: false, sorttype:"date",unformat: pickDate},
-					{name:'lastLoginTime', index:'lastLoginTime', width:70, editable: false, sorttype:"date",unformat: pickDate} 
+					{name:'id', index:'id',width:10, editable:false, defaulValue:null},
+					{name:'word', index:'word', width:40, editable:true, editoptions:{size:"20", maxlength:"30"}},
+					{name:'wFrequency', index:'wFrequency', width:40, editable: true, editoptions:{size:"20", maxlength:"30"}},
+					{name:'wClass',index:'wClass', width:40, editable: true, edittype:"textarea"},
 				],
 				viewrecords : true,
 				rowNum:10,
@@ -82,9 +93,7 @@
 				},
 		
 				editurl: "oper",
-				caption: "用户列表",
-		
-		
+				caption: "词条列表",
 				autowidth: true
 		
 			});

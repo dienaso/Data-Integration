@@ -11,8 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.epweike.model.Users;
 import com.epweike.service.UsersService;
 
-public class SysuserTest {
-	private static final Logger logger = LoggerFactory.getLogger(SysuserTest.class);
+public class UsersTest {
 	
 	@Autowired
 	private UsersService usersService;

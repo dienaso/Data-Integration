@@ -18,6 +18,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 	
+	//页码
+	public static int pageNum = 1;
+	//每页显示条数
+	public static int pageSize = 30;
+	
 	public static HttpSession getSession() {
 		HttpSession session = null;
 		try {

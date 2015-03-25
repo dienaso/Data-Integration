@@ -221,6 +221,13 @@
 								<span class="menu-text"> 用户管理 </span>
 							</a>
 						</li>
+						
+						<li>
+							<a href="/dicBasic/list">
+								<i class="icon-book"></i>
+								<span class="menu-text"> 词库管理 </span>
+							</a>
+						</li>
 
 						<li>
 							<a href="#">
