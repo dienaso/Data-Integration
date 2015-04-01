@@ -24,7 +24,7 @@ public class UsersTest {
 
 	@Test
 	public void selectOneTest() {
-		Users users = this.usersService.selectOne(new Users("ping6dfgdfg"));
+		Users users = this.usersService.selectOne(new Users("ping6"));
 		System.out.println("打印对象：" + users.toString());
 	}
 

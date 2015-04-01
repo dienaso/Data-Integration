@@ -1,7 +1,7 @@
 package com.epweike.controller;
 
-import com.epweike.model.DicBasic;
-import com.epweike.service.DicBasicService;
+import com.epweike.model.Lexicon;
+import com.epweike.service.LexiconService;
 
 import net.sf.json.JSONArray;
 
@@ -23,57 +23,57 @@ import javax.validation.Valid;
  * @author wuxp
  */
 @Controller
-public class DicBasicController extends BaseController {
+public class LexiconController extends BaseController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DicBasicController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LexiconController.class);
 
     @Autowired
-    private DicBasicService dicBasicService;
+    private LexiconService lexiconService;
     
-    public List<DicBasic> dicBasicList;
+    public List<Lexicon> lexiconList;
     
-    @RequestMapping(value="/dicBasic/oper", method=RequestMethod.POST)  
-    public String oper(@Valid DicBasic dicBasic,
+    @RequestMapping(value="/lexicon/oper", method=RequestMethod.POST)  
+    public String oper(@Valid Lexicon lexicon,
     		@RequestParam(value = "oper", required = true) String oper,
     		BindingResult binding){  
         
-    	logger.info("本次操作为：" +oper+ "," +dicBasic.toString() +"！！！");
+    	logger.info("本次操作为：" +oper+ "," +lexicon.toString() +"！！！");
     	
         if(oper.equals("add")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "dicBasic/list";  
+                return "lexicon/list";  
             } else {
             }
         	
         } else if (oper.equals("del")) {
         	
-        	this.dicBasicService.delete(dicBasic.getId());
+        	this.lexiconService.delete(lexicon.getId());
         	
         } else if (oper.equals("edit")) {
         	
         	if(binding.hasErrors()){ 
         		logger.info("验证不通过！！！" + binding.getAllErrors().toString());
-                return "dicBasic/list";  
+                return "lexicon/list";  
             } else {
-            	this.dicBasicService.update(dicBasic);
+            	this.lexiconService.update(lexicon);
             }
         	
         }
         
-        return "/dicBasic/list";  
+        return "/lexicon/list";  
     }
     
-    @RequestMapping(value = {"/dicBasic/list"})
+    @RequestMapping(value = {"/lexicon/list"})
     public String list(Model model) {
     	
-    	dicBasicList = this.dicBasicService.selectPage(pageNum, pageSize);
-    	JSONArray json = JSONArray.fromObject(dicBasicList); 
-    	model.addAttribute("dicBasic", json.toString());
+    	lexiconList = this.lexiconService.selectPage(pageNum, pageSize);
+    	JSONArray json = JSONArray.fromObject(lexiconList); 
+    	model.addAttribute("lexicon", json.toString());
     	logger.info("获取词语列表！！！"+json.toString());
     	
-        return "dicBasic/list";
+        return "lexicon/list";
     }
     
 }
