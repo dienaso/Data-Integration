@@ -113,7 +113,7 @@
 					<a href="#" class="navbar-brand">
 						<small>
 							<i class="icon-leaf"></i>
-							SOLR后台管理系统
+							一品威客SOLR后台管理系统
 						</small>
 					</a><!-- /.brand -->
 				</div><!-- /.navbar-header -->
@@ -223,7 +223,7 @@
 						</li>
 						
 						<li>
-							<a href="/dicBasic/list">
+							<a href="/lexicon/list">
 								<i class="icon-book"></i>
 								<span class="menu-text"> 词库管理 </span>
 							</a>

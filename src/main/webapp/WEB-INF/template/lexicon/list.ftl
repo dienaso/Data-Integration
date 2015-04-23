@@ -43,7 +43,7 @@
 	
 	<script type="text/javascript">
 		
-		var grid_data = ${dicBasic};
+		var grid_data = ${lexicon};
 		
 		jQuery(function($) {
 			var grid_selector = "#grid-table";
@@ -54,7 +54,7 @@
 				data: grid_data,
 				datatype: "local",
 				height: "auto",
-				colNames:[' ','ID', '词条', '词频', '词性'],
+				colNames:[' ','ID', '词条', '拼音', '近义词', '词性'],
 				colModel:[
 					{name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
 						formatter:'actions', 
@@ -65,10 +65,11 @@
 							//editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
 						}
 					},
-					{name:'id', index:'id',width:10, editable:false, defaulValue:null},
-					{name:'word', index:'word', width:40, editable:true, editoptions:{size:"20", maxlength:"30"}},
-					{name:'wFrequency', index:'wFrequency', width:40, editable: true, editoptions:{size:"20", maxlength:"30"}},
-					{name:'wClass',index:'wClass', width:40, editable: true, edittype:"textarea"},
+					{name:'id', index:'id',width:5, editable:false, defaulValue:null},
+					{name:'word', index:'word', width:10, editable:true, editoptions:{size:"20", maxlength:"30"}},
+					{name:'pinyin', index:'pinyin', width:20, editable:true, editoptions:{size:"20", maxlength:"30"}},
+					{name:'synonym',index:'synonym', width:30, editable: true, edittype:"textarea", editoptions:{rows:"2",cols:"10"}},
+					{name:'pos',index:'pos', width:30, editable: true}
 				],
 				viewrecords : true,
 				rowNum:10,
