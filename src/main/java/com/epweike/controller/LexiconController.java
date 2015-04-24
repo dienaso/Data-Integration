@@ -69,9 +69,8 @@ public class LexiconController extends BaseController {
     public String list(Model model) {
     	
     	lexiconList = this.lexiconService.selectPage(pageNum, pageSize);
-    	JSONArray json = JSONArray.fromObject(lexiconList); 
-    	model.addAttribute("lexicon", json.toString());
-    	logger.info("获取词语列表！！！"+json.toString());
+    	model.addAttribute("lexicon", lexiconList);
+    	logger.info("获取词语列表！！！"+lexiconList.toString());
     	
         return "lexicon/list";
     }

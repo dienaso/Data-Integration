@@ -30,10 +30,4 @@ public class LoginController extends BaseController {
         return "login";
     }
 	
-	@RequestMapping(value = {"/admin"})
-    public String list(Model model) {
-    	logger.info("管理员控制台！！！");
-        return "admin";
-    }
-
 }

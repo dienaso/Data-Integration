@@ -368,7 +368,7 @@
 			      </execution>
 			    </executions>
 			    <configuration>
-			      <targetGroups>basic,ace,jqgrid</targetGroups>
+			      <targetGroups></targetGroups>
 			      <minimize>true</minimize>
 			      <destinationFolder>${basedir}/src/main/webapp/common/static/</destinationFolder>
 			      <cssDestinationFolder>${basedir}/src/main/webapp/common/static/css</cssDestinationFolder>
