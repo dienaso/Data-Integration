@@ -11,8 +11,8 @@
 	<body>
 
 	  <div id="content-header">
-	    <div id="breadcrumb"><a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">主页</a></div>
-	    <h1>主页</h1>
+	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">控制面板</a></div>
+	    <h1>控制面板</h1>
 	  </div>
 	  <div class="container-fluid">
 	    <hr>

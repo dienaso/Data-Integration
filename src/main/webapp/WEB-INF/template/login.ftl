@@ -48,6 +48,20 @@
                     <span class="pull-right"><a class="btn btn-info"/>Reecover</a></span>
                 </div>
             </form>
+            <#if (SPRING_SECURITY_LAST_EXCEPTION.message)?if_exists>
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="icon-remove"></i>
+					</button>
+		
+					<strong>
+						<i class="icon-remove"></i>
+						Oh snap!
+					</strong>
+					${SPRING_SECURITY_LAST_EXCEPTION.message}  <!-- 输出异常信息 -->
+					<br />
+				</div>
+			</#if>	
         </div>
         
         <script src="/common/matrix/js/jquery.min.js"></script>  

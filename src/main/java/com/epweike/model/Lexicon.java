@@ -2,8 +2,13 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
-public class Lexicon extends BaseModel {
-    @Id
+public class Lexicon extends BaseModel<Lexicon> {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private Integer id;
 
     private String word;
@@ -31,6 +36,16 @@ public class Lexicon extends BaseModel {
      * 分类
      */
     private String category;
+    
+    public Lexicon() {
+	}
+
+	/**
+	 * @param sSearch
+	 */
+	public Lexicon(String sSearch) {
+		this.word = sSearch;
+	}
 
 	/**
      * @return id

@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-public abstract class BaseModel implements Serializable {
+public abstract class BaseModel<T> implements Serializable {
 
 	/**
 	 * 
@@ -25,4 +25,5 @@ public abstract class BaseModel implements Serializable {
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
+	
 }

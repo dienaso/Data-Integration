@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wuxp
@@ -60,9 +61,9 @@ public abstract class BaseService<T> {
 	 * @param pageSize
 	 * @return
 	 */
-	public List<T> selectPage(int pageNum, int pageSize) {
+	public List<T> selectPage(T record, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		// Spring4支持泛型注入
-		return mapper.select(null);
+		return mapper.select(record);
 	}
 }

@@ -3,6 +3,8 @@ package com.epweike.controller;
 import com.epweike.model.Menu;
 import com.epweike.service.MenuService;
 import com.epweike.util.DateUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import net.sf.json.JSONArray;
 
@@ -71,11 +73,12 @@ public class MenuController extends BaseController {
     @RequestMapping(value = {"/menu/list"})
     public String list(Model model) {
     	
-    	menuList = this.menuService.selectPage(pageNum, pageSize);
-    	JSONArray json = JSONArray.fromObject(menuList); 
-    	model.addAttribute("menu", json.toString());
+    	menuList = this.menuService.selectPage(new Menu(), pageNum, pageSize);
+    	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json2 = gson.toJson(menuList);
+    	model.addAttribute("menu", json2);
     	
-    	logger.info("获取菜单列表！！！"+json.toString());
+    	logger.info("获取菜单列表！！！"+json2);
     	
         return "menu/list";
     }
