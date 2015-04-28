@@ -1,8 +1,10 @@
 package com.epweike.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
-public class Menu extends BaseModel {
+public class Menus extends BaseModel<Menus> {
     /**
 	 * 
 	 */
@@ -13,7 +15,7 @@ public class Menu extends BaseModel {
 
     private Integer pid;
 
-    private String level;
+    private Byte level;
 
     private String name;
 
@@ -21,12 +23,34 @@ public class Menu extends BaseModel {
 
     private String icon;
 
+    /**
+     * _blank:在新窗口中打开被链接文档;_self:默认。在相同的框架中打开被链接文档。
+     */
     private String target;
 
     @Column(name = "on_time")
-    private String onTime;
+    private Date onTime;
 
     /**
+     * 排序，数值越小越靠前
+     */
+    private Byte sort;
+    
+    /**
+  	 * @param sSearch
+  	 */
+  	public Menus() {
+  	}
+
+      /**
+  	 * @param sSearch
+  	 */
+  	public Menus(String sSearch) {
+  		this.name = sSearch;
+  	}
+    
+    
+	/**
      * @return id
      */
     public Integer getId() {
@@ -57,14 +81,14 @@ public class Menu extends BaseModel {
     /**
      * @return level
      */
-    public String getLevel() {
+    public Byte getLevel() {
         return level;
     }
 
     /**
      * @param level
      */
-    public void setLevel(String level) {
+    public void setLevel(Byte level) {
         this.level = level;
     }
 
@@ -111,14 +135,18 @@ public class Menu extends BaseModel {
     }
 
     /**
-     * @return target
+     * 获取_blank:在新窗口中打开被链接文档;_self:默认。在相同的框架中打开被链接文档。
+     *
+     * @return target - _blank:在新窗口中打开被链接文档;_self:默认。在相同的框架中打开被链接文档。
      */
     public String getTarget() {
         return target;
     }
 
     /**
-     * @param target
+     * 设置_blank:在新窗口中打开被链接文档;_self:默认。在相同的框架中打开被链接文档。
+     *
+     * @param target _blank:在新窗口中打开被链接文档;_self:默认。在相同的框架中打开被链接文档。
      */
     public void setTarget(String target) {
         this.target = target;
@@ -127,14 +155,32 @@ public class Menu extends BaseModel {
     /**
      * @return on_time
      */
-    public String getOnTime() {
+    public Date getOnTime() {
         return onTime;
     }
 
     /**
      * @param onTime
      */
-    public void setOnTime(String onTime) {
+    public void setOnTime(Date onTime) {
         this.onTime = onTime;
+    }
+
+    /**
+     * 获取排序，数值越小越靠前
+     *
+     * @return sort - 排序，数值越小越靠前
+     */
+    public Byte getSort() {
+        return sort;
+    }
+
+    /**
+     * 设置排序，数值越小越靠前
+     *
+     * @param sort 排序，数值越小越靠前
+     */
+    public void setSort(Byte sort) {
+        this.sort = sort;
     }
 }

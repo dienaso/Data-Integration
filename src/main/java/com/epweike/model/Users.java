@@ -2,7 +2,7 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
-public class Users extends BaseModel {
+public class Users extends BaseModel<Users> {
 	
     /**
 	 * 

@@ -2,7 +2,7 @@
 <html>
     
 <head>
-        <title>Matrix Admin</title><meta charset="UTF-8" />
+        <title>Data Integration</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/common/matrix/css/bootstrap-responsive.min.css" />
@@ -50,10 +50,6 @@
             </form>
             <#if (SPRING_SECURITY_LAST_EXCEPTION.message)?if_exists>
 				<div class="alert alert-danger">
-					<button type="button" class="close" data-dismiss="alert">
-						<i class="icon-remove"></i>
-					</button>
-		
 					<strong>
 						<i class="icon-remove"></i>
 						Oh snap!

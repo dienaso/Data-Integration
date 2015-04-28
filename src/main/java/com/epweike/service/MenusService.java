@@ -1,6 +1,6 @@
 package com.epweike.service;
 
-import com.epweike.model.Menu;
+import com.epweike.model.Menus;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * @author wuxp
  */
 @Service
-public class MenuService extends BaseService<Menu> {
+public class MenusService extends BaseService<Menus> {
 
 }

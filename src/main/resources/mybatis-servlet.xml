@@ -34,67 +34,47 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
   <mvc:default-servlet-handler/>
-
-  <!--RequestMappingHandlerAdapter-->
-  <mvc:annotation-driven>
-    <mvc:message-converters>
-      <ref bean="stringHttpMessageConverter"/>
-      <ref bean="marshallingHttpMessageConverter"/>
-      <ref bean="mappingJackson2HttpMessageConverter"/>
-    </mvc:message-converters>
-  </mvc:annotation-driven>
   
   <mvc:resources mapping="/common/**" location="/common/" />
-  <!--<mvc:resources mapping="/js/**" location="/js/" />
-  <mvc:resources mapping="/images/**" location="/images/" />
-  <mvc:resources mapping="/css/**" location="/css/" />
-	-->
-
+  <mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+	
   <context:component-scan base-package="com.epweike.controller"/>
-
-  <bean id="stringHttpMessageConverter"
-        class="org.springframework.http.converter.StringHttpMessageConverter"/>
-
-  <bean id="marshallingHttpMessageConverter"
-        class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-    <property name="marshaller" ref="castorMarshaller"/>
-    <property name="unmarshaller" ref="castorMarshaller"/>
-  </bean>
-
-  <bean id="mappingJackson2HttpMessageConverter"
-        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    <property name="supportedMediaTypes">
-      <list>
-        <value>application/json</value>
-        <value>application/xml</value>
-        <value>text/html</value>
-        <value>text/plain</value>
-        <value>text/xml</value>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
-  <!--信息转换 - 结束-->
-
-  <bean id="contentNegotiationManagerFactoryBean"
-        class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-    <property name="defaultContentType" value="text/html"/>
-    <property name="ignoreAcceptHeader" value="true"/>
-    <property name="favorPathExtension" value="true"/>
-    <property name="favorParameter" value="false"/>
-    <property name="mediaTypes">
-      <map>
-        <entry key="atom" value="application/atom+xml"/>
-        <entry key="html" value="text/html"/>
-        <entry key="json" value="application/json"/>
-      </map>
-    </property>
-  </bean>
-
+  
+  <!--主要作用于@Controller激活该模式下面是一种简写形式
+          它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
+          是spring MVC为@Controllers分发请求所必须的   -->                      
+  <mvc:annotation-driven/>
+  
   <!--文件上传-->
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <property name="maxUploadSize" value="100000"/>
+  </bean>
+  
+  <!-- 配置JSON视图 -->
+  <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    <property name="supportedMediaTypes">
+        <list>
+            <value>application/json; charset=UTF-8</value>
+        </list>
+    </property>     
+    <property name="objectMapper">
+        <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+            <property name="dateFormat">
+                <bean class="java.text.SimpleDateFormat">
+                    <constructor-arg index="0" type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                </bean>
+            </property>
+        </bean>
+    </property>
+  </bean>
+  <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>
+  <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <property name="messageConverters">
+        <list>
+            <ref bean="mappingJacksonHttpMessageConverter"/>
+            <ref bean="stringHttpMessageConverter"/>
+        </list>
+    </property>
   </bean>
   
   <!-- freemaker配置 -->
@@ -133,6 +113,7 @@
   		<property name="contentType" value="text/html; charset=UTF-8"></property>
   </bean>
   
+  <!-- 配置JSP视图 -->
   <bean
     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass"
@@ -144,12 +125,12 @@
   <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
     <property name="mediaTypes">
       <map>
-        <entry key="json"  value="application/json" />
+        <entry key="json"  value="application/json; charset=UTF-8" />
         <entry key="xml" value="text/xml" />
         <entry key="htm" value="text/html" />
       </map>
     </property>
-    <property name="defaultContentType" value="text/html" />
+    <property name="defaultContentType" value="text/html; charset=UTF-8" />
   </bean> 
 
 </beans>

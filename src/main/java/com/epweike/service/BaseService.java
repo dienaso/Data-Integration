@@ -1,5 +1,6 @@
 package com.epweike.service;
 
+import com.epweike.model.PageModel;
 import com.github.abel533.mapper.Mapper;
 import com.github.pagehelper.PageHelper;
 
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wuxp
@@ -61,7 +61,12 @@ public abstract class BaseService<T> {
 	 * @param pageSize
 	 * @return
 	 */
-	public List<T> selectPage(T record, int pageNum, int pageSize) {
+	public List<T> selectPage(T record, PageModel<T> pageModel) {
+		//每页显示条数
+    	int pageSize = pageModel.getiDisplayLength();
+    	//当前页码
+    	int pageNum = (pageModel.getiDisplayStart() / pageSize) + 1;
+    	
 		PageHelper.startPage(pageNum, pageSize);
 		// Spring4支持泛型注入
 		return mapper.select(record);

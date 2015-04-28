@@ -54,7 +54,7 @@
 	<!-- 生成mapxml对应client，也就是接口mapper -->  
     <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
 
-    <table tableName="lexicon" >
+    <table tableName="menu" >
     </table>
   </context>
 </generatorConfiguration>

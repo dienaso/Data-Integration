@@ -2,7 +2,7 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
-public class Lexicon extends BaseModel<Lexicon> {
+public class Lexicons extends BaseModel<Lexicons> {
     /**
 	 * 
 	 */
@@ -37,13 +37,13 @@ public class Lexicon extends BaseModel<Lexicon> {
      */
     private String category;
     
-    public Lexicon() {
+    public Lexicons() {
 	}
 
 	/**
 	 * @param sSearch
 	 */
-	public Lexicon(String sSearch) {
+	public Lexicons(String sSearch) {
 		this.word = sSearch;
 	}
 

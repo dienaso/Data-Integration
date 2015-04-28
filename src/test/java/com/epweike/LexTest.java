@@ -15,20 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.epweike.model.Lexicon;
-import com.epweike.service.LexiconService;
+import com.epweike.model.Lexicons;
+import com.epweike.service.LexiconsService;
 
 public class LexTest {
 
 	@Autowired
-	private LexiconService service;
+	private LexiconsService service;
 
 	@Before
 	public void before() {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "classpath:applicationContext.xml" });
-		service = (LexiconService) context.getBean("lexiconService");
+		service = (LexiconsService) context.getBean("lexiconService");
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class LexTest {
 			
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));  
 			String tempString = null; 
-			List<Lexicon> list = new ArrayList<Lexicon>();
+			List<Lexicons> list = new ArrayList<Lexicons>();
 			int line = 1; 
 			//一次读入一行，直到读入null为文件结束 
 			while ((tempString = reader.readLine()) != null){ 
@@ -55,7 +55,7 @@ public class LexTest {
 					String[] tempArr = tempString.split("/");
 					if(tempArr.length > 3) {
 						//单条数据
-						Lexicon lex = new Lexicon(); 
+						Lexicons lex = new Lexicons(); 
 						lex.setWord(tempArr[0]);
 						lex.setPos(tempArr[1]);
 						lex.setPinyin(tempArr[2]);

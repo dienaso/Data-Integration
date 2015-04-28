@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.epweike.model.Lexicon;
 import com.epweike.model.PageModel;
 
 
@@ -27,39 +26,6 @@ import com.epweike.model.PageModel;
  */
 public class BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
-	
-	//页码
-	public static int pageNum = 1;
-	/**
-	 * @return the pageNum
-	 */
-	public static int getPageNum() {
-		return pageNum;
-	}
-
-	/**
-	 * @param pageNum the pageNum to set
-	 */
-	public static void setPageNum(int pageNum) {
-		BaseController.pageNum = pageNum;
-	}
-
-	/**
-	 * @return the pageSize
-	 */
-	public static int getPageSize() {
-		return pageSize;
-	}
-
-	/**
-	 * @param pageSize the pageSize to set
-	 */
-	public static void setPageSize(int pageSize) {
-		BaseController.pageSize = pageSize;
-	}
-
-	//每页显示条数
-	public static int pageSize = 30;
 	
 	public static HttpSession getSession() {
 		HttpSession session = null;

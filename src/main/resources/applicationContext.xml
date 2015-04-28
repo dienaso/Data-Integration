@@ -135,12 +135,4 @@
 		<property name="notEmpty" value="true" />
 		<property name="IDENTITY" value="MYSQL" />
 	</bean>
-	
-	<!-- 自定义拦截链配置 -->
-    <!--<mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/sysuser/*"/>
-            <bean class="com.epweike.interceptor.UserInterceptor"></bean>
-        </mvc:interceptor>
-    </mvc:interceptors>-->
 </beans>

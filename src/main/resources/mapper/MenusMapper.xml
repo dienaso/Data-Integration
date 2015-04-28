@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epweike.mapper.MenusMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.Menus">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="on_time" jdbcType="TIMESTAMP" property="onTime" />
+    <result column="sort" jdbcType="TINYINT" property="sort" />
+  </resultMap>
+</mapper>

@@ -1,8 +1,8 @@
 package com.epweike.controller;
 
-import com.epweike.model.Lexicon;
+import com.epweike.model.Lexicons;
 import com.epweike.model.PageModel;
-import com.epweike.service.LexiconService;
+import com.epweike.service.LexiconsService;
 
 import net.sf.json.JSONObject;
 
@@ -19,20 +19,19 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 /**
  * @author wuxp
  */
 @Controller
-public class LexiconController extends BaseController {
+public class LexiconsController extends BaseController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(LexiconController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LexiconsController.class);
 
     @Autowired
-    private LexiconService lexiconService;
+    private LexiconsService lexiconService;
     
-    public List<Lexicon> lexiconList;
+    public List<Lexicons> lexiconList;
     
     @RequestMapping(value = {"/lexicon/list"})
     public String list(Model model) {
@@ -45,19 +44,15 @@ public class LexiconController extends BaseController {
     	//获取查询关键参数
     	String aoData = request.getParameter("aoData"); 
     	//解析查询关键参数
-    	PageModel<Lexicon> pageModel = parsePageParamFromJson(aoData);
+    	PageModel<Lexicons> pageModel = parsePageParamFromJson(aoData);
     	//搜索条件
     	String sSearch = pageModel.getsSearch();
-    	//每页显示条数
-    	pageSize = pageModel.getiDisplayLength();
-    	//当前页码
-    	pageNum = (pageModel.getiDisplayStart() / pageSize) + 1;
     	//总条数
-    	int total = this.lexiconService.count(new Lexicon());
+    	int total = this.lexiconService.count(new Lexicons());
     	//搜索结果数
-    	int totalDisplay = this.lexiconService.count(new Lexicon(sSearch));
-    	//结果集
-    	lexiconList = this.lexiconService.selectPage(new Lexicon(sSearch), pageNum, pageSize);
+    	int totalDisplay = this.lexiconService.count(new Lexicons(sSearch));
+    	//搜索结果集
+    	lexiconList = this.lexiconService.selectPage(new Lexicons(sSearch), pageModel);
 		//Set Total display record
     	pageModel.setiTotalDisplayRecords(totalDisplay);
 		//Set Total record

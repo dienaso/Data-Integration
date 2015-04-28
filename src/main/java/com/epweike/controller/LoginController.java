@@ -27,6 +27,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(value = {"/login"})
     public String login(Model model) {
+		logger.info("进入登录页面！！！");
         return "login";
     }
 	

@@ -38,6 +38,7 @@
 <script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+
     $("#list").dataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
