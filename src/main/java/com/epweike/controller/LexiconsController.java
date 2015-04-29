@@ -53,9 +53,7 @@ public class LexiconsController extends BaseController {
     	int totalDisplay = this.lexiconService.count(new Lexicons(sSearch));
     	//搜索结果集
     	lexiconList = this.lexiconService.selectPage(new Lexicons(sSearch), pageModel);
-		//Set Total display record
     	pageModel.setiTotalDisplayRecords(totalDisplay);
-		//Set Total record
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(lexiconList);
 		

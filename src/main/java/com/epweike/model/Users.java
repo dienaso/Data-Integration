@@ -11,7 +11,7 @@ public class Users extends BaseModel<Users> {
 
 	/**
 	 * @param userName
-	 * @param password
+	 * 
 	 */
 	public Users(String userName) {
 		this.userName = userName;
@@ -20,24 +20,19 @@ public class Users extends BaseModel<Users> {
 	public Users() {
 	}
 	
-    @Id
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "nick_name")
-    private String nickName;
-
-    private String email;
-
-    private String tel;
 
     /**
      * 即登陆账号
      */
+    @Id
     @Column(name = "username")
     private String userName;
 
     private String password;
+	
+    private String email;
+
+    private String tel;
 
     /**
      * 1:正常 0:禁用
@@ -46,37 +41,6 @@ public class Users extends BaseModel<Users> {
 
     @Column(name = "on_time")
     private String onTime;
-
-    @Column(name = "uer_icon")
-    private String uerIcon;
-
-	/**
-     * @return id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return nick_name
-     */
-    public String getNickName() {
-        return nickName;
-    }
-
-    /**
-     * @param nickName
-     */
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 
     /**
      * @return email
@@ -168,19 +132,5 @@ public class Users extends BaseModel<Users> {
      */
     public void setOnTime(String onTime) {
         this.onTime = onTime;
-    }
-
-    /**
-     * @return uer_icon
-     */
-    public String getUerIcon() {
-        return uerIcon;
-    }
-
-    /**
-     * @param uerIcon
-     */
-    public void setUerIcon(String uerIcon) {
-        this.uerIcon = uerIcon;
     }
 }

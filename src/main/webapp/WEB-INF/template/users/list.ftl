@@ -17,8 +17,6 @@
 	    <table id="list" class="table table-bordered data-table">
 	      <thead>
 	        <tr>
-	          <th>ID</th>
-	          <th>昵称</th>
 	          <th>用户名</th>
 	          <th>联系电话</th>
 	          <th>邮箱</th>
@@ -46,8 +44,6 @@ $(document).ready(function() {
 	        "sAjaxSource": '/users/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "id"},
-		        	{ "mData": "nickName"}, 
 		        	{ "mData": "userName"},
 		        	{ "mData": "tel"},
 		        	{ "mData": "email"},
@@ -56,8 +52,8 @@ $(document).ready(function() {
 	        	],
         	 "aoColumnDefs": [
                  {
-                     "aTargets": [7],
-                     "mData": "id",
+                     "aTargets": [5],
+                     "mData": "userName",
                      "mRender": function (data, type, full) {
                          return '<a href="javascript:void(0);" class="delete" tag=' + data + '>删除</a>';
                      }
@@ -75,9 +71,7 @@ $(document).ready(function() {
 						fnCallback(resp);
 					}
 				});
-	
 			}
-			 
 		});
 } );
 

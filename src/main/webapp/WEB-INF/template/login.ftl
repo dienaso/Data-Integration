@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="loginbox">            
-            <form id="loginform" class="form-vertical" action="/springAuthority/j_spring_security_check" method="post">
+            <form id="loginform" class="form-vertical" action="/j_spring_security_check" method="post">
 				 <div class="control-group normal_text"> <h3><img src="/common/matrix/img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">

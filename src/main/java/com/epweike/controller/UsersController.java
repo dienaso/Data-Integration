@@ -60,9 +60,7 @@ public class UsersController extends BaseController {
     	int totalDisplay = this.usersService.count(new Users(sSearch));
     	//搜索结果集
     	usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
-		//Set Total display record
     	pageModel.setiTotalDisplayRecords(totalDisplay);
-		//Set Total record
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(usersList);
 		
@@ -76,11 +74,11 @@ public class UsersController extends BaseController {
     public @ResponseBody int del(HttpServletRequest  request) throws IOException {
     	
     	//获取删除主键
-    	int id = Integer.parseInt( request.getParameter("id") ); 
+    	String userName = request.getParameter("id"); 
     	
-    	System.out.println("--------------------"+id);
+    	System.out.println("--------------------"+userName);
     	
-    	int result = this.usersService.delete(id);
+    	int result = this.usersService.delete(userName);
 	
 		return result;
     }

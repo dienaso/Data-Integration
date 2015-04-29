@@ -5,14 +5,11 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
     <result column="username" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="enabled" jdbcType="CHAR" property="enabled" />
     <result column="on_time" jdbcType="VARCHAR" property="onTime" />
-    <result column="uer_icon" jdbcType="VARCHAR" property="uerIcon" />
   </resultMap>
 </mapper>

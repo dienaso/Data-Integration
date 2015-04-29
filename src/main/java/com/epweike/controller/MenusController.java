@@ -52,9 +52,7 @@ public class MenusController extends BaseController {
     	int totalDisplay = this.menuService.count(new Menus(sSearch));
     	//搜索结果集
     	menuList = this.menuService.selectPage(new Menus(sSearch), pageModel);
-		//Set Total display record
     	pageModel.setiTotalDisplayRecords(totalDisplay);
-		//Set Total record
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(menuList);
 		
