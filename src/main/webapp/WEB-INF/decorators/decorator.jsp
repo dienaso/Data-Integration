@@ -1,24 +1,48 @@
+<%@page import="java.util.Iterator"%>
 <%@ page language="java" pageEncoding="UTF-8"%>  
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.context.support.ClassPathXmlApplicationContext" %>
+<%@ page import="com.epweike.service.MenusService" %>
+<%@ page import="com.epweike.model.Menus" %>
+<%@ page import="java.util.List" %>
+
+<%
+	@SuppressWarnings("resource")
+	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "classpath:applicationContext.xml" });
+	MenusService menusService = (MenusService) context.getBean("menusService");   
+	
+	String m = "1";
+	if (request.getParameter("m") != null && !request.getParameter("m").toString().equals("")) {
+		m = request.getParameter("m");
+	}
+	
+	System.out.println("m:"+m);
+	
+	//一级菜单
+	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
+%>  
 <!DOCTYPE html>
 <html>
 <head>
-<title>Data Integration</title>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/common/matrix/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="/common/matrix/css/uniform.css" />
-<link rel="stylesheet" href="/common/matrix/css/select2.css" />
-<link rel="stylesheet" href="/common/matrix/css/matrix-style.css" />
-<link rel="stylesheet" href="/common/matrix/css/matrix-media.css" />
-<link href="/common/matrix/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link href='http://fonts.useso.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-
-<script src="/common/matrix/js/jquery.min.js"></script> 
-<script src="/common/matrix/js/bootstrap.min.js"></script> 
-<script src="/common/matrix/js/matrix.js"></script> 
-
+	<title>Data Integration</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/common/matrix/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="/common/matrix/css/dataTables.bootstrap.css" />
+	<link rel="stylesheet" href="/common/matrix/css/uniform.css" />
+	<link rel="stylesheet" href="/common/matrix/css/select2.css" />
+	<link rel="stylesheet" href="/common/matrix/css/matrix-style.css" />
+	<link rel="stylesheet" href="/common/matrix/css/matrix-media.css" />
+	<link rel="stylesheet" href="/common/matrix/font-awesome/css/font-awesome.css" />
+	<link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:400,700,800' type='text/css'>
+	
+	<script src="/common/matrix/js/jquery.min.js"></script> 
+	<script src="/common/matrix/js/bootstrap.min.js"></script> 
+	<script src="/common/matrix/js/matrix.js"></script> 
+	
+	<sitemesh:write property='head'/>
 </head>
 <body>
 
@@ -27,7 +51,6 @@
   <h1><a href="/">Data Integration</a></h1>
 </div>
 <!--close-Header-part--> 
-
 
 <!--top-Header-menu-->
 <div id="user-nav" class="navbar navbar-inverse">
@@ -53,11 +76,77 @@
 <!--close-top-serch-->
 <!--sidebar-menu-->
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
-  <ul>
-    <li><a href="/"><i class="icon icon-home"></i> <span>控制面板</span></a> </li>
-    <li class="active"> <a href="/lexicon/list"><i class="icon icon-book"></i> <span>词库管理</span></a> </li>
-    <li> <a href="/users/list"><i class="icon icon-user"></i> <span>用户管理</span></a> </li>
-  </ul>
+	<ul>
+  		<%
+  		//循环遍历一级菜单
+		if(menus != null && menus.size() > 0) {
+			for(Iterator<Menus> it = menus.iterator(); it.hasNext();) {
+				Menus menu = it.next();
+				System.out.println("一级菜单对象：" + menu.toString());
+				int id = menu.getId();
+				String url = menu.getUrl();
+				String icon = menu.getIcon();
+				String name = menu.getName();
+		%>			
+			<%			
+			//二级菜单
+			List<Menus> two_menus = menusService.select(new Menus(id));
+			if(two_menus != null && two_menus.size() > 0) { //存在二级菜单
+			%>
+				
+			<li class="submenu open"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span><span class="label label-important"><%=two_menus.size() %></span></a> 	
+				<ul style="display: block;">
+					
+					<%
+					for(Iterator<Menus> two_it = two_menus.iterator(); two_it.hasNext();) {
+						Menus two_menu = two_it.next();
+						System.out.println("二级菜单对象：" + two_menus.toString());
+						String two_url = two_menu.getUrl();
+						String two_name = two_menu.getName();
+						if(two_menu.getId().toString().equals(m)) { //当前菜单
+					%>
+						
+						<li class="active"><a href="<%=two_url %>"><%=two_name %></a></li>
+					
+					<%	
+						} else {
+					%>
+					
+						<li><a href="<%=two_url %>"><%=two_name %></a></li>
+					
+					
+					<%
+						}
+					}
+					%>
+				
+				</ul>	
+				
+				<%				
+				} else {
+					if(menu.getId().toString().equals(m)) { //当前菜单
+				%>
+				
+			<li class="active"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span></a> 			
+					
+				<%
+					} else {
+				%>
+						
+			<li><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span></a> 						
+					
+				<%
+					}
+				} 
+				%>
+					
+			</li>
+			
+			<%
+				}
+			}
+	  		%>  
+	</ul>
 </div>
 <!--sidebar-menu-->
 

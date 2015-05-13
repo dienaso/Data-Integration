@@ -65,7 +65,7 @@ public class UsersController extends BaseController {
     	pageModel.setAaData(usersList);
 		
     	JSONObject json = JSONObject.fromObject(pageModel);
-    	logger.info("获取词语列表！！！"+json);
+    	logger.info("获取用户列表！！！"+json);
 	
 		return json.toString();
     }

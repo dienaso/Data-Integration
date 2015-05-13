@@ -36,10 +36,21 @@ public class Menus extends BaseModel<Menus> {
      */
     private Byte sort;
     
-    /**
-  	 * @param sSearch
-  	 */
   	public Menus() {
+  	}
+  	
+  	/**
+  	 * @param pid
+  	 */
+  	public Menus(int pid) {
+  		this.pid = pid;
+  	}
+  	
+  	/**
+  	 * @param level
+  	 */
+  	public Menus(Byte level) {
+  		this.level = level;
   	}
 
       /**

@@ -15,7 +15,7 @@
   </resultMap>
   
   <insert id="insertLexBatch" parameterType="java.util.List">  
-    insert into lexicon (word,frequency,pos,pinyin,synonym,category)   
+    insert into lexicons (word,frequency,pos,pinyin,synonym,category)   
     values  
     <foreach collection="list" item="item" index="index" separator="," >  
         (#{item.word},#{item.frequency},#{item.pos},#{item.pinyin},#{item.synonym},#{item.category})  

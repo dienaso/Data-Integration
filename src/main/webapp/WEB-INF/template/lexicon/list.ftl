@@ -2,8 +2,6 @@
 <html>
 <head>
 <title>词库管理</title>
-<link rel="stylesheet" href="/common/matrix/css/uniform.css" />
-<link rel="stylesheet" href="/common/matrix/css/select2.css" />
 </head>
 <body>
 <div id="content-header">
@@ -32,14 +30,21 @@
 	</div>
 </div>
 
-<script src="/common/matrix/js/jquery.dataTables.min.js"></script> 
+<script src="/common/matrix/js/jquery.dataTables.js"></script> 
+<!--
+<script src="/common/matrix/js/dataTables.tableTools.js"></script> 
+<script src="/common/matrix/js/dataTables.editor.js"></script> 
+<script src="/common/matrix/js/dataTables.bootstrap.js"></script> 
+<script src="/common/matrix/js/editor.bootstrap.js"></script> 
+-->
 <script src="/common/matrix/js/jquery.ui.custom.js"></script> 
 <script src="/common/matrix/js/jquery.uniform.js"></script> 
 <script src="/common/matrix/js/select2.min.js"></script> 
 <script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $("#list").dataTable({
+
+	var table = $("#list").dataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
@@ -57,13 +62,13 @@ $(document).ready(function() {
                      "aTargets": [5],
                      "mData": "id",
                      "mRender": function (data, type, full) {
-                         return '<a href="del(+ data +)" class="delete" tag=' + data + '>删除</a>';
+                         return '<a href="#" class="delete" tag=' + data + '>删除</a>';
                      }
                  }
                 ],
 	        "fnServerData" : function(sSource, aoData, fnCallback) {
 				$.ajax({
-					"type" : 'post',
+					"type" : 'get',
 					"url" : sSource,
 					"dataType" : "json",
 					"data" : {
@@ -73,12 +78,11 @@ $(document).ready(function() {
 						fnCallback(resp);
 					}
 				});
-	
 			}
-			 
 		});
-    
+		
 } );
+
 
 $(".delete").live('click', function() {
   var id = $(this).attr('tag');

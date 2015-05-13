@@ -28,12 +28,12 @@ public class LexTest {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "classpath:applicationContext.xml" });
-		service = (LexiconsService) context.getBean("lexiconService");
+		service = (LexiconsService) context.getBean("lexiconsService");
 	}
 	
 	@Test
 	public void readAndImportDic() {
-		String fileName = "F:\\lexicon\\lex-main.lex";
+		String fileName = "F:\\baike.dic";
 		
 		File file = new File(fileName); 
 		BufferedReader reader = null; 
@@ -52,18 +52,23 @@ public class LexTest {
 				System.out.println("line " + line + ": " + tempString); 
 				
 				try {
-					String[] tempArr = tempString.split("/");
-					if(tempArr.length > 3) {
-						//单条数据
-						Lexicons lex = new Lexicons(); 
-						lex.setWord(tempArr[0]);
-						lex.setPos(tempArr[1]);
-						lex.setPinyin(tempArr[2]);
-						lex.setSynonym(tempArr[3]);
-						lex.setCategory(file.getName());
-						//单个对象加入list
-						list.add(lex);
-					}
+//					String[] tempArr = tempString.split("/");
+//					if(tempArr.length > 0) {
+//						//单条数据
+//						Lexicons lex = new Lexicons(); 
+//						lex.setWord(tempArr[0]);
+//						lex.setPos(tempArr[1]);
+//						lex.setPinyin(tempArr[2]);
+//						lex.setSynonym(tempArr[3]);
+//						lex.setCategory(file.getName());
+//						//单个对象加入list
+//						list.add(lex);
+//					}
+					
+					Lexicons lex = new Lexicons(); 
+					lex.setWord(tempString);
+					list.add(lex);
+					
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				}

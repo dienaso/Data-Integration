@@ -38,7 +38,7 @@ public class LexiconsController extends BaseController {
         return "lexicon/list";
     }
     
-    @RequestMapping(value = "/lexicon/get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/lexicon/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
     	
     	//获取查询关键参数
