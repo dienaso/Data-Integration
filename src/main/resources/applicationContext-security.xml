@@ -13,6 +13,7 @@
 		
 		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER,ROLE_ADMIN')"/>
 		<form-login login-page="/login"
+					default-target-url=""
 					username-parameter="j_username" 
 					password-parameter="j_password" 
 					login-processing-url="/j_spring_security_check" 

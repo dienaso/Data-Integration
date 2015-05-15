@@ -14,6 +14,10 @@
     <result column="category" property="synonym" jdbcType="VARCHAR" />
   </resultMap>
   
+  <select id="selectAll" resultType="Lexicons">
+    select * from lexicons order by id
+  </select>
+  
   <insert id="insertLexBatch" parameterType="java.util.List">  
     insert into lexicons (word,frequency,pos,pinyin,synonym,category)   
     values  

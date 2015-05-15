@@ -16,9 +16,9 @@ public class PageModel<T> extends BaseModel<T>{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	int iTotalRecords;
+	long iTotalRecords;
 	 
-    int iTotalDisplayRecords;
+    long iTotalDisplayRecords;
     
     int iDisplayStart;
     
@@ -32,19 +32,19 @@ public class PageModel<T> extends BaseModel<T>{
  
     List<T> aaData;
  
-    public int getiTotalRecords() {
+    public long getiTotalRecords() {
 	return iTotalRecords;
     }
  
-    public void setiTotalRecords(int iTotalRecords) {
+    public void setiTotalRecords(long iTotalRecords) {
 	this.iTotalRecords = iTotalRecords;
     }
  
-    public int getiTotalDisplayRecords() {
+    public long getiTotalDisplayRecords() {
 	return iTotalDisplayRecords;
     }
  
-    public void setiTotalDisplayRecords(int iTotalDisplayRecords) {
+    public void setiTotalDisplayRecords(long iTotalDisplayRecords) {
 	this.iTotalDisplayRecords = iTotalDisplayRecords;
     }
  

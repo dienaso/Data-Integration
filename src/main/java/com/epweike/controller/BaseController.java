@@ -41,7 +41,12 @@ public class BaseController {
 		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();    
 	}
 		
-	//从json数据中解析关键参数
+	/**  
+	* @Description:从json数据中解析关键分页参数
+	*  
+	* @author  吴小平
+	* @version 创建时间：2015年5月15日 下午2:08:44
+	*/  
 	public <T> PageModel<T> parsePageParamFromJson(String aoData) {
 		
 		JSONArray ja = (JSONArray) JSONArray.fromObject(aoData);

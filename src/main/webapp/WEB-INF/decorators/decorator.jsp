@@ -12,12 +12,16 @@
 	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "classpath:applicationContext.xml" });
 	MenusService menusService = (MenusService) context.getBean("menusService");   
 	
-	String m = "1";
-	if (request.getParameter("m") != null && !request.getParameter("m").toString().equals("")) {
-		m = request.getParameter("m");
+	String id = "1";
+	String pid = "0";
+	if (request.getParameter("id") != null && !request.getParameter("id").toString().equals("")) {
+		id = request.getParameter("id");
+	}
+	if (request.getParameter("pid") != null && !request.getParameter("pid").toString().equals("")) {
+		pid = request.getParameter("pid");
 	}
 	
-	System.out.println("m:"+m);
+	System.out.println("id:" +id+ " pid:" +pid);
 	
 	//一级菜单
 	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
@@ -83,27 +87,41 @@
 			for(Iterator<Menus> it = menus.iterator(); it.hasNext();) {
 				Menus menu = it.next();
 				System.out.println("一级菜单对象：" + menu.toString());
-				int id = menu.getId();
 				String url = menu.getUrl();
+				if(!"#".equals(url)) {
+					url = menu.getUrl() + "?id=" + menu.getId() + "&pid=" + menu.getPid();
+				}
 				String icon = menu.getIcon();
 				String name = menu.getName();
 		%>			
 			<%			
 			//二级菜单
-			List<Menus> two_menus = menusService.select(new Menus(id));
+			List<Menus> two_menus = menusService.select(new Menus(menu.getId()));
 			if(two_menus != null && two_menus.size() > 0) { //存在二级菜单
+				if(menu.getId().toString().equals(pid)) { //当一级前菜单且存在子级菜单
+			%>		
+			
+			<li class="submenu open active"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span><span class="label label-important"><%=two_menus.size() %></span></a> 	
+				<ul style="display: block;">		
+			
+			<%
+				} else {
 			%>
+			
+			<li class="submenu"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span><span class="label label-important"><%=two_menus.size() %></span></a> 	
+				<ul style="display: none;">
+			
+			<%		
+				}
 				
-			<li class="submenu open"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span><span class="label label-important"><%=two_menus.size() %></span></a> 	
-				<ul style="display: block;">
-					
+			%>
 					<%
 					for(Iterator<Menus> two_it = two_menus.iterator(); two_it.hasNext();) {
 						Menus two_menu = two_it.next();
 						System.out.println("二级菜单对象：" + two_menus.toString());
-						String two_url = two_menu.getUrl();
+						String two_url = two_menu.getUrl() + "?id=" + two_menu.getId() + "&pid=" + two_menu.getPid();
 						String two_name = two_menu.getName();
-						if(two_menu.getId().toString().equals(m)) { //当前菜单
+						if(two_menu.getId().toString().equals(id)) { //当前二级菜单
 					%>
 						
 						<li class="active"><a href="<%=two_url %>"><%=two_name %></a></li>
@@ -124,7 +142,7 @@
 				
 				<%				
 				} else {
-					if(menu.getId().toString().equals(m)) { //当前菜单
+					if(menu.getId().toString().equals(id)) { //当一级前菜单且没有子级菜单
 				%>
 				
 			<li class="active"><a href="<%=url %>"><i class="<%=icon %>"></i> <span><%=name %></span></a> 			

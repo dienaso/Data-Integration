@@ -74,14 +74,12 @@ public class ChartUtils {
 		     System.out.println("--------------------");
 		     switch (ff.getName()) {
 	         	case "province"://按省份分布统计
-	         	int i = 0;
 			    for (Count count : ff.getValues()) {
 			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
 			    	Map<String, Object> map = new HashMap<String, Object>();
 			    	map.put("name", count.getName());
 			    	map.put("count", count.getCount());
 			    	list.add(map);
-			    	i++;
 		        }
 		     }
 	    }	

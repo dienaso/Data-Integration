@@ -61,7 +61,7 @@ $(document).ready(function() {
                 ],
 	        "fnServerData" : function(sSource, aoData, fnCallback) {
 				$.ajax({
-					"type" : 'post',
+					"type" : "post",
 					"url" : sSource,
 					"dataType" : "json",
 					"data" : {

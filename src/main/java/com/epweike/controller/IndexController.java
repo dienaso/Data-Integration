@@ -35,14 +35,14 @@ public class IndexController extends BaseController {
 	@Autowired
 	private UsersService sysuserService;
 	
-	@RequestMapping(value = {"/index"})
+	@RequestMapping(value = {"/"})
     public ModelAndView index() throws SolrServerException, IOException {
 		
 		String urlString = "http://solr.api.epweike.com/talent";
 		SolrClient solr = new HttpSolrClient(urlString);
 		
 		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province","city");
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
 		
 		QueryResponse response = solr.query(parameters);
 		
@@ -73,7 +73,7 @@ public class IndexController extends BaseController {
 		solr.close();
 		
 		//返回视图
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("dashboard");
 		mv.addObject("pieData", pieData);
 		
 		logger.info("进入控制面板！！！");

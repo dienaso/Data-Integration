@@ -3,6 +3,7 @@ package com.epweike.controller;
 import com.epweike.model.Lexicons;
 import com.epweike.model.PageModel;
 import com.epweike.service.LexiconsService;
+import com.github.pagehelper.Page;
 
 import net.sf.json.JSONObject;
 
@@ -46,13 +47,14 @@ public class LexiconsController extends BaseController {
     	//解析查询关键参数
     	PageModel<Lexicons> pageModel = parsePageParamFromJson(aoData);
     	//搜索条件
-    	String sSearch = pageModel.getsSearch();
+    	//String sSearch = pageModel.getsSearch();
     	//总条数
     	int total = this.lexiconService.count(new Lexicons());
-    	//搜索结果数
-    	int totalDisplay = this.lexiconService.count(new Lexicons(sSearch));
+    	
     	//搜索结果集
-    	lexiconList = this.lexiconService.selectPage(new Lexicons(sSearch), pageModel);
+    	lexiconList = this.lexiconService.selectAll(pageModel);
+    	//搜索结果数
+    	long totalDisplay = ((Page<Lexicons>) lexiconList).getTotal();
     	pageModel.setiTotalDisplayRecords(totalDisplay);
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(lexiconList);

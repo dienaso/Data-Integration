@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.epweike.model.Menus;
 import com.epweike.model.PageModel;
 import com.epweike.service.MenusService;
+import com.github.pagehelper.Page;
 
 import net.sf.json.JSONObject;
 
@@ -28,16 +29,16 @@ public class MenusController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(MenusController.class);
 
     @Autowired
-    private MenusService menuService;
+    private MenusService menusService;
     
-    public List<Menus> menuList;
+    public List<Menus> menusList;
     
-    @RequestMapping(value = {"/menu/list"})
+    @RequestMapping(value = {"/menus/list"})
     public String list(Model model) {
-        return "menu/list";
+        return "menus/list";
     }
     
-    @RequestMapping(value = "/menu/get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/menus/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
     	
     	//获取查询关键参数
@@ -47,14 +48,14 @@ public class MenusController extends BaseController {
     	//搜索条件
     	String sSearch = pageModel.getsSearch();
     	//总条数
-    	int total = this.menuService.count(new Menus());
-    	//搜索结果数
-    	int totalDisplay = this.menuService.count(new Menus(sSearch));
+    	int total = this.menusService.count(new Menus());
     	//搜索结果集
-    	menuList = this.menuService.selectPage(new Menus(sSearch), pageModel);
+    	menusList = this.menusService.selectPage(new Menus(sSearch), pageModel);
+    	//搜索结果数
+    	long totalDisplay = ((Page<Menus>) menusList).getTotal();
     	pageModel.setiTotalDisplayRecords(totalDisplay);
     	pageModel.setiTotalRecords(total);
-    	pageModel.setAaData(menuList);
+    	pageModel.setAaData(menusList);
 		
     	JSONObject json = JSONObject.fromObject(pageModel);
     	logger.info("获取菜单列表！！！"+json);
@@ -62,7 +63,7 @@ public class MenusController extends BaseController {
 		return json.toString();
     }
     
-    @RequestMapping(value = "/menu/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/menus/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public @ResponseBody int del(HttpServletRequest  request) throws IOException {
     	
     	//获取删除主键
@@ -70,7 +71,7 @@ public class MenusController extends BaseController {
     	
     	System.out.println("--------------------"+id);
     	
-    	int result = this.menuService.delete(id);
+    	int result = this.menusService.delete(id);
 	
 		return result;
     }
