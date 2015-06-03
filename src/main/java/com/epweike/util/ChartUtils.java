@@ -82,10 +82,7 @@ public class ChartUtils {
 			    	list.add(map);
 		        }
 		     }
-	    }	
+	    }
 		return list;
-	}
-	
-	public static void main(String args[]) {
 	}
 }

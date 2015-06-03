@@ -44,45 +44,44 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-	var table = $("#list").dataTable({
-			"bServerSide" : true,
-			"bDestroy": true,
-			"bStateSave": true,
-	        "sAjaxSource": '/lexicon/get', 
-	        "aoColumns":
-	           [  
-					{ "mData": "id"},
-		        	{ "mData": "word"}, 
-		        	{ "mData": "pinyin"},
-		        	{ "mData": "pos"},
-		        	{ "mData": "synonym"},
-	        	],
-        	 "aoColumnDefs": [
-                 {
-                     "aTargets": [5],
-                     "mData": "id",
-                     "mRender": function (data, type, full) {
-                         return '<a href="#" class="delete" tag=' + data + '>删除</a>';
-                     }
+$("#list").dataTable({
+		"bServerSide" : true,
+		"bDestroy": true,
+		"bStateSave": true,
+        "sAjaxSource": '/lexicon/get', 
+        "aoColumns":
+           [  
+				{ "mData": "id"},
+	        	{ "mData": "word"}, 
+	        	{ "mData": "pinyin"},
+	        	{ "mData": "pos"},
+	        	{ "mData": "synonym"},
+        	],
+    	 "aoColumnDefs": [
+             {
+                 "aTargets": [5],
+                 "mData": "id",
+                 "mRender": function (data, type, full) {
+                     return '<a href="#" class="delete" tag=' + data + '>删除</a>';
                  }
-                ],
-	        "fnServerData" : function(sSource, aoData, fnCallback) {
-				$.ajax({
-					"type" : "get",
-					"url" : sSource,
-					"dataType" : "json",
-					"data" : {
-						aoData : JSON.stringify(aoData)
-					},
-					"success" : function(resp) {
-						fnCallback(resp);
-					}
-				});
-			}
-		});
+             }
+            ],
+        "fnServerData" : function(sSource, aoData, fnCallback) {
+			$.ajax({
+				"type" : "get",
+				"url" : sSource,
+				"dataType" : "json",
+				"data" : {
+					aoData : JSON.stringify(aoData)
+				},
+				"success" : function(resp) {
+					fnCallback(resp);
+				}
+			});
+		}
+	});
 		
 } );
-
 
 $(".delete").live('click', function() {
   var id = $(this).attr('tag');
