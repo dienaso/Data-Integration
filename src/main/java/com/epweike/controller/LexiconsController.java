@@ -47,12 +47,12 @@ public class LexiconsController extends BaseController {
     	//解析查询关键参数
     	PageModel<Lexicons> pageModel = parsePageParamFromJson(aoData);
     	//搜索条件
-    	//String sSearch = pageModel.getsSearch();
-    	//总条数
+    	String sSearch = pageModel.getsSearch();
+    	//总条数(无过滤)
     	int total = this.lexiconService.count(new Lexicons());
     	
     	//搜索结果集
-    	lexiconList = this.lexiconService.selectAll(pageModel);
+    	lexiconList = this.lexiconService.select(new Lexicons(sSearch), pageModel);
     	//搜索结果数
     	long totalDisplay = ((Page<Lexicons>) lexiconList).getTotal();
     	pageModel.setiTotalDisplayRecords(totalDisplay);

@@ -85,11 +85,6 @@
 			value="com.epweike.mapper,com.github.abel533.entity.mapper" />
 	</bean>
 
-	<bean id="entityMapper" class="com.github.abel533.entity.EntityMapper"
-		scope="prototype">
-		<constructor-arg ref="commonMapper" />
-	</bean>
-
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
 		scope="prototype">
 		<constructor-arg index="0" ref="sqlSessionFactory" />

@@ -5,6 +5,7 @@ import com.github.abel533.mapper.Mapper;
 import com.github.pagehelper.PageHelper;
 
 import org.apache.ibatis.exceptions.TooManyResultsException;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,10 @@ public abstract class BaseService<T> {
 	
 	public List<T> select(T record) {
 		return mapper.select(record);
+	}
+	
+	public List<T> select(T record, PageModel<T> pageModel) {
+		return mapper.selectByRowBounds(record, new RowBounds(pageModel.getiDisplayStart(), pageModel.getiDisplayLength()));
 	}
 
 	public T selectOne(T record) {
