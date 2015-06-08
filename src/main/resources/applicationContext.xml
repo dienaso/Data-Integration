@@ -68,14 +68,6 @@
 		<property name="typeAliasesPackage" value="com.epweike.model" />
 		<property name="plugins">
 			<array>
-				<bean class="com.github.pagehelper.PageHelper">
-					<property name="properties">
-						<value>
-							dialect=hsqldb
-							reasonable=true
-						</value>
-					</property>
-				</bean>
 			</array>
 		</property>
 	</bean>

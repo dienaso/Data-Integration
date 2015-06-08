@@ -81,4 +81,30 @@ public class ChartsController extends BaseController {
         return mv;
     }
 	
+	@RequestMapping(value = {"/charts/users/loginType"})
+    public ModelAndView loginTypeStat() throws SolrServerException, IOException {
+		
+		String urlString = "http://solr.api.epweike.com/login";
+		SolrClient solr = new HttpSolrClient(urlString);
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("login_type");
+		QueryResponse response = solr.query(parameters);
+		SolrDocumentList results = response.getResults();
+		
+		//登录类型统计
+		List<FacetField> facetFields = response.getFacetFields(); 
+		
+		solr.close();
+		
+		//返回视图
+		ModelAndView mv = new ModelAndView("charts/users/loginType");
+		//总数
+		mv.addObject("total", results.getNumFound());
+		//柱状图数据
+		mv.addObject("barData", ChartUtils.barJson(facetFields));
+		//饼状图数据
+		mv.addObject("pieData", ChartUtils.pieJson(facetFields));
+		logger.info("进入用户注册统计！！！");
+        return mv;
+    }
+	
 }

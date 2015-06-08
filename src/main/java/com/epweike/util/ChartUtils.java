@@ -43,7 +43,8 @@ public class ChartUtils {
 			    	map.put("data", count.getCount());
 			    	countList.add(map);
 		        }
-	         	case "city"://按城市分布统计
+			    break;
+	         	case "login_type"://按登陆类型统计
 			    for (Count count : ff.getValues()) {
 			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
 			    	Map<String, Object> map = new HashMap<String, Object>();
@@ -81,6 +82,16 @@ public class ChartUtils {
 			    	map.put("count", count.getCount());
 			    	list.add(map);
 		        }
+			    break;
+	         	case "login_type"://按登陆类型统计
+			    for (Count count : ff.getValues()) {
+			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
+			    	Map<String, Object> map = new HashMap<String, Object>();
+			    	map.put("name", count.getName());
+			    	map.put("count", count.getCount());
+			    	list.add(map);
+		        }
+			    break;
 		     }
 	    }
 		return list;

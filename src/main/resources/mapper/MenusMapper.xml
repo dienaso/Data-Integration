@@ -15,4 +15,5 @@
     <result column="on_time" jdbcType="TIMESTAMP" property="onTime" />
     <result column="sort" jdbcType="TINYINT" property="sort" />
   </resultMap>
+  
 </mapper>

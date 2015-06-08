@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.epweike.model.Menus;
 import com.epweike.model.PageModel;
 import com.epweike.service.MenusService;
-import com.github.pagehelper.Page;
 
 import net.sf.json.JSONObject;
 
@@ -52,8 +51,7 @@ public class MenusController extends BaseController {
     	//搜索结果集
     	menusList = this.menusService.selectPage(new Menus(sSearch), pageModel);
     	//搜索结果数
-    	long totalDisplay = ((Page<Menus>) menusList).getTotal();
-    	pageModel.setiTotalDisplayRecords(totalDisplay);
+    	pageModel.setiTotalDisplayRecords(total);
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(menusList);
 		

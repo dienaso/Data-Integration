@@ -3,7 +3,6 @@ package com.epweike.controller;
 import com.epweike.model.PageModel;
 import com.epweike.model.Users;
 import com.epweike.service.UsersService;
-import com.github.pagehelper.Page;
 
 import net.sf.json.JSONObject;
 
@@ -59,9 +58,7 @@ public class UsersController extends BaseController {
     	int total = this.usersService.count(new Users());
     	//搜索结果集
     	usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
-    	//搜索结果数
-    	long totalDisplay = ((Page<Users>) usersList).getTotal();
-    	pageModel.setiTotalDisplayRecords(totalDisplay);
+    	pageModel.setiTotalDisplayRecords(total);
     	pageModel.setiTotalRecords(total);
     	pageModel.setAaData(usersList);
 		
