@@ -21,7 +21,7 @@
 		/>
 		<logout logout-url="/j_spring_security_logout"/>
 		<session-management>
-			 <concurrency-control max-sessions="1" />
+			 <concurrency-control max-sessions="10" />
 		</session-management>
 	</http>
 	

@@ -52,9 +52,8 @@
 				<div class="alert alert-danger">
 					<strong>
 						<i class="icon-remove"></i>
-						Oh snap!
+						${SPRING_SECURITY_LAST_EXCEPTION.message}  <!-- 输出异常信息 -->
 					</strong>
-					${SPRING_SECURITY_LAST_EXCEPTION.message}  <!-- 输出异常信息 -->
 					<br />
 				</div>
 			</#if>	

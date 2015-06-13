@@ -8,8 +8,8 @@
 	<body>
 
 	  <div id="content-header">
-	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">用户登录类型统计</a></div>
-	    <h1>用户登录类型统计</h1>
+	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">用户注册统计</a></div>
+	    <h1>用户注册统计</h1>
 	  </div>
 	  <div class="container-fluid">
 	    <hr>
@@ -17,23 +17,10 @@
 	      <div class="span12">
 	        <div class="widget-box">
 	          <div class="widget-title"> <span class="icon"> <i class="icon-signal"></i> </span>
-	            <h5>柱状图(总数：${total}次)</h5>
+	            <h5>用户注册统计(总数：${total}人)</h5>
 	          </div>
 	          <div class="widget-content">
 	            <div class="bars"></div>
-	          </div>
-	        </div>
-	      </div>
-	     </div>
-	     
-	     <div class="row-fluid">
-	      <div class="span12">
-	        <div class="widget-box">
-	          <div class="widget-title"> <span class="icon"> <i class="icon-signal"></i> </span>
-	            <h5>饼状图(总数：${total}次)</h5>
-	          </div>
-	          <div class="widget-content">
-	            <div class="pie"></div>
 	          </div>
 	        </div>
 	      </div>
@@ -47,32 +34,6 @@
 	<script src="/common/matrix/js/jquery.flot.axislabels.js"></script> 
 	<script src="/common/matrix/js/jquery.peity.min.js"></script> 
 	<script type="text/javascript">
-	<!--Pie-chart-js-->
-	var data = ${pieData};
-    var pie = $.plot($(".pie"), data,{
-        series: {
-            pie: {
-                show: true,
-                radius: 3/4,
-                label: {
-                    show: true,
-                    radius: 3/4,
-                    formatter: function(label, series){
-                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                    },
-                    background: {
-                        opacity: 0.5,
-                        color: '#000'
-                    }
-                },
-                innerRadius: 0.2
-            },
-			legend: {
-				show: false
-			}
-		}
-	});
-	<!--Pie-chart-js-->	
 	<!--Bar-chart-js-->
 	var barData = new Array(); //数据  
     var ticks = new Array(); //横坐标值  
@@ -80,7 +41,7 @@
     	barData.push([${list_index},'${list.count}']);
     	ticks.push([${list_index},'${list.name}'])
     </#list>
-	var dataset = [{label: "一品威客网用户登录类型", data: barData, color: "#5482FF" }];
+	var dataset = [{label: "用户注册", data: barData, color: "#5482FF" }];
 	
 	var options = {
         series: {
@@ -93,7 +54,7 @@
             barWidth: 0.5
         },
         xaxis: {
-            axisLabel: "登陆类型",
+            axisLabel: "省份",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
@@ -101,13 +62,13 @@
             ticks: ticks
         },
         yaxis: {
-            axisLabel: "登陆次数",
+            axisLabel: "用户数",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v + "次";
+                return v + "人";
             }
         },
         legend: {

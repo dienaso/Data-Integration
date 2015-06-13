@@ -22,57 +22,43 @@
 	          <th>邮箱</th>
 	          <th>状态</th>
 	          <th>注册时间</th>
-	          <th>操作</th>
 	        </tr>
 	      </thead>
 	    </table>
 	  </div>
 	</div>
 </div>
-<script src="/common/matrix/js/jquery.dataTables.js"></script> 
-<script src="/common/matrix/js/jquery.ui.custom.js"></script> 
-<script src="/common/matrix/js/jquery.uniform.js"></script> 
-<script src="/common/matrix/js/select2.min.js"></script> 
-<script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 
     $("#list").dataTable({
-			"bServerSide" : true,
-			"bDestroy": true,
-			"bStateSave": true,
-	        "sAjaxSource": '/users/get', 
-	        "aoColumns":
-	           [  
-		        	{ "mData": "userName"},
-		        	{ "mData": "tel"},
-		        	{ "mData": "email"},
-		        	{ "mData": "enabled"},
-		        	{ "mData": "onTime"},
-	        	],
-        	 "aoColumnDefs": [
-                 {
-                     "aTargets": [5],
-                     "mData": "userName",
-                     "mRender": function (data, type, full) {
-                         return '<a href="javascript:void(0);" class="delete" tag=' + data + '>删除</a>';
-                     }
-                 }
-                ],
-	        "fnServerData" : function(sSource, aoData, fnCallback) {
-				$.ajax({
-					"type" : "post",
-					"url" : sSource,
-					"dataType" : "json",
-					"data" : {
-						aoData : JSON.stringify(aoData)
-					},
-					"success" : function(resp) {
-						fnCallback(resp);
-					}
-				});
-			}
-		});
+		"bServerSide" : true,
+		"bDestroy": true,
+		"bStateSave": true,
+		"bFilter": false,
+        "sAjaxSource": '/users/get', 
+        "aoColumns":
+           [  
+	        	{ "mData": "userName"},
+	        	{ "mData": "tel"},
+	        	{ "mData": "email"},
+	        	{ "mData": "enabled"},
+	        	{ "mData": "onTime"},
+        	],
+        "fnServerData" : function(sSource, aoData, fnCallback) {
+			$.ajax({
+				"type" : "post",
+				"url" : sSource,
+				"dataType" : "json",
+				"data" : {
+					aoData : JSON.stringify(aoData)
+				},
+				"success" : function(resp) {
+					fnCallback(resp);
+				}
+			});
+		}
+	});
 } );
 
 $(".delete").live('click', function() {

@@ -22,32 +22,20 @@
 		          	<th>拼音</th>
 		          	<th>词性</th>
 		          	<th>近义词</th>
-		          	<th>操作</th>
 	        	</tr>
 	     	</thead>
 	    </table>
 	  </div>
 	</div>
 </div>
-
-<script src="/common/matrix/js/jquery.dataTables.js"></script> 
-<!--
-<script src="/common/matrix/js/dataTables.tableTools.js"></script> 
-<script src="/common/matrix/js/dataTables.editor.js"></script> 
-<script src="/common/matrix/js/dataTables.bootstrap.js"></script> 
-<script src="/common/matrix/js/editor.bootstrap.js"></script> 
--->
-<script src="/common/matrix/js/jquery.ui.custom.js"></script> 
-<script src="/common/matrix/js/jquery.uniform.js"></script> 
-<script src="/common/matrix/js/select2.min.js"></script> 
-<script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 
-$("#list").dataTable({
+	$("#list").dataTable({
 		"bServerSide" : true,
 		"bDestroy": true,
 		"bStateSave": true,
+		"bFilter": false,
         "sAjaxSource": '/lexicon/get', 
         "aoColumns":
            [  
@@ -57,15 +45,6 @@ $("#list").dataTable({
 	        	{ "mData": "pos"},
 	        	{ "mData": "synonym"},
         	],
-    	 "aoColumnDefs": [
-             {
-                 "aTargets": [5],
-                 "mData": "id",
-                 "mRender": function (data, type, full) {
-                     return '<a href="#" class="delete" tag=' + data + '>删除</a>';
-                 }
-             }
-            ],
         "fnServerData" : function(sSource, aoData, fnCallback) {
 			$.ajax({
 				"type" : "get",

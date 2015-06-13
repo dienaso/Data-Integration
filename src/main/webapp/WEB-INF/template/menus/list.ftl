@@ -48,6 +48,7 @@ $(document).ready(function() {
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
+			"bFilter": false,
 	        "sAjaxSource": '/menus/get', 
 	        "aoColumns":
 	           [  

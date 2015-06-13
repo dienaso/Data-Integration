@@ -10,10 +10,8 @@ import com.epweike.service.UsersService;
 
 import net.sf.json.JSONArray;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -38,15 +36,9 @@ public class IndexController extends BaseController {
 	@RequestMapping(value = {"/"})
     public ModelAndView index() throws SolrServerException, IOException {
 		
-		String urlString = "http://solr.api.epweike.com/talent";
-		SolrClient solr = new HttpSolrClient(urlString);
-		
-		
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
 		
-		QueryResponse response = solr.query(parameters);
-		
-		//SolrDocumentList list = response.getResults();
+		QueryResponse response = getSolrServer("talent").query(parameters);
 		
 		//地区分布统计
 		List<FacetField> facetFields = response.getFacetFields(); 
@@ -70,7 +62,6 @@ public class IndexController extends BaseController {
 		//List to json
 		String pieData = JSONArray.fromObject(countList).toString();
 		System.out.println(pieData);
-		solr.close();
 		
 		//返回视图
 		ModelAndView mv = new ModelAndView("dashboard");

@@ -29,28 +29,6 @@
 	        </div>
 	      </div>
 	    </div>
-	    <div class="row-fluid">
-	      <div class="span6">
-	        <div class="widget-box">
-	          <div class="widget-title"> <span class="icon"> <i class="icon-signal"></i> </span>
-	            <h5>用户分布统计</h5>
-	          </div>
-	          <div class="widget-content">
-	            <div class="pie"></div>
-	          </div>
-	        </div>
-	      </div>
-	      <div class="span6">
-	        <div class="widget-box">
-	          <div class="widget-title"> <span class="icon"> <i class="icon-signal"></i> </span>
-	            <h5>Line chart</h5>
-	          </div>
-	          <div class="widget-content">
-	            <div class="bars"></div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
 	  </div>
 		
 	<script src="/common/matrix/js/jquery.flot.min.js"></script> 
@@ -129,51 +107,6 @@
 	    plotAccordingToChoices();
 	});
 	<!--Turning-series-chart-js-->
-	<!--Pie-chart-js-->
-	var data = ${pieData};
-    var pie = $.plot($(".pie"), data,{
-        series: {
-            pie: {
-                show: true,
-                radius: 3/4,
-                label: {
-                    show: true,
-                    radius: 3/4,
-                    formatter: function(label, series){
-                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                    },
-                    background: {
-                        opacity: 0.5,
-                        color: '#000'
-                    }
-                },
-                innerRadius: 0.2
-            },
-			legend: {
-				show: false
-			}
-		}
-	});
-	<!--Pie-chart-js-->	
-	<!--Line-chart-js-->	
-	var d1 = [];
-    for (var i = 0; i <= 10; i += 1) d1.push([i, parseInt(Math.random() * 30)]);
-
-	var data = new Array(); 
-	data.push({
-		data:d1,
-        bars: {
-            show: true, 
-            barWidth: 0.4, 
-            order: 1,
-        }
-    });    
-	
-    //Display graph
-    var bar = $.plot($(".bars"), data, {
-		legend: true
-	});
-	<!--Line-chart-js-->	
 	</script>
 	</body>
 </html>

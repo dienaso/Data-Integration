@@ -29,22 +29,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Data Integration</title>
+	<title>Data Integration-数据集中查询分析平台</title>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/common/matrix/css/bootstrap-responsive.min.css" />
-	<link rel="stylesheet" href="/common/matrix/css/dataTables.bootstrap.css" />
 	<link rel="stylesheet" href="/common/matrix/css/uniform.css" />
 	<link rel="stylesheet" href="/common/matrix/css/select2.css" />
 	<link rel="stylesheet" href="/common/matrix/css/matrix-style.css" />
 	<link rel="stylesheet" href="/common/matrix/css/matrix-media.css" />
 	<link rel="stylesheet" href="/common/matrix/font-awesome/css/font-awesome.css" />
 	<link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:400,700,800' type='text/css'>
+	<link rel="stylesheet" href="/common/matrix/css/bootstrap-datepicker3.css" />
+	<link rel="stylesheet" href="/common/matrix/css/dataTables.tableTools.css" />
 	
 	<script src="/common/matrix/js/jquery.min.js"></script> 
 	<script src="/common/matrix/js/bootstrap.min.js"></script> 
 	<script src="/common/matrix/js/matrix.js"></script> 
+	<script src="/common/matrix/js/jquery.dataTables.js"></script> 
+	<script src="/common/matrix/js/jquery.ui.custom.js"></script> 
+	<script src="/common/matrix/js/jquery.uniform.js"></script> 
+	<script src="/common/matrix/js/select2.min.js"></script> 
+	<script src="/common/matrix/js/dataTables.tableTools.js"></script>
+	<script src="/common/matrix/js/bootstrap-datepicker.js"></script> 
+	<script src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script> 
 	
 	<sitemesh:write property='head'/>
 </head>
@@ -184,6 +192,6 @@
 </div>
 
 <!--end-Footer-part-->
-
+<script src="/common/matrix/js/matrix.tables.js"></script>
 </body>
 </html>
