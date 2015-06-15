@@ -61,8 +61,7 @@ public class TaskController extends BaseController {
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet(field, start, end, statType)
-				.setFacetLimit(1000)
-		;
+				.setFacetLimit(1000);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
 		// 过滤任务类型
@@ -182,7 +181,8 @@ public class TaskController extends BaseController {
 				.addFilterQuery(
 						"pub_time:[" + startString + "T00:00:00Z TO "
 								+ endString + "T23:59:59Z]").setFacet(true)
-				.addFacetField("indus_name").setFacetLimit(1000);
+				.addFacetField("indus_name").setFacetMinCount(1)
+				.setFacetLimit(1000);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
 		// 过滤任务类型
