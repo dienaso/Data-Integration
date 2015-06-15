@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+@Table(name = "menus")
 public class Menus extends BaseModel<Menus> {
     /**
 	 * 

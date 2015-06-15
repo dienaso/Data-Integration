@@ -2,6 +2,7 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
+@Table(name = "lexicons")
 public class Lexicons extends BaseModel<Lexicons> {
     /**
 	 * 

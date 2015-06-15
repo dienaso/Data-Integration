@@ -2,6 +2,7 @@ package com.epweike.model;
 
 import javax.persistence.*;
 
+@Table(name = "users")
 public class Users extends BaseModel<Users> {
 	
     /**

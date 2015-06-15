@@ -346,8 +346,9 @@
 						<artifactId>mysql-connector-java</artifactId>
 						<version>${mysql.version}</version>
 					</dependency>
+					<!--通用Mapper -->
 					<dependency>
-						<groupId>tk.mybatis.mapper</groupId>
+						<groupId>tk.mybatis</groupId>
 						<artifactId>mapper</artifactId>
 						<version>${mapper.version}</version>
 					</dependency>
