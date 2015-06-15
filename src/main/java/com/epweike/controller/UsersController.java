@@ -3,6 +3,7 @@ package com.epweike.controller;
 import com.epweike.model.PageModel;
 import com.epweike.model.Users;
 import com.epweike.service.UsersService;
+import com.epweike.util.DateUtils;
 import com.epweike.util.StatUtils;
 
 import net.sf.json.JSONObject;
@@ -11,6 +12,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,8 +41,6 @@ public class UsersController extends BaseController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 	
-	public static final String urlCoreString = SOLR_URL + "talent";
-
     @Autowired
     private UsersService usersService;
     
@@ -87,11 +89,11 @@ public class UsersController extends BaseController {
     public @ResponseBody int del(HttpServletRequest  request) throws IOException {
     	
     	//获取删除主键
-    	String userName = request.getParameter("id"); 
+    	String id = request.getParameter("id"); 
     	
-    	System.out.println("--------------------"+userName);
+    	System.out.println("--------------------"+id);
     	
-    	int result = this.usersService.delete(userName);
+    	int result = this.usersService.delete(id);
 	
 		return result;
     }
@@ -131,22 +133,63 @@ public class UsersController extends BaseController {
 	* @version 创建时间：2015年6月10日 下午3:28:27
 	*/  
 	@RequestMapping(value = {"/stat/users/register"})
-    public ModelAndView registerStat() throws SolrServerException, IOException {
-		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
-		QueryResponse response = getSolrServer("talent").query(parameters);
-		SolrDocumentList results = response.getResults();
-		
-		//地区分布统计
-		List<FacetField> facetFields = response.getFacetFields(); 
-		
+    public ModelAndView register() throws SolrServerException, IOException {
 		//返回视图
 		ModelAndView mv = new ModelAndView("stat/users/register");
-		//总数
-		mv.addObject("total", results.getNumFound());
-		//柱状图数据
-		mv.addObject("barData", StatUtils.barJson(facetFields));
 		logger.info("进入用户注册统计！！！");
         return mv;
     }
+	
+	/**  
+	* @Description:获取注册用户
+	*  
+	* @author  吴小平
+	* @version 创建时间：2015年6月10日 下午3:28:27
+	*/  
+	@RequestMapping(value = "/users/register/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getRegister(HttpServletRequest request)
+			throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// 开始时间
+		String startString = getParamFromAodata(aoData, "start");
+		Date start = DateUtils.parseDate(startString);
+		// 结束时间
+		String endString = getParamFromAodata(aoData, "end");
+		Date end = DateUtils.parseDateTime(endString + " 23:59:59");
+		// 统计类型(日、月、年)
+		String statType = getParamFromAodata(aoData, "statType");
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addDateRangeFacet("reg_time", start, end, statType)
+				.setFacetLimit(1000);
+
+		QueryResponse response = getSolrServer("task").query(parameters);
+
+		// 日期根据统计类型截取
+		int endIndex = 10;
+		if (statType.contains("YEAR")) {
+			endIndex = 4;
+		} else if (statType.contains("MONTH")) {
+			endIndex = 7;
+		}
+		
+		// 获取区间统计列表
+		@SuppressWarnings("rawtypes")
+		List<RangeFacet> listFacet = response.getFacetRanges();
+		List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet, endIndex);
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.size());
+		pageModel.setiTotalRecords(list.size());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取用户注册统计列表！！！" + json);
+
+		return json.toString();
+	}
 }

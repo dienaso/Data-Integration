@@ -37,8 +37,6 @@ public class TaskController extends BaseController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(TaskController.class);
 
-	public static final String urlCoreString = SOLR_URL + "task";
-
 	/**
 	 * @Description:通用获取任务、稿件统计列表,根据时间分组
 	 * 
@@ -62,7 +60,9 @@ public class TaskController extends BaseController {
 		String source = getParamFromAodata(aoData, "source");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
-				.addDateRangeFacet(field, start, end, statType).addFacetPivotField("source");
+				.addDateRangeFacet(field, start, end, statType)
+				.setFacetLimit(1000)
+		;
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
 		// 过滤任务类型
@@ -106,6 +106,7 @@ public class TaskController extends BaseController {
 
 		QueryResponse response = getSolrServer(core).query(parameters);
 		// 获取区间统计列表
+		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (RangeFacet<?, ?> rf : listFacet) {
@@ -181,8 +182,7 @@ public class TaskController extends BaseController {
 				.addFilterQuery(
 						"pub_time:[" + startString + "T00:00:00Z TO "
 								+ endString + "T23:59:59Z]").setFacet(true)
-				.addFacetField("indus_name").setFacetLimit(1000)
-				.setFacetMinCount(1);
+				.addFacetField("indus_name").setFacetLimit(1000);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
 		// 过滤任务类型
@@ -221,7 +221,7 @@ public class TaskController extends BaseController {
 		List<FacetField> facetFields = response.getFacetFields();
 
 		List<Map<String, Object>> list = StatUtils
-				.getCountList(facetFields, "");
+				.getFacetList(facetFields, "");
 
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());

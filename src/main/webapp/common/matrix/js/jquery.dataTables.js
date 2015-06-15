@@ -3216,18 +3216,15 @@
 			/* Record set after filtering */
 			out += ' ' + lang.sInfoFiltered;
 		}
-	
 		// Convert the macros
 		out += lang.sInfoPostFix;
 		out = _fnInfoMacros( settings, out );
-	
 		var callback = lang.fnInfoCallback;
 		if ( callback !== null ) {
 			out = callback.call( settings.oInstance,
 				settings, start, end, max, total, out
 			);
 		}
-	
 		$(nodes).html( out );
 	}
 	
@@ -3243,12 +3240,12 @@
 			vis        = settings.fnRecordsDisplay(),
 			all        = len === -1;
 		return str.
-			replace(/_START_/g, formatter.call( settings, start ) ).
-			replace(/_END_/g,   formatter.call( settings, settings.fnDisplayEnd() ) ).
-			replace(/_MAX_/g,   formatter.call( settings, settings.fnRecordsTotal() ) ).
-			replace(/_TOTAL_/g, formatter.call( settings, vis ) ).
-			replace(/_PAGE_/g,  formatter.call( settings, all ? 1 : Math.ceil( start / len ) ) ).
-			replace(/_PAGES_/g, formatter.call( settings, all ? 1 : Math.ceil( vis / len ) ) );
+			replace(/_START_/g, start ).
+			replace(/_END_/g,   settings.fnDisplayEnd() ).
+			replace(/_MAX_/g,   settings.fnRecordsTotal() ).
+			replace(/_TOTAL_/g, vis ).
+			replace(/_PAGE_/g,  all ? 1 : Math.ceil( start / len ) ).
+			replace(/_PAGES_/g, all ? 1 : Math.ceil( vis / len ) );
 	}
 	
 	

@@ -63,9 +63,9 @@
               <label class="control-label">统计类型:</label>
               <div class="controls">
                 <select id="statType">
-                  <option value="+1YEAR">按年</option>
-                  <option value="+1MONTH">按月</option>
                   <option value="+1DAY">按日</option>
+                  <option value="+1MONTH">按月</option>
+                  <option value="+1YEAR">按年</option>
                 </select>
               </div>
             </div>

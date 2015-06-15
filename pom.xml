@@ -4,10 +4,10 @@
 	<groupId>com.epweike</groupId>
 	<artifactId>Data-Integration</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Data Integration</name>
 	<description>数据集中查询分析系统</description>
-	<url>http://analysis.epweike.com</url>
+	<url>http://ea.epweike.com</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,7 +22,7 @@
 		<!-- 编译jdk版本 -->
 		<jdk.version>1.8</jdk.version>
 		<!-- 依赖版本 -->
-		<mapper.version>3.0.0</mapper.version>
+		<mapper.version>3.1.0</mapper.version>
 		<mysql.version>5.1.29</mysql.version>
 		<spring.version>4.1.5.RELEASE</spring.version>
 		<spring-security.version>4.0.0.RELEASE</spring-security.version>
@@ -32,15 +32,17 @@
 		<solr.version>4.10.2</solr.version>
 		<!-- hadoop版本 -->
 		<hadoop.version>2.7.0</hadoop.version>
+		<!-- jetty版本 -->
+		<jetty.version>9.3.0.M2</jetty.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-		    <groupId>jdk.tools</groupId>
-		    <artifactId>jdk.tools</artifactId>
-		    <version>1.8</version>
-		    <scope>system</scope>
-		    <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk.tools</artifactId>
+			<version>1.8</version>
+			<scope>system</scope>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -71,7 +73,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
 		<!--web -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -117,8 +118,8 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-context-support</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -150,21 +151,20 @@
 		</dependency>
 		<!-- Spring Security -->
 		<dependency>
-	        <groupId>org.springframework.security</groupId>
-	        <artifactId>spring-security-web</artifactId>
-	        <version>${spring-security.version}</version>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-config</artifactId>
-		    <version>${spring-security.version}</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>${spring-security.version}</version>
 		</dependency>
-		
 		<!--spring-oxm依赖 -->
 		<dependency>
 			<groupId>org.codehaus.castor</groupId>
@@ -220,9 +220,9 @@
 		</dependency>
 		<!-- 表单验证 -->
 		<dependency>
-		  <groupId>org.hibernate</groupId>
-		  <artifactId>hibernate-validator</artifactId>
-		  <version>5.2.0.Beta1</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.0.Beta1</version>
 		</dependency>
 		<!--Mybatis -->
 		<dependency>
@@ -236,9 +236,9 @@
 			<version>1.2.2</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.struts.xwork</groupId>
-		  <artifactId>xwork-core</artifactId>
-		  <version>2.3.20</version>
+			<groupId>org.apache.struts.xwork</groupId>
+			<artifactId>xwork-core</artifactId>
+			<version>2.3.20</version>
 		</dependency>
 		<!-- Mybatis Generator -->
 		<dependency>
@@ -250,7 +250,7 @@
 		</dependency>
 		<!--通用Mapper -->
 		<dependency>
-			<groupId>com.github.abel533</groupId>
+			<groupId>tk.mybatis</groupId>
 			<artifactId>mapper</artifactId>
 			<version>${mapper.version}</version>
 		</dependency>
@@ -261,10 +261,10 @@
 		</dependency>
 		<!--json的java类库 -->
 		<dependency>
-		  <groupId>net.sf.json-lib</groupId>
-		  <artifactId>json-lib</artifactId>
-		  <version>2.4</version>
-		  <classifier>jdk15</classifier>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
 		</dependency>
 		<!--Solr依赖 -->
 		<dependency>
@@ -317,6 +317,14 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${jdk.version}</source>
@@ -339,7 +347,7 @@
 						<version>${mysql.version}</version>
 					</dependency>
 					<dependency>
-						<groupId>com.github.abel533</groupId>
+						<groupId>tk.mybatis.mapper</groupId>
 						<artifactId>mapper</artifactId>
 						<version>${mapper.version}</version>
 					</dependency>
@@ -374,36 +382,19 @@
 						</systemProperty>
 					</systemProperties>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
-					<contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml>  
+					<contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml>
 					<!-- 指定监控的扫描时间间隔，0为关闭jetty自身的热部署，主要是为了使用jrebel -->
 				</configuration>
 			</plugin>
-			<!--
-		    <plugin>
-			    <groupId>ro.isdc.wro4j</groupId>
-			    <artifactId>wro4j-maven-plugin</artifactId>
-			    <version>${wro4j.version}</version>
-			    <executions>
-			      <execution>
-			        <phase>compile</phase>
-			        <goals>
-			          <goal>run</goal>
-			        </goals>
-			      </execution>
-			    </executions>
-			    <configuration>
-			      <targetGroups></targetGroups>
-			      <minimize>true</minimize>
-			      <destinationFolder>${basedir}/src/main/webapp/common/static/</destinationFolder>
-			      <cssDestinationFolder>${basedir}/src/main/webapp/common/static/css</cssDestinationFolder>
-			      <jsDestinationFolder>${basedir}/src/main/webapp/common/static/js</jsDestinationFolder>
-			      <contextFolder>${basedir}/src/main/webapp/</contextFolder>
-			      <wroFile>${basedir}/src/main/webapp/WEB-INF/wro.xml</wroFile>
-			      <wroManagerFactory>ro.isdc.wro.extensions.manager.standalone.GoogleStandaloneManagerFactory</wroManagerFactory>
-			      <ignoreMissingResources>false</ignoreMissingResources>
-			    </configuration>
-			  </plugin>
-			  -->
+			<!-- <plugin> <groupId>ro.isdc.wro4j</groupId> <artifactId>wro4j-maven-plugin</artifactId> 
+				<version>${wro4j.version}</version> <executions> <execution> <phase>compile</phase> 
+				<goals> <goal>run</goal> </goals> </execution> </executions> <configuration> 
+				<targetGroups></targetGroups> <minimize>true</minimize> <destinationFolder>${basedir}/src/main/webapp/common/static/</destinationFolder> 
+				<cssDestinationFolder>${basedir}/src/main/webapp/common/static/css</cssDestinationFolder> 
+				<jsDestinationFolder>${basedir}/src/main/webapp/common/static/js</jsDestinationFolder> 
+				<contextFolder>${basedir}/src/main/webapp/</contextFolder> <wroFile>${basedir}/src/main/webapp/WEB-INF/wro.xml</wroFile> 
+				<wroManagerFactory>ro.isdc.wro.extensions.manager.standalone.GoogleStandaloneManagerFactory</wroManagerFactory> 
+				<ignoreMissingResources>false</ignoreMissingResources> </configuration> </plugin> -->
 		</plugins>
 	</build>
 </project>

@@ -2,8 +2,9 @@ package com.epweike.mapper;
 
 import java.util.List;
 
+import tk.mybatis.mapper.common.Mapper;
+
 import com.epweike.model.Lexicons;
-import com.github.abel533.mapper.Mapper;
 
 public interface LexiconsMapper extends Mapper<Lexicons> {
 	

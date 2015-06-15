@@ -1,11 +1,12 @@
 package com.epweike.service;
 
 import com.epweike.model.PageModel;
-import com.github.abel533.mapper.Mapper;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 

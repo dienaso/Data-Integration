@@ -1,8 +1,5 @@
 package com.epweike.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -10,8 +7,7 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.epweike.model.PageModel;
 
@@ -30,34 +26,27 @@ public class BaseController {
 			.getLogger(BaseController.class);
 
 	/*
-	 * SOLR地址
+	 * 从配置文件中读取SOLR地址
 	 */
-	public static final String SOLR_URL = "http://solr.api.epweike.com/";
+	@Value("#{configProperties['solr.url']}")
+	private String solr_url;
 
-	/**  
-	* @Description:连接solr服务器
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月11日 上午9:32:13
-	*/  
-	public static SolrServer getSolrServer(String core) {
-		SolrServer solr = new HttpSolrServer(SOLR_URL + core);
-		return solr;
-	}
-
-	public static HttpSession getSession() {
-		HttpSession session = null;
-		try {
-			session = getRequest().getSession();
-		} catch (Exception e) {
-			logger.error("获取session异常！详细错误：" + e);
+	/**
+	 * @Description:连接solr服务器
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月11日 上午9:32:13
+	 */
+	public SolrServer getSolrServer(String core) {
+		logger.info("读取配置文件属性：solr.url=" + solr_url);
+		if (solr_url == null) {
+			logger.error("solr.url=" + solr_url
+					+ "，将使用使用默认值:'http://solr.api.epweike.net/'！！！");
+			solr_url = "http://solr.api.epweike.net/";
 		}
-		return session;
-	}
-
-	public static HttpServletRequest getRequest() {
-		return ((ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes()).getRequest();
+		SolrServer solr = new HttpSolrServer(solr_url + core);
+		logger.info("SOLR URL IS:" + solr_url + core);
+		return solr;
 	}
 
 	/**

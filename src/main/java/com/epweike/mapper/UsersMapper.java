@@ -1,7 +1,8 @@
 package com.epweike.mapper;
 
+import tk.mybatis.mapper.common.Mapper;
+
 import com.epweike.model.Users;
-import com.github.abel533.mapper.Mapper;
 
 public interface UsersMapper extends Mapper<Users> {
 }

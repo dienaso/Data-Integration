@@ -11,6 +11,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
 /**
@@ -29,7 +30,7 @@ public class StatUtils {
 	 */
 	public static String pieJson(List<FacetField> facetFields) {
 		// 地区分布统计
-		List<Map<String, Object>> countList = getCountList(facetFields, "pie");
+		List<Map<String, Object>> countList = getFacetList(facetFields, "pie");
 		// List to json
 		return JSONArray.fromObject(countList).toString();
 	}
@@ -41,7 +42,7 @@ public class StatUtils {
 	 * @version 创建时间：2015年4月30日 上午10:00:29
 	 */
 	public static List<Map<String, Object>> barJson(List<FacetField> facetFields) {
-		return getCountList(facetFields, "bar");
+		return getFacetList(facetFields, "bar");
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class StatUtils {
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月9日 下午3:32:48
 	 */
-	public static List<Map<String, Object>> getCountList(
+	public static List<Map<String, Object>> getFacetList(
 			List<FacetField> facetFields, String chartType) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
@@ -146,4 +147,29 @@ public class StatUtils {
 
 		return list;
 	}
+
+	/**
+	 * @Description:获取区间统计列表
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月15日 上午11:10:17
+	 */
+	public static List<Map<String, Object>> getFacetRangeList(
+			@SuppressWarnings("rawtypes") List<RangeFacet> listFacet,
+			int endIndex) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (RangeFacet<?, ?> rf : listFacet) {
+			List<RangeFacet.Count> listCounts = rf.getCounts();
+			for (RangeFacet.Count count : listCounts) {
+				System.out.println("RangeFacet:" + count.getValue() + ":"
+						+ count.getCount());
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("date", count.getValue().substring(0, endIndex));// 日期截取特定形式
+				map.put("count", count.getCount());
+				list.add(map);
+			}
+		}
+		return list;
+	}
+
 }
