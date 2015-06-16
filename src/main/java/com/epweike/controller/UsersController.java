@@ -168,7 +168,7 @@ public class UsersController extends BaseController {
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addDateRangeFacet("reg_time", start, end, statType)
 				.setFacetLimit(1000);
 
-		QueryResponse response = getSolrServer("task").query(parameters);
+		QueryResponse response = getSolrServer("talent").query(parameters);
 
 		// 日期根据统计类型截取
 		int endIndex = 10;

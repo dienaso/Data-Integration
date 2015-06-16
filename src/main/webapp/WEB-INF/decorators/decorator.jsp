@@ -51,6 +51,7 @@
 	<script src="/common/matrix/js/jquery.uniform.js"></script> 
 	<script src="/common/matrix/js/select2.min.js"></script> 
 	<script src="/common/matrix/js/dataTables.tableTools.js"></script>
+	<script src="/common/matrix/js/dataTables.editor.min.js"></script>
 	<script src="/common/matrix/js/bootstrap-datepicker.js"></script> 
 	<script src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script> 
 	
@@ -80,11 +81,11 @@
   </ul>
 </div>
 <!--close-top-Header-menu-->
-<!--start-top-serch-->
+<!--start-top-serch
 <div id="search">
   <input type="text" placeholder="Search here..."/>
   <button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
-</div>
+</div>-->
 <!--close-top-serch-->
 <!--sidebar-menu-->
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>

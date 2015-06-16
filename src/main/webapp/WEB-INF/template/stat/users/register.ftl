@@ -102,9 +102,6 @@
 		
 		<!--dateTable-->
 		var table = $('#list').dataTable({
-			tableTools: {
-	            "aButtons": [ "copy", "xls", "pdf", "print" ]
-	        },
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
@@ -113,14 +110,13 @@
 	        "sAjaxSource": '/users/register/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "name"},
+					{ "mData": "date"},
 		        	{ "mData": "count"},
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
-	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
-	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
+	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

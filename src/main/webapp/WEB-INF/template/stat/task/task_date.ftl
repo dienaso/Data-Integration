@@ -129,10 +129,6 @@
 		
 		<!--dateTable-->
 		var table = $('#list').dataTable({
-			"dom": 'T<"clear"><"H"lfr>t<"F"ip>',
-			tableTools: {
-	            "aButtons": [ "copy", "xls", "pdf", "print" ]
-	        },
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,

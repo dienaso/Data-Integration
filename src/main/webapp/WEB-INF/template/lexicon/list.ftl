@@ -14,6 +14,7 @@
 	    <h5>词条列表</h5>
 	  </div>
 	  <div class="widget-content nopadding">
+	  	
 	    <table id="list" class="table table-bordered data-table">
 	        <thead>
 	        	<tr>
@@ -22,15 +23,16 @@
 		          	<th>拼音</th>
 		          	<th>词性</th>
 		          	<th>近义词</th>
+		          	<th>操作</th>
 	        	</tr>
 	     	</thead>
+	     	
 	    </table>
 	  </div>
 	</div>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-
 	$("#list").dataTable({
 		"bServerSide" : true,
 		"bDestroy": true,
@@ -59,7 +61,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-		
+	
 } );
 
 $(".delete").live('click', function() {

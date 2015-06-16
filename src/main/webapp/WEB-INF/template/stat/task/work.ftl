@@ -129,9 +129,6 @@
 		
 		<!--List-->
 		var table = $('#list').dataTable({
-			tableTools: {
-	            "aButtons": [ "copy", "xls", "pdf", "print" ]
-	        },
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
