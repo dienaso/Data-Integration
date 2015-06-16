@@ -9846,7 +9846,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"aLengthMenu": [ 10, 25, 50, 100 ],
+		"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 	
 	
 		/**
@@ -11128,7 +11128,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"sPaginationType": "full_numbers",
+		"sPaginationType": "simple_numbers",
 	
 	
 		/**

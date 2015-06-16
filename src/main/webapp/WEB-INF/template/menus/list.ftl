@@ -85,7 +85,7 @@ $(document).ready(function() {
 } );
 
 
-$(".delete").live('click', function() {
+$(".delete1").live('click', function() {
   var id = $(this).attr('tag');
   alert(id);
   $.ajax({    

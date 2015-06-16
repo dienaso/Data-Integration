@@ -23,7 +23,6 @@
 		          	<th>拼音</th>
 		          	<th>词性</th>
 		          	<th>近义词</th>
-		          	<th>操作</th>
 	        	</tr>
 	     	</thead>
 	     	
