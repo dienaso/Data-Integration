@@ -141,6 +141,16 @@ public class StatUtils {
 						list.add(map);
 					}
 					break;
+				case "keyword":// 关键词统计
+					for (Count count : ff.getValues()) {
+						System.out.println("name=" + count.getName()
+								+ "\tcount=" + count.getCount());
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", count.getName());
+						map.put("count", count.getCount());
+						list.add(map);
+					}
+					break;
 				}
 			}
 		}
