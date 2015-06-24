@@ -31,8 +31,9 @@
 	</div>
 </div>
 <script type="text/javascript">
+var oTable;
 $(document).ready(function() {
-	$("#list").dataTable({
+	oTable = $("#list").dataTable({
 		"bServerSide" : true,
 		"bDestroy": true,
 		"bStateSave": true,
@@ -58,7 +59,17 @@ $(document).ready(function() {
 					fnCallback(resp);
 				}
 			});
-		}
+		},
+		"fnDrawCallback": function () {
+            $("#list tbody td").editable({
+            	url: '/lexicon/update',
+            	pk: 1,
+            	mode: 'inline',
+                "callback": function( sValue, y ) {
+                    oTable.fnDraw();
+                }
+            } );
+        }
 	});
 	
 } );

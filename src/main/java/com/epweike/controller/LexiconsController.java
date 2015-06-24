@@ -38,6 +38,19 @@ public class LexiconsController extends BaseController {
         return "lexicon/list";
     }
     
+    @RequestMapping(value = "/lexicon/update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public @ResponseBody int update(HttpServletRequest  request) throws IOException {
+    	
+    	//获取主键
+    	String id = request.getParameter("pk"); 
+    	
+    	System.out.println("--------------------"+id);
+    	
+    	//int result = this.lexiconService.update(new Lexicons());
+    	int result = 0;
+		return result;
+    }
+    
     @RequestMapping(value = "/lexicon/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
     	

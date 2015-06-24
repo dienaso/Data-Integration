@@ -54,6 +54,8 @@
 	href="/common/matrix/css/bootstrap-datepicker3.css" />
 <link rel="stylesheet"
 	href="/common/matrix/css/dataTables.tableTools.css" />
+<link rel="stylesheet"
+	href="/common/bootstrap-editable/css/bootstrap-editable.css" />
 
 <script src="/common/matrix/js/jquery.min.js"></script>
 <script src="/common/matrix/js/bootstrap.min.js"></script>
@@ -66,6 +68,7 @@
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="/common/bootstrap-editable/js/bootstrap-editable.js"></script>
 
 <sitemesh:write property='head' />
 </head>
@@ -88,9 +91,11 @@
 					class="text">Welcome <sec:authentication property="name" /></span><b
 					class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a href="javascript:void(0)"><i class="icon-user"></i> My Profile</a></li>
+					<li><a href="javascript:void(0)"><i class="icon-user"></i>
+							My Profile</a></li>
 					<li class="divider"></li>
-					<li><a href="javascript:void(0)"><i class="icon-check"></i> My Tasks</a></li>
+					<li><a href="javascript:void(0)"><i class="icon-check"></i>
+							My Tasks</a></li>
 					<li class="divider"></li>
 					<li><a href="/j_spring_security_logout"><i
 							class="icon-key"></i> Log Out</a></li>
@@ -181,8 +186,8 @@
  	} else {
  				if (menu.getId().toString().equals(id)) { //当一级前菜单且没有子级菜单
  %>
-					<li class="active"><a href="<%=url%>"><i
-							class="<%=icon%>"></i> <span><%=name%></span></a> <%
+					<li class="active"><a href="<%=url%>"><i class="<%=icon%>"></i>
+							<span><%=name%></span></a> <%
  	} else {
  %>
 					<li><a href="<%=url%>"><i class="<%=icon%>"></i> <span><%=name%></span></a>
@@ -197,6 +202,7 @@
 						}
 					%>
 				</ul>
+		</ul>
 	</div>
 	<!--sidebar-menu-->
 
