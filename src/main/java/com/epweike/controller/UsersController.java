@@ -165,7 +165,7 @@ public class UsersController extends BaseController {
 		// 统计类型(日、月、年)
 		String statType = getParamFromAodata(aoData, "statType");
 
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addDateRangeFacet("reg_time", start, end, statType)
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addDateRangeFacet("reg_time_date", start, end, statType)
 				.setFacetLimit(1000);
 
 		QueryResponse response = getSolrServer("talent").query(parameters);
