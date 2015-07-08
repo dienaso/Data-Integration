@@ -139,7 +139,7 @@ public class TaskController extends BaseController {
 		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
 		// facet统计列表
 		List<Map<String, Object>> list = getTaskFacetListByTime(aoData,
-				"pub_time", "task");
+				"pub_time_date", "task");
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());
 		pageModel.setiTotalRecords(list.size());
@@ -179,7 +179,7 @@ public class TaskController extends BaseController {
 
 		SolrQuery parameters = new SolrQuery("*:*")
 				.addFilterQuery(
-						"pub_time:[" + startString + "T00:00:00Z TO "
+						"pub_time_date:[" + startString + "T00:00:00Z TO "
 								+ endString + "T23:59:59Z]").setFacet(true)
 				.addFacetField("indus_name").setFacetMinCount(1)
 				.setFacetLimit(1000);
