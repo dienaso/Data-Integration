@@ -16,9 +16,9 @@
 	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN ~ THE SOFTWARE. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
@@ -32,19 +32,19 @@
        ">
 
 	<context:component-scan base-package="com.epweike.service" />
-	
+
 	<bean id="configProperties"
-        class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="locations">
-            <list>
-                <value>classpath:config.properties</value>
-            </list>
-        </property>
-    </bean>
-    <bean id="propertyConfigurer"
-        class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
-        <property name="properties" ref="configProperties" />
-    </bean>
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:config.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
@@ -80,21 +80,20 @@
 		<property name="plugins">
 			<array>
 				<bean class="tk.mybatis.mapper.mapperhelper.MapperInterceptor">
-		          <property name="properties">
-		            <value>
-		              mappers=tk.mybatis.mapper.common.Mapper
-		              IDENTITY=MYSQL
-		              notEmpty=true
-		            </value>
-		          </property>
-		        </bean>
+					<property name="properties">
+						<value>
+							mappers=tk.mybatis.mapper.common.Mapper
+							IDENTITY=MYSQL
+							notEmpty=true
+						</value>
+					</property>
+				</bean>
 			</array>
 		</property>
 	</bean>
-	
+
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage"
-			value="com.epweike.mapper" />
+		<property name="basePackage" value="com.epweike.mapper" />
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
@@ -118,11 +117,31 @@
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
-	
-	<!-- 事务控制-->
+
+	<!-- 事务控制 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+
+	<!--Druid关联Spring监控 -->
+	<bean id="druid-stat-interceptor"
+		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+	</bean>
+
+	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+		scope="prototype">
+		<property name="patterns">
+			<list>
+				<value>com.epweike.service.*</value>
+				<value>com.epweike.mapper.*</value>
+			</list>
+		</property>
+	</bean>
+
+	<aop:config>
+		<aop:advisor advice-ref="druid-stat-interceptor"
+			pointcut-ref="druid-stat-pointcut" />
+	</aop:config>
 
 </beans>

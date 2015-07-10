@@ -204,7 +204,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.0.11</version>
+			<version>1.0.15</version>
 		</dependency>
 		<!--模板引擎 -->
 		<dependency>
