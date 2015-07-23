@@ -62,7 +62,7 @@ public class SearchHistoryController extends BaseController {
 						"on_time:[" + startString + "T00:00:00Z TO "
 								+ endString + "T23:59:59Z]").setFacet(true)
 				.addFacetField("keyword").setFacetMinCount(1)
-				.setFacetLimit(1000);
+				.setFacetLimit(Integer.MAX_VALUE);
 		if (!searchType.equals("all"))// 搜索类型过滤
 			parameters.addFilterQuery("search_type:" + searchType);
 
