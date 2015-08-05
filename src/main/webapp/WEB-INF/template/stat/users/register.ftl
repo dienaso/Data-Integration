@@ -27,9 +27,9 @@
               <label class="control-label">时间区间 :</label>
               <div class="controls">
 	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="start" placeholder="开始时间" value="new Date()" readonly>
+				    <input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
 				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="end" placeholder="结束时间" value="new Date()" readonly>
+				    <input type="text" class="input-small" name="end" placeholder="结束时间" readonly>
 				  </div>
 			  </div>
 			  
@@ -71,7 +71,6 @@
 		    format: "yyyy-mm-dd",
     		language: "zh-CN",
     		todayHighlight: true,
-    		todayBtn: true,
     		autoclose: true
 		});
 		

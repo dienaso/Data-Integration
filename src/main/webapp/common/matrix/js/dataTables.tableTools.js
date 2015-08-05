@@ -2872,9 +2872,9 @@ TableTools.BUTTONS = {
 			var lines = text.split('\n').length;
             if (oConfig.bHeader) lines--;
             if (this.s.dt.nTFoot !== null && oConfig.bFooter) lines--;
-			var plural = (lines==1) ? "" : "s";
-			this.fnInfo( '<h6>Table copied</h6>'+
-				'<p>Copied '+lines+' row'+plural+' to the clipboard.</p>',
+			//var plural = (lines==1) ? "" : "s";
+			this.fnInfo( '<h6>表格已复制</h6>'+
+				'<p>已复制 '+lines+' 行至剪贴板.</p>',
 				1500
 			);
 		}
