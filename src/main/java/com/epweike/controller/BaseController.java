@@ -53,17 +53,18 @@ public class BaseController {
 		logger.info("读取配置文件属性：solr2.cores=" + solr2_cores);
 
 		if (solr1_url == null && solr2_url == null) {
-			logger.error("solr1.url=" + solr1_url + "solr2.url=" + solr2_url
+			logger.error("solr1.url=" + solr1_url + ";solr2.url=" + solr2_url
 					+ "，将使用使用默认值:'http://solr.api.epweike.net/'！！！");
 			solr_url = "http://solr.api.epweike.net/";
 		} else {
-			//core路由
+			// core路由
 			if (solr1_cores.contains(core)) {
 				solr_url = solr1_url;
 			} else {
 				solr_url = solr2_url;
 			}
 		}
+
 		SolrServer solr = new HttpSolrServer(solr_url + core);
 		logger.info("SOLR URL IS:" + solr_url + core);
 		return solr;
