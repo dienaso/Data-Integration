@@ -27,9 +27,9 @@
               <label class="control-label">时间区间 :</label>
               <div class="controls">
 	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="start" placeholder="开始时间" value="new Date()"/>
+				    <input type="text" class="input-small" name="start" placeholder="开始时间" value="new Date()" readonly>
 				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="end" placeholder="结束时间" value="new Date()"/>
+				    <input type="text" class="input-small" name="end" placeholder="结束时间" value="new Date()" readonly>
 				  </div>
 			  </div>
 			  
@@ -68,9 +68,10 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('.input-daterange').datepicker({
-		    format: "yyyy-m-d",
+		    format: "yyyy-mm-dd",
     		language: "zh-CN",
     		todayHighlight: true,
+    		todayBtn: true,
     		autoclose: true
 		});
 		
@@ -78,8 +79,8 @@
 		// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
 		// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
 		// 例子： 
-		// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-		// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
+		// (new Date()).Format("yyyy-MM-dd") ==> 2006-07-02 08:09:04.423 
+		// (new Date()).Format("yyyy-MM-dd")      ==> 2006-7-2 8:9:4.18 
 		Date.prototype.Format = function (fmt) { //author: meizz 
 		    var o = {
 		        "M+": this.getMonth() + 1, //月份 
