@@ -49,7 +49,7 @@
         </div>	
 	  	
 		  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-		    <h5>任务统计列表</h5>
+		    <h5>用户组注册统计列表</h5>
 		  </div>
 		  <div class="widget-content nopadding">
 		    <table id="list" class="table table-bordered data-table">

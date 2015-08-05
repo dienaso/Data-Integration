@@ -26,9 +26,18 @@ public class BaseController {
 			.getLogger(BaseController.class);
 
 	/*
-	 * 从配置文件中读取SOLR地址
+	 * 从配置文件中读取SOLR配置
 	 */
-	@Value("#{configProperties['solr.url']}")
+	@Value("#{configProperties['solr1.url']}")
+	private String solr1_url;
+	@Value("#{configProperties['solr2.url']}")
+	private String solr2_url;
+	@Value("#{configProperties['solr1.cores']}")
+	private String solr1_cores;
+	@Value("#{configProperties['solr2.cores']}")
+	private String solr2_cores;
+
+	// 最终路由地址
 	private String solr_url;
 
 	/**
@@ -38,11 +47,22 @@ public class BaseController {
 	 * @version 创建时间：2015年6月11日 上午9:32:13
 	 */
 	public SolrServer getSolrServer(String core) {
-		logger.info("读取配置文件属性：solr.url=" + solr_url);
-		if (solr_url == null) {
-			logger.error("solr.url=" + solr_url
+		logger.info("读取配置文件属性：solr1.url=" + solr1_url);
+		logger.info("读取配置文件属性：solr2.url=" + solr1_url);
+		logger.info("读取配置文件属性：solr1.cores=" + solr1_cores);
+		logger.info("读取配置文件属性：solr2.cores=" + solr2_cores);
+
+		if (solr1_url == null && solr2_url == null) {
+			logger.error("solr1.url=" + solr1_url + "solr2.url=" + solr2_url
 					+ "，将使用使用默认值:'http://solr.api.epweike.net/'！！！");
 			solr_url = "http://solr.api.epweike.net/";
+		} else {
+			//core路由
+			if (solr1_cores.contains(core)) {
+				solr_url = solr1_url;
+			} else {
+				solr_url = solr2_url;
+			}
 		}
 		SolrServer solr = new HttpSolrServer(solr_url + core);
 		logger.info("SOLR URL IS:" + solr_url + core);
