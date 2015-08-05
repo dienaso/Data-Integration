@@ -12202,7 +12202,7 @@
 			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
-			"bProcessing": null,
+			"bProcessing": true,
 	
 			/**
 			 * Server-side processing enabled flag - when enabled DataTables will
