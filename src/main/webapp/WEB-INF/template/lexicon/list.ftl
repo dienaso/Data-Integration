@@ -59,17 +59,7 @@ $(document).ready(function() {
 					fnCallback(resp);
 				}
 			});
-		},
-		"fnDrawCallback": function () {
-            $("#list tbody td").editable({
-            	url: '/lexicon/update',
-            	pk: 1,
-            	mode: 'inline',
-                "callback": function( sValue, y ) {
-                    oTable.fnDraw();
-                }
-            } );
-        }
+		}
 	});
 	
 } );

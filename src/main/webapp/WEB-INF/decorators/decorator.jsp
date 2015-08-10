@@ -54,8 +54,6 @@
 	href="/common/matrix/css/bootstrap-datepicker3.css" />
 <link rel="stylesheet"
 	href="/common/matrix/css/dataTables.tableTools.css" />
-<link rel="stylesheet"
-	href="/common/bootstrap-editable/css/bootstrap-editable.css" />
 
 <script src="/common/matrix/js/jquery.min.js"></script>
 <script src="/common/matrix/js/bootstrap.min.js"></script>
@@ -68,7 +66,6 @@
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
-<script src="/common/bootstrap-editable/js/bootstrap-editable.js"></script>
 
 <sitemesh:write property='head' />
 </head>
