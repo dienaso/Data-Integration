@@ -33,7 +33,7 @@
 <script type="text/javascript">
 var oTable;
 $(document).ready(function() {
-	oTable = $("#list").dataTable({
+	oTable = $("#list1").dataTable({
 		"bServerSide" : true,
 		"bDestroy": true,
 		"bStateSave": true,
@@ -62,7 +62,27 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	$("#list").jqGrid({
+            url: '/lexicon/get',
+            mtype: "GET",
+			styleUI : 'Bootstrap',
+            datatype: "jsonp",
+            colModel: [
+                { label: 'ID', name: 'id', key: true, width: 75 },
+                { label: '词条', name: 'word', width: 150 },
+                { label: '拼音', name: 'pinyin', width: 150 },
+                { label: '词性', name: 'pos', width: 150 },
+                { label: '近义词', name: 'synonym', width: 150 }
+            ],
+			viewrecords: true,
+            height: 250,
+            rowNum: 20,
+            pager: "#jqGridPager"
+    });
+	
 } );
+
 
 $(".delete").live('click', function() {
   var id = $(this).attr('tag');

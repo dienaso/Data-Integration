@@ -66,6 +66,7 @@
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="/common/jqGrid/js/jquery.jqGrid.min.js"></script>
 
 <sitemesh:write property='head' />
 </head>
