@@ -3,6 +3,8 @@ package com.epweike.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -95,8 +97,6 @@ public class FinanceController extends BaseController {
 		default:
 			break;
 		}
-		//过滤掉计件任务
-		parameters.addFilterQuery("NOT model_id:3");
 		// 日期根据统计类型截取
 		int endIndex = 10;
 		if (statType.contains("YEAR")) {
@@ -164,7 +164,7 @@ public class FinanceController extends BaseController {
 
 		// 获取查询关键参数
 		String aoData = request.getParameter("aoData");
-		logger.info("aoData:"+aoData);
+		logger.info("aoData:" + aoData);
 		// 解析查询关键参数
 		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
 
@@ -184,23 +184,8 @@ public class FinanceController extends BaseController {
 		String shop_level = getParamFromAodata(aoData, "shop_level");
 
 		SolrQuery parameters = new SolrQuery("*:*");
-		parameters.addFilterQuery(
-				"fina_time_date:[" + startString + "T00:00:00Z TO " + endString
-						+ "T23:59:59Z]").addFilterQuery("fina_action:task_bid");
-		if (!"".equals(username))
-			parameters.addFilterQuery("username:" + username);
-		parameters.setGetFieldStatistics(true);
-		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash");
-		parameters.setParam(StatsParams.STATS_FACET, "username");
-
-		if (!source.equals("全部"))
-			parameters.addFilterQuery("source:" + source);
-		if (shop_level.equals("全部VIP")) {
-			parameters.addFilterQuery("shop_level:{1 TO *}");
-		} else {
-			if (!shop_level.equals("全部"))
-				parameters.addFilterQuery("shop_level:" + shop_level);
-		}
+		// 过滤掉计件任务
+		parameters.addFilterQuery("NOT model_id:3");
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":
@@ -210,6 +195,7 @@ public class FinanceController extends BaseController {
 			parameters.addFilterQuery("model_id:2");
 			break;
 		case "计件":
+			parameters.clear();
 			parameters.addFilterQuery("model_id:3");
 			break;
 		case "招标":
@@ -231,7 +217,24 @@ public class FinanceController extends BaseController {
 		default:
 			break;
 		}
+		parameters.addFilterQuery(
+				"fina_time_date:[" + startString + "T00:00:00Z TO " + endString
+						+ "T23:59:59Z]").addFilterQuery("fina_action:task_bid");
+		if (!"".equals(username))
+			parameters.addFilterQuery("username:" + username);
+		parameters.setGetFieldStatistics(true);
+		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash");
+		parameters.setParam(StatsParams.STATS_FACET, "username");
 
+		if (!source.equals("全部"))
+			parameters.addFilterQuery("source:" + source);
+		if (shop_level.equals("全部VIP")) {
+			parameters.addFilterQuery("shop_level:{1 TO *}");
+		} else {
+			if (!shop_level.equals("全部"))
+				parameters.addFilterQuery("shop_level:" + shop_level);
+		}
+		
 		// 查询统计财务报表
 		QueryResponse response = getSolrServer("finance").query(parameters);
 
@@ -241,11 +244,11 @@ public class FinanceController extends BaseController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();// 返回结果集
 		if (stats != null && stats.size() >= 0) {
 			// total
-			DecimalFormat df = new DecimalFormat(
-					"######0.000");// 保留3位
+			DecimalFormat df = new DecimalFormat("######0.000");// 保留3位
 			if (statsInfo != null) {
 				tmp1.put("name", "汇总");
 				tmp1.put("min", df.format(statsInfo.getMin()));
+				tmp1.put("max", df.format(statsInfo.getMax()));
 				tmp1.put("sum", df.format(statsInfo.getSum()));
 				tmp1.put("count", statsInfo.getCount());
 				tmp1.put("missing", statsInfo.getMissing());
@@ -261,15 +264,26 @@ public class FinanceController extends BaseController {
 						Map<String, Object> tmp2 = new HashMap<String, Object>();
 						tmp2.put("name", statisList.get(i).getName());
 						tmp2.put("min", df.format(statisList.get(i).getMin()));
+						tmp2.put("max", df.format(statisList.get(i).getMax()));
 						tmp2.put("sum", df.format(statisList.get(i).getSum()));
 						tmp2.put("count", statisList.get(i).getCount());
 						tmp2.put("missing", statisList.get(i).getMissing());
 						tmp2.put("mean", df.format(statisList.get(i).getMean()));
-						tmp2.put("stddev", df.format(statisList.get(i).getStddev()));
+						tmp2.put("stddev",
+								df.format(statisList.get(i).getStddev()));
 						list.add(tmp2);
 					}
 				}
 			}
+			// 排序(按中标总额降序)
+			Collections.sort(list, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> arg0,
+						Map<String, Object> arg1) {
+					return -(Double.valueOf((String) arg0.get("sum"))
+							.compareTo(Double.valueOf(arg1.get("sum")
+									.toString())));
+				}
+			});
 			System.out.println("resultList:" + list.toString());
 
 			// 搜索结果数

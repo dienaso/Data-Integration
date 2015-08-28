@@ -36,9 +36,10 @@
               <label class="control-label">任务类型:</label>
               <div class="controls">
                 <select id="taskType">
-                  <option>全部</option>
+                  <option>全部(不包含计件)</option>
                   <option>单赏</option>
                   <option>多赏</option>
+                  <option>计件</option>
                   <option>招标</option>
                   <option>雇佣</option>
                   <option>服务</option>
@@ -97,6 +98,7 @@
 			          	<th>总额</th>
 			          	<th>平均</th>
 			          	<th>最小</th>
+			          	<th>最大</th>
 			          	<th>标准差</th>
 		        	</tr>
 		     	</thead>
@@ -156,6 +158,7 @@
 		        	{ "mData": "sum"},
 		        	{ "mData": "mean"},
 		        	{ "mData": "min"},
+		        	{ "mData": "max"},
 		        	{ "mData": "stddev"}
 	           ],
 	    	"fnServerData": function(sSource, aoData, fnCallback) {
