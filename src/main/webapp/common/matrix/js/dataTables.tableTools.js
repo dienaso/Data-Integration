@@ -2812,7 +2812,7 @@ TableTools.buttonBase = {
 
 	// Common button specific options
 	"sCharSet": "utf8",
-	"bBomInc": false,
+	"bBomInc": true,
 	"sFileName": "*.csv",
 	"sFieldBoundary": "",
 	"sFieldSeperator": "\t",
