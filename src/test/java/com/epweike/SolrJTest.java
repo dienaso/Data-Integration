@@ -17,11 +17,13 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
 import org.apache.solr.common.params.FacetParams.FacetRangeInclude;
+import org.apache.solr.common.params.StatsParams;
 import org.junit.Test;
 
 import com.epweike.util.DateUtils;
@@ -153,30 +155,82 @@ public class SolrJTest {
 //		
 //	}
 
+//	@Test
+//	public void query() throws Exception {
+//		
+//		String urlString = "http://solr.api.epweike.net/task";
+//		SolrServer solr = new HttpSolrServer(urlString);
+//		Date start = DateUtils.parseDate("2015-05-29");
+//		Date end = DateUtils.parseDate("2015-06-30");
+//		SolrQuery parameters = new SolrQuery("*:*");
+//		parameters//android、ios、wap
+//		.setFacet(true).addDateRangeFacet("pub_time", start, end, "+1DAY").addFacetPivotField("source");;
+////		parameters.addFilterQuery("model_id:4").addFilterQuery(
+////				"task_type:3");
+//		QueryResponse response = solr.query(parameters);
+//		
+//		List<RangeFacet> listFacet = response.getFacetRanges(); 
+//		int total = 0;
+//        for(RangeFacet rf : listFacet){  
+//            List<RangeFacet.Count> listCounts = rf.getCounts();  
+//            for(RangeFacet.Count count : listCounts){  
+//                System.out.println("RangeFacet:"+count.getValue()+":"+count.getCount()+":"+count.getValue());  
+//                total = total + count.getCount();
+//            }  
+//        }  
+//        System.out.println("Total:"+total);  
+//	}
+	
 	@Test
-	public void query() throws Exception {
+	public void stats() throws Exception {
 		
-		String urlString = "http://solr.api.epweike.net/task";
+		String urlString = "http://solr2.api.epweike.net/finance";
 		SolrServer solr = new HttpSolrServer(urlString);
-		Date start = DateUtils.parseDate("2015-05-29");
-		Date end = DateUtils.parseDate("2015-06-30");
+
 		SolrQuery parameters = new SolrQuery("*:*");
-		parameters//android、ios、wap
-		.setFacet(true).addDateRangeFacet("pub_time", start, end, "+1DAY").addFacetPivotField("source");;
-//		parameters.addFilterQuery("model_id:4").addFilterQuery(
-//				"task_type:3");
+		parameters.addFilterQuery("fina_time_date:{2015-06-28T00:00:00Z TO 2015-06-29T00:00:00Z}").addFilterQuery("fina_action:task_bid");
+		parameters.setGetFieldStatistics(true);
+		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash"); 
+		parameters.setParam(StatsParams.STATS_FACET, "username"); 
+
 		QueryResponse response = solr.query(parameters);
 		
-		List<RangeFacet> listFacet = response.getFacetRanges(); 
-		int total = 0;
-        for(RangeFacet rf : listFacet){  
-            List<RangeFacet.Count> listCounts = rf.getCounts();  
-            for(RangeFacet.Count count : listCounts){  
-                System.out.println("RangeFacet:"+count.getValue()+":"+count.getCount()+":"+count.getValue());  
-                total = total + count.getCount();
-            }  
-        }  
-        System.out.println("Total:"+total);  
+		Map<String, Object> tmp1 = new HashMap<String, Object>();
+		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();
+		FieldStatsInfo statsInfo = stats.get("fina_cash");
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		
+		//total
+		tmp1.put("name", "汇总");
+		tmp1.put("min", statsInfo.getMin());
+		tmp1.put("sum", statsInfo.getSum());
+		tmp1.put("count", statsInfo.getCount());
+		tmp1.put("missing", statsInfo.getMissing());
+		tmp1.put("mean", statsInfo.getMean());
+		tmp1.put("stddev", statsInfo.getStddev());
+		resultList.add(tmp1);
+		System.out.println("tmp:"+tmp1.toString());
+		
+		//facets
+		Map<String, List<FieldStatsInfo>> map = stats.get("fina_cash").getFacets();
+		List<FieldStatsInfo> list = map.get("username");
+		if(list != null && list.size() >0){
+			for(int i = 0; i < list.size(); i++){
+				Map<String, Object> tmp2 = new HashMap<String, Object>();
+				tmp2.put("name", list.get(i).getName());
+				tmp2.put("min", list.get(i).getMin());
+				tmp2.put("sum", list.get(i).getSum());
+				tmp2.put("count", list.get(i).getCount());
+				tmp2.put("missing", list.get(i).getMissing());
+				tmp2.put("mean", list.get(i).getMean());
+				tmp2.put("stddev", list.get(i).getStddev());
+				resultList.add(tmp2);
+			}
+		}
+		System.out.println("resultList:"+resultList.toString());
+		
+		
+		
 	}
 
 }

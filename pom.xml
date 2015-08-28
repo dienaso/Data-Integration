@@ -20,7 +20,7 @@
 		<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
 		<targetXMLPackage>mapper</targetXMLPackage>
 		<!-- 编译jdk版本 -->
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>1.7</jdk.version>
 		<!-- 依赖版本 -->
 		<mapper.version>3.1.0</mapper.version>
 		<mysql.version>5.1.29</mysql.version>
