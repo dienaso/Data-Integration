@@ -96,9 +96,9 @@
 			          	<th>名称</th>
 			          	<th>接单量</th>
 			          	<th>总额</th>
-			          	<th>平均</th>
-			          	<th>最小</th>
 			          	<th>最大</th>
+			          	<th>最小</th>
+			          	<th>平均</th>
 			          	<th>标准差</th>
 		        	</tr>
 		     	</thead>
@@ -156,9 +156,9 @@
 					{ "mData": "name"},
 		        	{ "mData": "count"},
 		        	{ "mData": "sum"},
-		        	{ "mData": "mean"},
-		        	{ "mData": "min"},
 		        	{ "mData": "max"},
+		        	{ "mData": "min"},
+		        	{ "mData": "mean"},
 		        	{ "mData": "stddev"}
 	           ],
 	    	"fnServerData": function(sSource, aoData, fnCallback) {
