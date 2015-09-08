@@ -77,7 +77,7 @@
               
               <label class="control-label">用户名:</label>
               <div class="controls">
-                <input type="text" name="username" placeholder="用户名">
+                <input type="text" name="username" placeholder="威客用户名">
               </div>
             </div>
          
