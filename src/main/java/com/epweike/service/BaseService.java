@@ -61,8 +61,6 @@ public abstract class BaseService<T> {
 	public List<T> selectPage(T record, PageModel<T> pageModel) {
 		//每页显示条数
     	int limit = pageModel.getiDisplayLength();
-    	if(limit == -1)//获取全部
-    		limit = Integer.MAX_VALUE;
     	//偏移
     	int offset = pageModel.getiDisplayStart();
     	

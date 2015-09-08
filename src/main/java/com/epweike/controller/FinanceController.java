@@ -234,7 +234,7 @@ public class FinanceController extends BaseController {
 			if (!shop_level.equals("全部"))
 				parameters.addFilterQuery("shop_level:" + shop_level);
 		}
-		
+
 		// 查询统计财务报表
 		QueryResponse response = getSolrServer("finance").query(parameters);
 

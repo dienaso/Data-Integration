@@ -38,114 +38,117 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class UsersController extends BaseController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
-	
-    @Autowired
-    private UsersService usersService;
-    
-    public List<Users> usersList;
-    
-    public User user;
-    
-    @RequestMapping(value = {"/users/list"})
-    public String list(Model model) {
-    	user = (User) SecurityContextHolder.getContext().getAuthentication()
-        .getPrincipal();
-    	
-        return "users/list";
-    }
-    
-    /**  
-	* @Description:ajax获取系统用户列表
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月10日 下午3:28:27
-	*/
-    @RequestMapping(value = "/users/get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
-    	
-    	//获取查询关键参数
-    	String aoData = request.getParameter("aoData"); 
-    	//解析查询关键参数
-    	PageModel<Users> pageModel = parsePageParamFromJson(aoData);
-    	//搜索条件
-    	String sSearch = pageModel.getsSearch();
-    	//总条数
-    	int total = this.usersService.count(new Users());
-    	//搜索结果集
-    	usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
-    	pageModel.setiTotalDisplayRecords(total);
-    	pageModel.setiTotalRecords(total);
-    	pageModel.setAaData(usersList);
-		
-    	JSONObject json = JSONObject.fromObject(pageModel);
-    	logger.info("获取用户列表！！！"+json);
-	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(UsersController.class);
+
+	@Autowired
+	private UsersService usersService;
+
+	public List<Users> usersList;
+
+	public User user;
+
+	@RequestMapping(value = { "/users/list" })
+	public String list(Model model) {
+		user = (User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		return "users/list";
+	}
+
+	/**
+	 * @Description:ajax获取系统用户列表
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = "/users/get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+			throws IOException {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		// 解析查询关键参数
+		PageModel<Users> pageModel = parsePageParamFromJson(aoData);
+		// 搜索条件
+		String sSearch = pageModel.getsSearch();
+		// 总条数
+		int total = this.usersService.count(new Users());
+		// 搜索结果集
+		usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
+		pageModel.setiTotalDisplayRecords(total);
+		pageModel.setiTotalRecords(total);
+		pageModel.setAaData(usersList);
+
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取用户列表！！！" + json);
+
 		return json.toString();
-    }
-    
-    @RequestMapping(value = "/users/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody int del(HttpServletRequest  request) throws IOException {
-    	
-    	//获取删除主键
-    	String id = request.getParameter("id"); 
-    	
-    	System.out.println("--------------------"+id);
-    	
-    	int result = this.usersService.delete(id);
-	
+	}
+
+	@RequestMapping(value = "/users/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody int del(HttpServletRequest request) throws IOException {
+
+		// 获取删除主键
+		String id = request.getParameter("id");
+
+		System.out.println("--------------------" + id);
+
+		int result = this.usersService.delete(id);
+
 		return result;
-    }
-    
-    /**  
-	* @Description:一品用户省份分布统计
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月10日 下午3:28:27
-	*/
-    @RequestMapping(value = {"/stat/users/province"})
-    public ModelAndView provinceStat() throws SolrServerException, IOException {
-		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
+	}
+
+	/**
+	 * @Description:一品用户省份分布统计
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "/stat/users/province" })
+	public ModelAndView provinceStat() throws SolrServerException, IOException {
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+				.addFacetField("province");
 		QueryResponse response = getSolrServer("talent").query(parameters);
 		SolrDocumentList results = response.getResults();
-		
-		//地区分布统计
-		List<FacetField> facetFields = response.getFacetFields(); 
-		
-		//返回视图
+
+		// 地区分布统计
+		List<FacetField> facetFields = response.getFacetFields();
+
+		// 返回视图
 		ModelAndView mv = new ModelAndView("stat/users/province");
-		//总数
+		// 总数
 		mv.addObject("total", results.getNumFound());
-		//饼状图数据
-		//mv.addObject("pieData", ChartUtils.pieJson(facetFields));
-		//柱状图数据
+		// 饼状图数据
+		// mv.addObject("pieData", ChartUtils.pieJson(facetFields));
+		// 柱状图数据
 		mv.addObject("barData", StatUtils.barJson(facetFields));
 		logger.info("进入用户分布统计！！！");
-        return mv;
-    }
-	
-	/**  
-	* @Description:一品用户注册统计
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月10日 下午3:28:27
-	*/  
-	@RequestMapping(value = {"/stat/users/register"})
-    public ModelAndView register() throws SolrServerException, IOException {
-		//返回视图
+		return mv;
+	}
+
+	/**
+	 * @Description:一品用户注册统计
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "/stat/users/register" })
+	public ModelAndView register() throws SolrServerException, IOException {
+		// 返回视图
 		ModelAndView mv = new ModelAndView("stat/users/register");
 		logger.info("进入用户注册统计！！！");
-        return mv;
-    }
-	
-	/**  
-	* @Description:获取注册用户
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月10日 下午3:28:27
-	*/  
+		return mv;
+	}
+
+	/**
+	 * @Description:获取注册用户
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
 	@RequestMapping(value = "/users/register/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getRegister(HttpServletRequest request)
 			throws Exception {
@@ -165,7 +168,8 @@ public class UsersController extends BaseController {
 		// 统计类型(日、月、年)
 		String statType = getParamFromAodata(aoData, "statType");
 
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addDateRangeFacet("reg_time_date", start, end, statType)
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+				.addDateRangeFacet("reg_time_date", start, end, statType)
 				.setFacetLimit(1000);
 
 		QueryResponse response = getSolrServer("talent").query(parameters);
@@ -177,11 +181,12 @@ public class UsersController extends BaseController {
 		} else if (statType.contains("MONTH")) {
 			endIndex = 7;
 		}
-		
+
 		// 获取区间统计列表
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
-		List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet, endIndex);
+		List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet,
+				endIndex);
 
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());
@@ -191,5 +196,78 @@ public class UsersController extends BaseController {
 		logger.info("获取用户注册统计列表！！！" + json);
 
 		return json.toString();
+	}
+
+	/**
+	 * @Description:获取一品用户登陆明细
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = "/users/loginDetail/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getLoginDetail(HttpServletRequest request)
+			throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// 开始时间
+		String startTime = getParamFromAodata(aoData, "start");
+		// 结束时间
+		String endTime = getParamFromAodata(aoData, "end");
+		// 登陆类型类型
+		String loginType = getParamFromAodata(aoData, "loginType");
+		// 用户名
+		String username = getParamFromAodata(aoData, "username");
+		// 过滤条件
+		SolrQuery parameters = new SolrQuery("*:*");
+		
+		parameters.setFields("uid,country,on_time_str,city,login_type,ip,username");
+
+		if (!loginType.equals("全部"))
+			parameters.addFilterQuery("login_type:" + loginType);
+
+		if (!username.equals(""))
+			parameters.addFilterQuery("username:" + username);
+
+		parameters.addFilterQuery("on_time:[" + startTime + "T00:00:00Z TO " + endTime
+				+ "T23:59:59Z]");
+		
+		parameters.setStart(pageModel.getiDisplayStart());
+		
+		parameters.setRows(pageModel.getiDisplayLength());
+		
+		parameters.setSort("on_time", SolrQuery.ORDER.desc);
+
+		QueryResponse response = getSolrServer("login").query(parameters);
+
+		// 获取登陆明细列表
+		SolrDocumentList list = response.getResults();
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.getNumFound());
+		pageModel.setiTotalRecords(list.getNumFound());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取用户登陆明细列表！！！" + json);
+
+		return json.toString();
+	}
+
+	/**
+	 * @Description:一品用户登陆明细
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "/stat/users/loginDetail" })
+	public ModelAndView loginDetail() throws SolrServerException, IOException {
+		// 返回视图
+		ModelAndView mv = new ModelAndView("stat/users/loginDetail");
+		logger.info("进入用户登陆明细列表！！！");
+		return mv;
 	}
 }
