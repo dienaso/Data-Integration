@@ -36,7 +36,7 @@
               <label class="control-label">任务类型:</label>
               <div class="controls">
                 <select id="taskType">
-                  <option>全部(不包含计件)</option>
+                  <option>全部</option>
                   <option>单赏</option>
                   <option>多赏</option>
                   <option>计件</option>
@@ -60,15 +60,6 @@
                 </select>
               </div>
               
-              <label class="control-label">托管状态:</label>
-              <div class="controls">
-                <select id="cash_status">
-                  <option>全部</option>
-                  <option>未托管</option>
-                  <option>已托管</option>
-                </select>
-              </div>
-              
             </div>
          
             <div class="form-actions">
@@ -83,13 +74,8 @@
 		    <table id="list" class="table table-bordered data-table">
 		        <thead>
 		        	<tr>
-			          	<th>名称</th>
+			          	<th>任务分类</th>
 			          	<th>发布数量</th>
-			          	<th>总额</th>
-			          	<th>最大</th>
-			          	<th>最小</th>
-			          	<th>平均</th>
-			          	<th>标准差</th>
 		        	</tr>
 		     	</thead>
 		    </table>
@@ -135,9 +121,9 @@
 		
 		<!--dateTable-->
 		var table = $('#list').dataTable({
+			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
-			"bServerSide": true,
 			"bFilter": false,
 			"bPaginate": false,
 	        "sAjaxSource": '/task/indus/get', 
@@ -145,19 +131,12 @@
 	           [  
 					{ "mData": "name"},
 		        	{ "mData": "count"},
-		        	{ "mData": "sum"},
-		        	{ "mData": "max"},
-		        	{ "mData": "min"},
-		        	{ "mData": "mean"},
-		        	{ "mData": "stddev"}
-	           ],
-	    	"fnServerData": function(sSource, aoData, fnCallback) {
+	        	],
+	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
 	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
-	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
-	    		aoData.push( { "name": "cash_status", "value": $("#cash_status option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

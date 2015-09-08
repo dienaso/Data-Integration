@@ -88,7 +88,7 @@
 		        <thead>
 		        	<tr>
 			          	<th>名称</th>
-			          	<th>发单量</th>
+			          	<th>发布数量</th>
 			          	<th>总额</th>
 			          	<th>最大</th>
 			          	<th>最小</th>
