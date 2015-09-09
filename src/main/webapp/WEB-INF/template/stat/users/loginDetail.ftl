@@ -50,6 +50,11 @@
               <div class="controls">
                 <input type="text" name="username" placeholder="用户名">
               </div>
+              
+              <label class="control-label">UID:</label>
+              <div class="controls">
+                <input type="text" name="uid" placeholder="UID">
+              </div>
             </div>
          
             <div class="form-actions">
@@ -135,6 +140,7 @@
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
 	    		aoData.push( { "name": "loginType", "value": $("#loginType option:selected").val() } );
 	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
+	    		aoData.push( { "name": "uid", "value": $("input[name='uid']").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

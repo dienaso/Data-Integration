@@ -24,19 +24,28 @@
         </div>
         <div class="widget-content nopadding form-horizontal">
             <div class="control-group">
-              <label class="control-label">时间区间 :</label>
+              <label class="control-label">发布时间 :</label>
               <div class="controls">
 	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
+				    <input type="text" class="input-small" name="pub_start" placeholder="开始时间" readonly>
 				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="end" placeholder="结束时间" readonly>
+				    <input type="text" class="input-small" name="pub_end" placeholder="结束时间" readonly>
+				  </div>
+			  </div>
+			  
+			  <label class="control-label">托管时间 :</label>
+              <div class="controls">
+	              <div class="input-daterange" id="datepicker">
+				    <input type="text" class="input-small" name="cash_start" placeholder="开始时间" readonly>
+				    <span class="add-on">to</span>
+				    <input type="text" class="input-small" name="cash_end" placeholder="结束时间" readonly>
 				  </div>
 			  </div>
 			  
               <label class="control-label">任务类型:</label>
               <div class="controls">
                 <select id="taskType">
-                  <option>全部(不包含计件)</option>
+                  <option>全部</option>
                   <option>单赏</option>
                   <option>多赏</option>
                   <option>计件</option>
@@ -67,6 +76,11 @@
                   <option>未托管</option>
                   <option>已托管</option>
                 </select>
+              </div>
+              
+              <label class="control-label">分类名称:</label>
+              <div class="controls">
+                <input type="text" name="indus_name" placeholder="分类名称">
               </div>
               
             </div>
@@ -128,10 +142,11 @@
 		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 		    return fmt;
 		}
+		
 		//获取当前时间
 		var date = new Date().Format("yyyy-MM-dd");
-		$("input[name='start']").val(date);
-		$("input[name='end']").val(date);
+		$("input[name='cash_start']").val(date);
+		$("input[name='cash_end']").val(date);
 		
 		<!--dateTable-->
 		var table = $('#list').dataTable({
@@ -152,12 +167,14 @@
 		        	{ "mData": "stddev"}
 	           ],
 	    	"fnServerData": function(sSource, aoData, fnCallback) {
-	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
-	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
+	    		aoData.push( { "name": "pub_start", "value": $("input[name='pub_start']").val() } );
+	    		aoData.push( { "name": "pub_end", "value": $("input[name='pub_end']").val() } );
 	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
-	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
+	    		aoData.push( { "name": "indus_name", "value": $("input[name='indus_name']").val() } );
 	    		aoData.push( { "name": "cash_status", "value": $("#cash_status option:selected").val() } );
+	    		aoData.push( { "name": "cash_start", "value": $("input[name='cash_start']").val() } );
+	    		aoData.push( { "name": "cash_end", "value": $("input[name='cash_end']").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

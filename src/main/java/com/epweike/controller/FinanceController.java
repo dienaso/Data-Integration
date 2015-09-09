@@ -245,7 +245,7 @@ public class FinanceController extends BaseController {
 		if (stats != null && stats.size() >= 0) {
 			// total
 			DecimalFormat df = new DecimalFormat("######0.000");// 保留3位
-			if (statsInfo != null) {
+			if (statsInfo != null && statsInfo.getCount() > 0) {
 				tmp1.put("name", "汇总");
 				tmp1.put("min", df.format(statsInfo.getMin()));
 				tmp1.put("max", df.format(statsInfo.getMax()));
@@ -261,17 +261,24 @@ public class FinanceController extends BaseController {
 				List<FieldStatsInfo> statisList = map.get("username");
 				if (statisList != null && statisList.size() > 0) {
 					for (int i = 0; i < statisList.size(); i++) {
-						Map<String, Object> tmp2 = new HashMap<String, Object>();
-						tmp2.put("name", statisList.get(i).getName());
-						tmp2.put("min", df.format(statisList.get(i).getMin()));
-						tmp2.put("max", df.format(statisList.get(i).getMax()));
-						tmp2.put("sum", df.format(statisList.get(i).getSum()));
-						tmp2.put("count", statisList.get(i).getCount());
-						tmp2.put("missing", statisList.get(i).getMissing());
-						tmp2.put("mean", df.format(statisList.get(i).getMean()));
-						tmp2.put("stddev",
-								df.format(statisList.get(i).getStddev()));
-						list.add(tmp2);
+						// count大于0才统计
+						if (statisList.get(i).getCount() > 0) {
+							Map<String, Object> tmp2 = new HashMap<String, Object>();
+							tmp2.put("name", statisList.get(i).getName());
+							tmp2.put("min",
+									df.format(statisList.get(i).getMin()));
+							tmp2.put("max",
+									df.format(statisList.get(i).getMax()));
+							tmp2.put("sum",
+									df.format(statisList.get(i).getSum()));
+							tmp2.put("count", statisList.get(i).getCount());
+							tmp2.put("missing", statisList.get(i).getMissing());
+							tmp2.put("mean",
+									df.format(statisList.get(i).getMean()));
+							tmp2.put("stddev",
+									df.format(statisList.get(i).getStddev()));
+							list.add(tmp2);
+						}
 					}
 				}
 			}

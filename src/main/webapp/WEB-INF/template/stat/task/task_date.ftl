@@ -24,7 +24,7 @@
         </div>
         <div class="widget-content nopadding form-horizontal">
             <div class="control-group">
-              <label class="control-label">时间区间 :</label>
+              <label class="control-label">发布时间 :</label>
               <div class="controls">
 	              <div class="input-daterange" id="datepicker">
 				    <input type="text" class="input-small" name="start" placeholder="开始时间" readonly>

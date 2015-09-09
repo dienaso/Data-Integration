@@ -31,11 +31,27 @@
 
 	//一级菜单
 	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
+	
+	//拼接一二级菜单
+	String title = "";
+	Menus menus1 = menusService.get(Integer.parseInt(pid));
+	Menus menus2 = menusService.get(Integer.parseInt(id));
+	if(menus1 != null)
+		title = "-" + menus1.getName();
+	if(!"".equals(title)) {
+		if(menus2 != null)
+			title = title + "-" + menus2.getName();
+	} else{
+		title = "-" + menus2.getName();
+	}
+		
+		
+		
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Data Integration-数据集中查询分析平台</title>
+<title>Data Integration<%=title%></title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
@@ -132,7 +148,7 @@
 						List<Menus> two_menus = menusService.select(new Menus(menu
 								.getId()));
 						if (two_menus != null && two_menus.size() > 0) { //存在二级菜单
-							if (menu.getId().toString().equals(pid)) { //当一级前菜单且存在子级菜单
+							if (menu.getId().toString().equals(pid)) { //当前一级菜单且存在子级菜单
 			%>
 
 			<li class="submenu open active"><a href="<%=url%>"><i

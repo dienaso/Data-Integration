@@ -222,24 +222,23 @@ public class UsersController extends BaseController {
 		String loginType = getParamFromAodata(aoData, "loginType");
 		// 用户名
 		String username = getParamFromAodata(aoData, "username");
+		// UID
+		String uid = getParamFromAodata(aoData, "uid");
 		// 过滤条件
 		SolrQuery parameters = new SolrQuery("*:*");
 		
 		parameters.setFields("uid,country,on_time_str,city,login_type,ip,username");
-
 		if (!loginType.equals("全部"))
 			parameters.addFilterQuery("login_type:" + loginType);
-
 		if (!username.equals(""))
 			parameters.addFilterQuery("username:" + username);
-
+		
+		if (!uid.equals(""))
+			parameters.addFilterQuery("uid:" + uid);
 		parameters.addFilterQuery("on_time:[" + startTime + "T00:00:00Z TO " + endTime
 				+ "T23:59:59Z]");
-		
 		parameters.setStart(pageModel.getiDisplayStart());
-		
 		parameters.setRows(pageModel.getiDisplayLength());
-		
 		parameters.setSort("on_time", SolrQuery.ORDER.desc);
 
 		QueryResponse response = getSolrServer("login").query(parameters);

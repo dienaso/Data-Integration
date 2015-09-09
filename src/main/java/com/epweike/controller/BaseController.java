@@ -1,15 +1,25 @@
 package com.epweike.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.RangeFacet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.epweike.model.PageModel;
+import com.epweike.util.DateUtils;
 
 /**  
  * @Description:控制器通用方法类
@@ -115,6 +125,91 @@ public class BaseController {
 				param = obj.get("value").toString();
 		}
 		return param;
+	}
+	
+	/**
+	 * @Description:通用获取任务、稿件统计列表,根据时间分组
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月12日 上午8:47:31
+	 */
+	public List<Map<String, Object>> getTaskFacetListByTime(String aoData,
+			String field, String core) throws Exception {
+
+		// 开始时间
+		String startString = getParamFromAodata(aoData, "start");
+		Date start = DateUtils.parseDate(startString);
+		// 结束时间
+		String endString = getParamFromAodata(aoData, "end");
+		Date end = DateUtils.parseDateTime(endString + " 23:59:59");
+		// 任务类型
+		String taskType = getParamFromAodata(aoData, "taskType");
+		// 统计类型(日、月、年)
+		String statType = getParamFromAodata(aoData, "statType");
+		// 来源(web、iphoe、Android等)
+		String source = getParamFromAodata(aoData, "source");
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+				.addDateRangeFacet(field, start, end, statType)
+				.setFacetLimit(1000);
+		if (!source.equals("全部"))
+			parameters.addFilterQuery("source:" + source);
+		// 过滤任务类型
+		switch (taskType) {
+		case "单赏":
+			parameters.addFilterQuery("model_id:1");
+			break;
+		case "多赏":
+			parameters.addFilterQuery("model_id:2");
+			break;
+		case "计件":
+			parameters.addFilterQuery("model_id:3");
+			break;
+		case "招标":
+			parameters.addFilterQuery("model_id:4").addFilterQuery(
+					"task_type:{* TO 2}");
+			break;
+		case "雇佣":
+			parameters.addFilterQuery("model_id:4")
+					.addFilterQuery("task_type:{* TO 2}")
+					.addFilterQuery("task_cash_coverage:0");
+			break;
+		case "服务":
+			parameters.addFilterQuery("model_id:4").addFilterQuery(
+					"task_type:2");
+			break;
+		case "直接雇佣":
+			parameters.addFilterQuery("model_id:4").addFilterQuery(
+					"task_type:3");
+		default:
+			break;
+		}
+
+		// 日期根据统计类型截取
+		int endIndex = 10;
+		if (statType.contains("YEAR")) {
+			endIndex = 4;
+		} else if (statType.contains("MONTH")) {
+			endIndex = 7;
+		}
+
+		QueryResponse response = getSolrServer(core).query(parameters);
+		// 获取区间统计列表
+		@SuppressWarnings("rawtypes")
+		List<RangeFacet> listFacet = response.getFacetRanges();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (RangeFacet<?, ?> rf : listFacet) {
+			List<RangeFacet.Count> listCounts = rf.getCounts();
+			for (RangeFacet.Count count : listCounts) {
+				System.out.println("RangeFacet:" + count.getValue() + ":"
+						+ count.getCount());
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("date", count.getValue().substring(0, endIndex));// 日期截取只保留年月日形式
+				map.put("count", count.getCount());
+				list.add(map);
+			}
+		}
+		return list;
 	}
 
 }
