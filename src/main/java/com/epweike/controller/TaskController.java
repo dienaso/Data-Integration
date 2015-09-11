@@ -102,62 +102,62 @@ public class TaskController extends BaseController {
 		// 分类名称
 		String indus_name = getParamFromAodata(aoData, "indus_name");
 
-		SolrQuery parameters = new SolrQuery("*:*");
+		SolrQuery params = new SolrQuery("*:*");
 		// 过滤掉计件任务
-		// parameters.addFilterQuery("NOT model_id:3");
+		// params.addFilterQuery("NOT model_id:3");
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":
-			parameters.addFilterQuery("model_id:1");
+			params.addFilterQuery("model_id:1");
 			break;
 		case "多赏":
-			parameters.addFilterQuery("model_id:2");
+			params.addFilterQuery("model_id:2");
 			break;
 		case "计件":
-			parameters.addFilterQuery("model_id:3");
+			params.addFilterQuery("model_id:3");
 			break;
 		case "招标":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:{* TO 2}");
 			break;
 		case "雇佣":
-			parameters.addFilterQuery("model_id:4")
+			params.addFilterQuery("model_id:4")
 					.addFilterQuery("task_type:{* TO 2}")
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:2");
 			break;
 		case "直接雇佣":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:3");
 		default:
 			break;
 		}
-		parameters.addFilterQuery("pub_time_date:[" + pub_start + " TO "
+		params.addFilterQuery("pub_time_date:[" + pub_start + " TO "
 				+ pub_end + "]");
-		parameters.addFilterQuery("cash_time_date:[" + cash_start + " TO "
+		params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
 				+ cash_end + "]");
 		if (!"".equals(indus_name))
-			parameters.addFilterQuery("indus_name:" + indus_name);
-		parameters.setGetFieldStatistics(true);
-		parameters.setParam(StatsParams.STATS_FIELD, "task_cash");
-		parameters.setParam(StatsParams.STATS_FACET, "indus_name");
+			params.addFilterQuery("indus_name:" + indus_name);
+		params.setGetFieldStatistics(true);
+		params.setParam(StatsParams.STATS_FIELD, "task_cash");
+		params.setParam(StatsParams.STATS_FACET, "indus_name");
 
 		if (!source.equals("全部"))
-			parameters.addFilterQuery("source:" + source);
+			params.addFilterQuery("source:" + source);
 
 		if (!cash_status.equals("全部")) {
 			if (cash_status.equals("未托管")) {
-				parameters.addFilterQuery("cash_status:0");
+				params.addFilterQuery("cash_status:0");
 			} else {
-				parameters.addFilterQuery("cash_status:{0 TO *}");
+				params.addFilterQuery("cash_status:{0 TO *}");
 			}
 		}
 
 		// 查询统计任务报表
-		QueryResponse response = getSolrServer("task").query(parameters);
+		QueryResponse response = getSolrServer("task").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();
@@ -263,62 +263,62 @@ public class TaskController extends BaseController {
 		// 是否已托管
 		String cash_status = getParamFromAodata(aoData, "cash_status");
 
-		SolrQuery parameters = new SolrQuery("*:*");
+		SolrQuery params = new SolrQuery("*:*");
 		// 过滤掉计件任务
-		// parameters.addFilterQuery("NOT model_id:3");
+		// params.addFilterQuery("NOT model_id:3");
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":
-			parameters.addFilterQuery("model_id:1");
+			params.addFilterQuery("model_id:1");
 			break;
 		case "多赏":
-			parameters.addFilterQuery("model_id:2");
+			params.addFilterQuery("model_id:2");
 			break;
 		case "计件":
-			parameters.addFilterQuery("model_id:3");
+			params.addFilterQuery("model_id:3");
 			break;
 		case "招标":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:{* TO 2}");
 			break;
 		case "雇佣":
-			parameters.addFilterQuery("model_id:4")
+			params.addFilterQuery("model_id:4")
 					.addFilterQuery("task_type:{* TO 2}")
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:2");
 			break;
 		case "直接雇佣":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:3");
 		default:
 			break;
 		}
-		parameters.addFilterQuery("pub_time_date:[" + pub_start
+		params.addFilterQuery("pub_time_date:[" + pub_start
 				+ " TO " + pub_end + "]");
-		parameters.addFilterQuery("cash_time_date:[" + cash_start
+		params.addFilterQuery("cash_time_date:[" + cash_start
 				+ " TO " + cash_end + "]");
 		if (!"".equals(username))
-			parameters.addFilterQuery("username:" + username);
-		parameters.setGetFieldStatistics(true);
-		parameters.setParam(StatsParams.STATS_FIELD, "task_cash");
-		parameters.setParam(StatsParams.STATS_FACET, "username");
+			params.addFilterQuery("username:" + username);
+		params.setGetFieldStatistics(true);
+		params.setParam(StatsParams.STATS_FIELD, "task_cash");
+		params.setParam(StatsParams.STATS_FACET, "username");
 
 		if (!source.equals("全部"))
-			parameters.addFilterQuery("source:" + source);
+			params.addFilterQuery("source:" + source);
 
 		if (!cash_status.equals("全部")) {
 			if (cash_status.equals("未托管")) {
-				parameters.addFilterQuery("cash_status:0");
+				params.addFilterQuery("cash_status:0");
 			} else {
-				parameters.addFilterQuery("cash_status:{0 TO *}");
+				params.addFilterQuery("cash_status:{0 TO *}");
 			}
 		}
 
 		// 查询统计任务报表
-		QueryResponse response = getSolrServer("task").query(parameters);
+		QueryResponse response = getSolrServer("task").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();

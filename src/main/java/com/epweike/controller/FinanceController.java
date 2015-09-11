@@ -62,37 +62,37 @@ public class FinanceController extends BaseController {
 		// 来源(web、iphoe、Android等)
 		String source = getParamFromAodata(aoData, "source");
 
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+		SolrQuery params = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet(field, start, end, statType)
 				.setFacetLimit(1000);
 		if (!source.equals("全部"))
-			parameters.addFilterQuery("source:" + source);
+			params.addFilterQuery("source:" + source);
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":
-			parameters.addFilterQuery("model_id:1");
+			params.addFilterQuery("model_id:1");
 			break;
 		case "多赏":
-			parameters.addFilterQuery("model_id:2");
+			params.addFilterQuery("model_id:2");
 			break;
 		case "计件":
-			parameters.addFilterQuery("model_id:3");
+			params.addFilterQuery("model_id:3");
 			break;
 		case "招标":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:{* TO 2}");
 			break;
 		case "雇佣":
-			parameters.addFilterQuery("model_id:4")
+			params.addFilterQuery("model_id:4")
 					.addFilterQuery("task_type:{* TO 2}")
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:2");
 			break;
 		case "直接雇佣":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:3");
 		default:
 			break;
@@ -105,7 +105,7 @@ public class FinanceController extends BaseController {
 			endIndex = 7;
 		}
 
-		QueryResponse response = getSolrServer(core).query(parameters);
+		QueryResponse response = getSolrServer(core).query(params);
 		// 获取区间统计列表
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
@@ -183,60 +183,60 @@ public class FinanceController extends BaseController {
 		// 店铺等级
 		String shop_level = getParamFromAodata(aoData, "shop_level");
 
-		SolrQuery parameters = new SolrQuery("*:*");
+		SolrQuery params = new SolrQuery("*:*");
 		// 过滤掉计件任务
-		parameters.addFilterQuery("NOT model_id:3");
+		params.addFilterQuery("NOT model_id:3");
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":
-			parameters.addFilterQuery("model_id:1");
+			params.addFilterQuery("model_id:1");
 			break;
 		case "多赏":
-			parameters.addFilterQuery("model_id:2");
+			params.addFilterQuery("model_id:2");
 			break;
 		case "计件":
-			parameters.clear();
-			parameters.addFilterQuery("model_id:3");
+			params.clear();
+			params.addFilterQuery("model_id:3");
 			break;
 		case "招标":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:{* TO 2}");
 			break;
 		case "雇佣":
-			parameters.addFilterQuery("model_id:4")
+			params.addFilterQuery("model_id:4")
 					.addFilterQuery("task_type:{* TO 2}")
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:2");
 			break;
 		case "直接雇佣":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
+			params.addFilterQuery("model_id:4").addFilterQuery(
 					"task_type:3");
 		default:
 			break;
 		}
-		parameters.addFilterQuery(
+		params.addFilterQuery(
 				"fina_time_date:[" + startString + "T00:00:00Z TO " + endString
 						+ "T23:59:59Z]").addFilterQuery("fina_action:task_bid");
 		if (!"".equals(username))
-			parameters.addFilterQuery("username:" + username);
-		parameters.setGetFieldStatistics(true);
-		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash");
-		parameters.setParam(StatsParams.STATS_FACET, "username");
+			params.addFilterQuery("username:" + username);
+		params.setGetFieldStatistics(true);
+		params.setParam(StatsParams.STATS_FIELD, "fina_cash");
+		params.setParam(StatsParams.STATS_FACET, "username");
 
 		if (!source.equals("全部"))
-			parameters.addFilterQuery("source:" + source);
+			params.addFilterQuery("source:" + source);
 		if (shop_level.equals("全部VIP")) {
-			parameters.addFilterQuery("shop_level:{1 TO *}");
+			params.addFilterQuery("shop_level:{1 TO *}");
 		} else {
 			if (!shop_level.equals("全部"))
-				parameters.addFilterQuery("shop_level:" + shop_level);
+				params.addFilterQuery("shop_level:" + shop_level);
 		}
 
 		// 查询统计财务报表
-		QueryResponse response = getSolrServer("finance").query(parameters);
+		QueryResponse response = getSolrServer("finance").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();

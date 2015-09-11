@@ -40,8 +40,8 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = {"/stat/users/loginType"})
     public ModelAndView loginTypeStat() throws SolrServerException, IOException {
 		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("login_type");
-		QueryResponse response = getSolrServer("login").query(parameters);
+		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("login_type");
+		QueryResponse response = getSolrServer("login").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//登录类型统计

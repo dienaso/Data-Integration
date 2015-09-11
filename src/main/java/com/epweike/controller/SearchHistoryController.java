@@ -57,17 +57,17 @@ public class SearchHistoryController extends BaseController {
 		// 搜索类型
 		String searchType = getParamFromAodata(aoData, "searchType");
 
-		SolrQuery parameters = new SolrQuery("*:*")
+		SolrQuery params = new SolrQuery("*:*")
 				.addFilterQuery(
 						"on_time:[" + startString + "T00:00:00Z TO "
 								+ endString + "T23:59:59Z]").setFacet(true)
 				.addFacetField("keyword").setFacetMinCount(1)
 				.setFacetLimit(Integer.MAX_VALUE);
 		if (!searchType.equals("all"))// 搜索类型过滤
-			parameters.addFilterQuery("search_type:" + searchType);
+			params.addFilterQuery("search_type:" + searchType);
 
 		QueryResponse response = getSolrServer("search_history").query(
-				parameters);
+				params);
 		// 获取统计列表
 		List<FacetField> facetFields = response.getFacetFields();
 

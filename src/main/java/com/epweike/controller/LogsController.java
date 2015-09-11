@@ -27,8 +27,8 @@ public class LogsController extends BaseController {
 	@RequestMapping(value = {"/logs/stat"})
     public ModelAndView stat() throws SolrServerException, IOException {
 		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
-		QueryResponse response = getSolrServer("logs").query(parameters);
+		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
+		QueryResponse response = getSolrServer("logs").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//地区分布统计
@@ -47,8 +47,8 @@ public class LogsController extends BaseController {
 	@RequestMapping(value = {"/logs/userAgent"})
     public ModelAndView userAgent() throws SolrServerException, IOException {
 		
-		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province");
-		QueryResponse response = getSolrServer("logs").query(parameters);
+		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
+		QueryResponse response = getSolrServer("logs").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//地区分布统计

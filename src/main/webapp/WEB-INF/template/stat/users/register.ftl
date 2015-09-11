@@ -32,15 +32,6 @@
 				    <input type="text" class="input-small" name="reg_end" placeholder="结束时间" readonly>
 				  </div>
 			  </div>
-			  
-              <label class="control-label">统计类型:</label>
-              <div class="controls">
-                <select id="statType">
-                  <option value="+1DAY">按日</option>
-                  <option value="+1MONTH">按月</option>
-                  <option value="+1YEAR">按年</option>
-                </select>
-              </div>
             </div>
          
             <div class="form-actions">
@@ -132,6 +123,7 @@
 	    		aoData.push( { "name": "reg_start", "value": $("input[name='reg_start']").val() } );
 	    		aoData.push( { "name": "reg_end", "value": $("input[name='reg_end']").val() } );
 	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
+	    		aoData.push( { "name": "come", "value": $("#come option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,
