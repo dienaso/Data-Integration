@@ -24,12 +24,12 @@
         </div>
         <div class="widget-content nopadding form-horizontal">
             <div class="control-group">
-              <label class="control-label">时间区间 :</label>
+              <label class="control-label">注册时间 :</label>
               <div class="controls">
 	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
+				    <input type="text" class="input-small" name="reg_start" placeholder="开始时间" readonly>
 				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="end" placeholder="结束时间" readonly>
+				    <input type="text" class="input-small" name="reg_end" placeholder="结束时间" readonly>
 				  </div>
 			  </div>
 			  
@@ -55,9 +55,18 @@
 		    <table id="list" class="table table-bordered data-table">
 		        <thead>
 		        	<tr>
-			          	<th>日期</th>
-			          	<th>注册数</th>
+			          	<th rowspan="2">日期</th>
+			          	<th colspan="7">注册数</th>
 		        	</tr>
+		        	<tr>
+		                <th>WEB</th>
+		                <th>CPM</th>
+		                <th>APP</th>
+		                <th>WAP</th>
+		                <th>酷贝街</th>
+		                <th>后台</th>
+		                <th>云创平台</th>
+		            </tr>
 		     	</thead>
 		    </table>
 		  </div>
@@ -97,8 +106,8 @@
 		}
 		//获取当前时间
 		var date = new Date().Format("yyyy-MM-dd");
-		$("input[name='start']").val(date);
-		$("input[name='end']").val(date);
+		$("input[name='reg_start']").val(date);
+		$("input[name='reg_end']").val(date);
 		
 		<!--dateTable-->
 		var table = $('#list').dataTable({
@@ -110,12 +119,18 @@
 	        "sAjaxSource": '/users/register/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "date"},
-		        	{ "mData": "count"},
+					{ "mData": "label"},
+		        	{ "mData": "WEB"},
+		        	{ "mData": "cpm"},
+		        	{ "mData": "APP"},
+		        	{ "mData": "WAP"},
+		        	{ "mData": "mall"},
+		        	{ "mData": "background"},
+		        	{ "mData": "yun"}
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
-	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
-	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
+	    		aoData.push( { "name": "reg_start", "value": $("input[name='reg_start']").val() } );
+	    		aoData.push( { "name": "reg_end", "value": $("input[name='reg_end']").val() } );
 	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
 				$.ajax({
 					"type" : "get",

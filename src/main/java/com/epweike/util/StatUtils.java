@@ -174,7 +174,7 @@ public class StatUtils {
 				System.out.println("RangeFacet:" + count.getValue() + ":"
 						+ count.getCount());
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("date", count.getValue().substring(0, endIndex));// 日期截取特定形式
+				map.put("date", count.getValue().substring(0, endIndex).replace("-", ""));// 日期截取特定形式
 				map.put("count", count.getCount());
 				list.add(map);
 			}

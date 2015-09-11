@@ -1,206 +1,59 @@
 package com.epweike;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
+import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
-import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.common.params.FacetParams;
-import org.apache.solr.common.params.FacetParams.FacetRangeInclude;
 import org.apache.solr.common.params.StatsParams;
+import org.apache.solr.common.util.NamedList;
 import org.junit.Test;
 
 import com.epweike.util.DateUtils;
+import com.epweike.util.StatUtils;
 
-public class SolrJTest {
-	
-//	@Test
-//	public void query() throws SolrServerException, IOException {
-//		
-//		String urlString = "http://solr.api.epweike.net/talent";
-//		SolrClient solr = new HttpSolrClient(urlString);
-//		
-//		
-//		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province","city");
-//		
-//		QueryResponse response = solr.query(parameters);
-//		
-//		//SolrDocumentList list = response.getResults();
-//		
-//		//地区分布统计
-//		List<FacetField> facetFields = response.getFacetFields(); 
-//		List<Map<String, Object>> countList = new ArrayList<Map<String, Object>>();
-//		for (FacetField ff : facetFields) {
-//		     System.out.println("--------------------");
-//		     System.out.println("name=" + ff.getName() + "\tcount=" + ff.getValueCount());
-//		     System.out.println("--------------------");
-//		     switch (ff.getName()) {
-//	         	case "province"://按省份分布统计
-//			    for (Count count : ff.getValues()) {
-//			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
-//			    	Map<String, Object> map = new HashMap<String, Object>();
-//			    	map.put("label", count.getName());
-//			    	map.put("data", count.getCount());
-//			    	countList.add(map);
-//		        }
-//			    break;
-//		     }
-//	    }
-//		//List to json
-//		JSONArray ja = JSONArray.fromObject(countList);
-//		System.out.println(ja.toString());
-//		solr.close();
-//		
-//	}
-	
-	
-//	@Test
-//	public void query() throws SolrServerException, IOException {
-//		
-//		String urlString = "http://solr.api.epweike.net/talent";
-//		SolrClient solr = new HttpSolrClient(urlString);
-//		
-//		
-//		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("province","city");
-//		
-//		QueryResponse response = solr.query(parameters);
-//		
-//		List<FacetField> facetFields = response.getFacetFields(); 
-//		
-//		//地区分布统计
-//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//		
-//		for (FacetField ff : facetFields) {
-//		     System.out.println("--------------------");
-//		     System.out.println("name=" + ff.getName() + "\tcount=" + ff.getValueCount());
-//		     System.out.println("--------------------");
-//		     switch (ff.getName()) {
-//	         	case "province"://按省份分布统计
-//	         	int i = 0;
-//			    for (Count count : ff.getValues()) {
-//			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
-//			    	Map<String, Object> map = new HashMap<String, Object>();
-//			    	map.put("name", count.getName());
-//			    	map.put("count", count.getCount());
-//			    	list.add(map);
-//			    	i++;
-//		        }
-//		     }
-//	    }
-//		//List to json
-//		System.out.println("countList="+list.toString());
-////		JSONArray ja = JSONArray.fromObject(countList);
-////		System.out.println(ja.toString());
-//		solr.close();
-//		
-//	}
-	
-	
-//	@Test
-//	public void query() throws SolrServerException, IOException {
-//		
-//		String urlString = "http://solr.api.epweike.net/login";
-//		SolrClient solr = new HttpSolrClient(urlString);
-//		
-//		Date d1 = new Date();
-//		d1.setTime(1398873600);
-//		Date d2 = new Date();
-//		d2.setTime(1399651200);
-//		SolrQuery parameters = new SolrQuery("*:*")
-//		.setFacet(true)
-//		.addDateRangeFacet("on_time", d1, d2, "%2BDAY");
-//		
-//		QueryResponse response = solr.query(parameters);
-//		
-//		List<FacetField> facetFields = response.getFacetFields(); 
-//		
-//		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//		
-//		for (FacetField ff : facetFields) {
-//		     System.out.println("--------------------");
-//		     System.out.println("name=" + ff.getName() + "\tcount=" + ff.getValueCount());
-//		     System.out.println("--------------------");
-//		     switch (ff.getName()) {
-//	         	case "on_time":
-//			    for (Count count : ff.getValues()) {
-//			    	System.out.println("name=" + count.getName() + "\tcount=" + count.getCount());
-//			    	Map<String, Object> map = new HashMap<String, Object>();
-//			    	map.put("name", count.getName());
-//			    	map.put("count", count.getCount());
-//			    	list.add(map);
-//		        }
-//		     }
-//	    }
-//		//List to json
-//		System.out.println("countList="+list.toString());
-////		JSONArray ja = JSONArray.fromObject(countList);
-////		System.out.println(ja.toString());
-//		solr.close();
-//		
-//	}
+public class SolrJTest<E> {
 
-//	@Test
-//	public void query() throws Exception {
-//		
-//		String urlString = "http://solr.api.epweike.net/task";
-//		SolrServer solr = new HttpSolrServer(urlString);
-//		Date start = DateUtils.parseDate("2015-05-29");
-//		Date end = DateUtils.parseDate("2015-06-30");
-//		SolrQuery parameters = new SolrQuery("*:*");
-//		parameters//android、ios、wap
-//		.setFacet(true).addDateRangeFacet("pub_time", start, end, "+1DAY").addFacetPivotField("source");;
-////		parameters.addFilterQuery("model_id:4").addFilterQuery(
-////				"task_type:3");
-//		QueryResponse response = solr.query(parameters);
-//		
-//		List<RangeFacet> listFacet = response.getFacetRanges(); 
-//		int total = 0;
-//        for(RangeFacet rf : listFacet){  
-//            List<RangeFacet.Count> listCounts = rf.getCounts();  
-//            for(RangeFacet.Count count : listCounts){  
-//                System.out.println("RangeFacet:"+count.getValue()+":"+count.getCount()+":"+count.getValue());  
-//                total = total + count.getCount();
-//            }  
-//        }  
-//        System.out.println("Total:"+total);  
-//	}
-	
 	@Test
 	public void stats() throws Exception {
-		
+
 		String urlString = "http://solr2.api.epweike.net/finance";
 		SolrServer solr = new HttpSolrServer(urlString);
 
 		SolrQuery parameters = new SolrQuery("*:*");
-		parameters.addFilterQuery("fina_time_date:{2015-06-28T00:00:00Z TO 2015-06-29T00:00:00Z}").addFilterQuery("fina_action:task_bid");
+		parameters
+				.addFilterQuery(
+						"fina_time_date:{2015-06-28T00:00:00Z TO 2015-06-29T00:00:00Z}")
+				.addFilterQuery("fina_action:task_bid");
 		parameters.setGetFieldStatistics(true);
-		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash"); 
-		parameters.setParam(StatsParams.STATS_FACET, "username"); 
+		parameters.setParam(StatsParams.STATS_FIELD, "fina_cash");
+		parameters.setParam(StatsParams.STATS_FACET, "username");
 
 		QueryResponse response = solr.query(parameters);
-		
+
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();
 		FieldStatsInfo statsInfo = stats.get("fina_cash");
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
-		
-		//total
+
+		// total
 		tmp1.put("name", "汇总");
 		tmp1.put("min", statsInfo.getMin());
 		tmp1.put("sum", statsInfo.getSum());
@@ -209,13 +62,14 @@ public class SolrJTest {
 		tmp1.put("mean", statsInfo.getMean());
 		tmp1.put("stddev", statsInfo.getStddev());
 		resultList.add(tmp1);
-		System.out.println("tmp:"+tmp1.toString());
-		
-		//facets
-		Map<String, List<FieldStatsInfo>> map = stats.get("fina_cash").getFacets();
+		System.out.println("tmp:" + tmp1.toString());
+
+		// facets
+		Map<String, List<FieldStatsInfo>> map = stats.get("fina_cash")
+				.getFacets();
 		List<FieldStatsInfo> list = map.get("username");
-		if(list != null && list.size() >0){
-			for(int i = 0; i < list.size(); i++){
+		if (list != null && list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
 				Map<String, Object> tmp2 = new HashMap<String, Object>();
 				tmp2.put("name", list.get(i).getName());
 				tmp2.put("min", list.get(i).getMin());
@@ -227,10 +81,213 @@ public class SolrJTest {
 				resultList.add(tmp2);
 			}
 		}
-		System.out.println("resultList:"+resultList.toString());
-		
-		
-		
+		System.out.println("resultList:" + resultList.toString());
+
 	}
 
+	@Test
+	public void regTypeStats() throws Exception {
+
+		String urlString = "http://solr2.api.epweike.net/talent";
+		SolrServer solr = new HttpSolrServer(urlString);
+
+		// 注册统计
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
+		// 统计类型(日、月、年)
+		String statType = "+1DAY";
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+
+		QueryResponse response = solr.query(parameters);
+		// 获取区间统计列表
+		@SuppressWarnings("rawtypes")
+		List<RangeFacet> listFacet = response.getFacetRanges();
+		List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet,
+				10);
+		System.out.println(list.toString());
+	}
+
+	@Test
+	public void getMultFacet() throws Exception {
+		String urlString = "http://solr2.api.epweike.net/talent";
+		SolrServer solr = new HttpSolrServer(urlString);
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
+		SolrQuery parameters = new SolrQuery("*:*");
+		parameters.addFilterQuery("reg_time:[" + start.getTime() + " TO "
+				+ end.getTime() + "]");
+		parameters.setFacet(true);
+		parameters.addFacetField("reg_time_date", "come");
+
+		QueryResponse response = solr.query(parameters);
+		List<FacetField> facetFields = response.getFacetFields();
+
+		for (FacetField ff : facetFields) {
+			System.out.println("--------------------");
+			System.out.println("name=" + ff.getName() + "\tcount="
+					+ ff.getValueCount());
+			System.out.println("--------------------");
+			for (Count count : ff.getValues()) {
+				System.out.println("name=" + count.getName() + "\tcount="
+						+ count.getCount());
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("name", count.getName());
+				map.put("count", count.getCount());
+			}
+		}
+	}
+	
+	@Test
+	public void getRegFacetRange() throws Exception {
+		String urlString = "http://solr2.api.epweike.net/talent";
+		SolrServer solr = new HttpSolrServer(urlString);
+
+		// 注册统计
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
+		// 统计类型(日、月、年)
+		String statType = "+1DAY";
+
+		//WEB
+		SolrQuery parameters1 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:WEB")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//CPM
+		SolrQuery parameters2 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:cpm")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//APP
+		SolrQuery parameters3 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:APP")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//WAP
+		SolrQuery parameters4 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:WAP")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//MALL
+		SolrQuery parameters5 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:mall")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//BACKGROUND
+		SolrQuery parameters6 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:background")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		//YUN
+		SolrQuery parameters7 = new SolrQuery("*:*").setFacet(true).addFilterQuery("come:yun")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+
+		QueryResponse response = null;
+		// 获取各个注册来源区间统计列表
+		response = solr.query(parameters1);
+		List<Map<String, Object>> list1 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters2);
+		List<Map<String, Object>> list2 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters3);
+		List<Map<String, Object>> list3 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters4);
+		List<Map<String, Object>> list4 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters5);
+		List<Map<String, Object>> list5 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters6);
+		List<Map<String, Object>> list6 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		response = solr.query(parameters7);
+		List<Map<String, Object>> list7 = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				10);
+		
+		
+		System.out.println("list1:======="+JSONArray.fromObject(list1));
+		System.out.println("list2:======="+JSONArray.fromObject(list2));
+		System.out.println("list3:======="+JSONArray.fromObject(list3));
+		System.out.println("list4:======="+JSONArray.fromObject(list4));
+		System.out.println("list5:======="+JSONArray.fromObject(list5));
+		System.out.println("list6:======="+JSONArray.fromObject(list6));
+		System.out.println("list7:======="+JSONArray.fromObject(list7));
+	}
+
+	@Test
+	public void getPivot() throws Exception {
+		String urlString = "http://solr.api.epweike.com/login";
+		SolrServer solr = new HttpSolrServer(urlString);
+//		long end = System.currentTimeMillis() / 1000;// 结束时间
+//		long start = end - 20 * 24 * 60 * 60;// 开始时间(20天前)
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -10);// 开始时间(20天前)
+		SolrQuery parameters = new SolrQuery("*:*");
+		//parameters.addFilterQuery("on_time:[" + start + " TO " + end + "]");
+		parameters.setFacet(true);
+		parameters.addFacetPivotField("d,login_type");
+		//parameters.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
+
+		QueryResponse response = solr.query(parameters);
+		NamedList<List<PivotField>> namedList = response.getFacetPivot();
+		System.out.println(namedList);// 底下为啥要这样判断，把这个值打印出来，你就明白了
+		
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> resultMap = null;
+		Map<String, Object> map = null;
+		Map<String, Object> map2 = null;
+		
+		if (namedList != null) {
+			List<PivotField> pivotList = null;
+			for (int i = 0; i < namedList.size(); i++) {
+				pivotList = namedList.getVal(i);
+				if (pivotList != null) {
+					for (PivotField pivot : pivotList) {
+						List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+						map = new HashMap<String, Object>();
+						map.put("label", pivot.getValue());
+						//System.out.println("-----------------------------------------------------");
+						//System.out.println(pivot.getValue());
+						List<PivotField> fieldList = pivot.getPivot();
+						if (fieldList != null) {
+							for (PivotField field : fieldList) {
+								map2 = new HashMap<String, Object>();
+								map2.put("login_type", field.getValue().toString());
+								map2.put("count", field.getCount());
+								tmpList.add(map2);
+							}
+						}
+						// 排序(按注册日期升序)
+//						Collections.sort(tmpList, new Comparator<Map<String, Object>>() {
+//							public int compare(Map<String, Object> arg0,
+//									Map<String, Object> arg1) {
+//								SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+//								Date date1 = null;
+//								Date date2 = null;
+//								try {
+//									date1 = simpleDateFormat .parse(arg0.get("date").toString());
+//									date2 = simpleDateFormat .parse(arg1.get("date").toString());
+//								} catch (ParseException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//								Double timeStemp1 = (double) date1.getTime();
+//								Double timeStemp2 = (double) date2.getTime();
+//								return -(timeStemp1.compareTo(timeStemp2));
+//							}
+//						});
+						map.put("data", tmpList);
+						
+						resultMap = new HashMap<String, Object>();
+						resultMap.put(pivot.getValue().toString(), map);
+						resultList.add(resultMap);
+					}
+				}
+			}
+		}
+		System.out.println("-----------------------------------------------------"+resultList);
+		JSONArray json = JSONArray.fromObject(resultList);
+		System.out.println("json="+json.toString());
+	}
+
+	@Test
+	public void getDate() throws Exception {
+		// 注册统计
+		SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
+		System.out.println(end.getTime());
+	}
 }

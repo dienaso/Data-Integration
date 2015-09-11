@@ -495,10 +495,10 @@ hr{ border-top-color:#dadada;}
 	height: 300px;
 	max-width: 100%;
 }
-#choices{ border-top:1px solid #dcdcdc; margin:10px 0; padding:10px;}
-#choices br{ display:none;}
-#choices input{ margin:-5px 5px 0 0;}
-#choices label{ display:inline-block; padding-right:20px; }
+.choices{ border-top:1px solid #dcdcdc; margin:10px 0; padding:10px;}
+.choices br{ display:none;}
+.choices input{ margin:-5px 5px 0 0;}
+.choices label{ display:inline-block; padding-right:20px; }
 #tooltip {
 	position: absolute;
 	display:none;
