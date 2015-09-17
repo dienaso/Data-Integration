@@ -78,7 +78,7 @@
     var ticks = new Array(); //横坐标值  
     <#list barData as list>
     	barData.push([${list_index},'${list.count}']);
-    	ticks.push([${list_index},'${list.name}'])
+    	ticks.push([${list_index},'${list.name}']);
     </#list>
 	var dataset = [{label: "用户登录类型", data: barData, color: "#5482FF" }];
 	

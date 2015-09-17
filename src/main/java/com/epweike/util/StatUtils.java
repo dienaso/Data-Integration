@@ -14,13 +14,15 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
+import com.epweike.controller.BaseController;
+
 /**
  * @Description:图表统计工具类
  * 
  * @author 吴小平
  * @version 创建时间：2015年4月30日 上午10:00:29
  */
-public class StatUtils {
+public class StatUtils extends BaseController{
 
 	/**
 	 * @Description:饼状图json数据转换
@@ -103,8 +105,6 @@ public class StatUtils {
 				switch (ff.getName()) {
 				case "province":// 按省份分布统计
 					for (Count count : ff.getValues()) {
-						System.out.println("name=" + count.getName()
-								+ "\tcount=" + count.getCount());
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
 						map.put("count", count.getCount());
@@ -113,8 +113,6 @@ public class StatUtils {
 					break;
 				case "login_type":// 按登陆类型统计
 					for (Count count : ff.getValues()) {
-						System.out.println("name=" + count.getName()
-								+ "\tcount=" + count.getCount());
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
 						map.put("count", count.getCount());
@@ -123,8 +121,6 @@ public class StatUtils {
 					break;
 				case "source":// 按来源类型统计（任务、稿件）
 					for (Count count : ff.getValues()) {
-						System.out.println("name=" + count.getName()
-								+ "\tcount=" + count.getCount());
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
 						map.put("count", count.getCount());
@@ -133,8 +129,6 @@ public class StatUtils {
 					break;
 				case "indus_name":// 按分类统计（任务、稿件）
 					for (Count count : ff.getValues()) {
-						System.out.println("name=" + count.getName()
-								+ "\tcount=" + count.getCount());
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
 						map.put("count", count.getCount());
@@ -143,10 +137,24 @@ public class StatUtils {
 					break;
 				case "keyword":// 关键词统计
 					for (Count count : ff.getValues()) {
-						System.out.println("name=" + count.getName()
-								+ "\tcount=" + count.getCount());
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
+						map.put("count", count.getCount());
+						list.add(map);
+					}
+					break;
+				case "w_level":// 能力等级统计
+					for (Count count : ff.getValues()) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", getWLevelName(count.getName()));
+						map.put("count", count.getCount());
+						list.add(map);
+					}
+					break;
+				case "shop_level":// 商铺等级统计
+					for (Count count : ff.getValues()) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", getShopLevelName(count.getName()));
 						map.put("count", count.getCount());
 						list.add(map);
 					}
@@ -166,7 +174,7 @@ public class StatUtils {
 	 */
 	public static List<Map<String, Object>> getFacetRangeList(
 			@SuppressWarnings("rawtypes") List<RangeFacet> listFacet,
-			int endIndex) {
+			int startIndex, int endIndex) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (RangeFacet<?, ?> rf : listFacet) {
 			List<RangeFacet.Count> listCounts = rf.getCounts();
@@ -174,7 +182,8 @@ public class StatUtils {
 				System.out.println("RangeFacet:" + count.getValue() + ":"
 						+ count.getCount());
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("date", count.getValue().substring(0, endIndex).replace("-", ""));// 日期截取特定形式
+				map.put("date", count.getValue()
+						.substring(startIndex, endIndex));// 日期截取特定形式
 				map.put("count", count.getCount());
 				list.add(map);
 			}

@@ -1,10 +1,6 @@
 package com.epweike;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +17,6 @@ import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.solr.common.params.FacetParams;
 import org.apache.solr.common.params.StatsParams;
 import org.apache.solr.common.util.NamedList;
 import org.junit.Test;
@@ -105,7 +100,7 @@ public class SolrJTest<E> {
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
 		List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet,
-				10);
+				0, 10);
 		System.out.println(list.toString());
 	}
 
@@ -176,25 +171,25 @@ public class SolrJTest<E> {
 		// 获取各个注册来源区间统计列表
 		response = solr.query(parameters1);
 		List<Map<String, Object>> list1 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters2);
 		List<Map<String, Object>> list2 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters3);
 		List<Map<String, Object>> list3 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters4);
 		List<Map<String, Object>> list4 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters5);
 		List<Map<String, Object>> list5 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters6);
 		List<Map<String, Object>> list6 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		response = solr.query(parameters7);
 		List<Map<String, Object>> list7 = StatUtils.getFacetRangeList(response.getFacetRanges(),
-				10);
+				0, 10);
 		
 		
 		System.out.println("list1:======="+JSONArray.fromObject(list1));
@@ -284,10 +279,12 @@ public class SolrJTest<E> {
 
 	@Test
 	public void getDate() throws Exception {
-		// 注册统计
-		SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
-		Date end = new Date();// 结束时间
-		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
-		System.out.println(end.getTime());
+//		String urlString = "http://solr2.api.epweike.com/talent";
+//		SolrServer solr = new HttpSolrServer(urlString);
+//		SolrQuery sParams = new SolrQuery("*:*").setFacet(true).addFacetField("w_level");
+//		QueryResponse sResponse = solr.query(sParams);
+//		List<FacetField> sFacetFields = sResponse.getFacetFields(); 
+//		System.out.println("sFacetFields="+StatUtils.barJson(sFacetFields));
+		System.out.println("贺卡。并且在贺卡中还是附上一段祝福语".length());
 	}
 }

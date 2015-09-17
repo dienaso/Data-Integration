@@ -16,7 +16,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
@@ -38,14 +37,14 @@ public class BaseController {
 	/*
 	 * 从配置文件中读取SOLR配置
 	 */
-	@Value("#{configProperties['solr1.url']}")
-	private String solr1_url;
-	@Value("#{configProperties['solr2.url']}")
-	private String solr2_url;
-	@Value("#{configProperties['solr1.cores']}")
-	private String solr1_cores;
-	@Value("#{configProperties['solr2.cores']}")
-	private String solr2_cores;
+	//@Value("#{configProperties['solr1.url']}")
+	private String solr1_url = "http://solr.api.epweike.com/";
+	//@Value("#{configProperties['solr2.url']}")
+	private String solr2_url = "http://solr2.api.epweike.com/";;
+	//@Value("#{configProperties['solr1.cores']}")
+	private String solr1_cores = "system_log,msg,login,search_history,feed,search_history,ip_area";
+	//@Value("#{configProperties['solr2.cores']}")
+	private String solr2_cores = "article,ask_question,longword,service,shop_article,shop_case,talent,task,task_work,topic,favorite,finance,messqueue";
 
 	// 最终路由地址
 	private String solr_url;
@@ -57,22 +56,16 @@ public class BaseController {
 	 * @version 创建时间：2015年6月11日 上午9:32:13
 	 */
 	public SolrServer getSolrServer(String core) {
-		logger.info("读取配置文件属性：solr1.url=" + solr1_url);
-		logger.info("读取配置文件属性：solr2.url=" + solr1_url);
-		logger.info("读取配置文件属性：solr1.cores=" + solr1_cores);
-		logger.info("读取配置文件属性：solr2.cores=" + solr2_cores);
+		logger.info("solr1.url=" + solr1_url);
+		logger.info("solr2.url=" + solr1_url);
+		logger.info("solr1.cores=" + solr1_cores);
+		logger.info("solr2.cores=" + solr2_cores);
 
-		if (solr1_url == null && solr2_url == null) {
-			logger.error("solr1.url=" + solr1_url + ";solr2.url=" + solr2_url
-					+ "，将使用使用默认值:'http://solr.api.epweike.net/'！！！");
-			solr_url = "http://solr.api.epweike.net/";
+		// core路由
+		if (solr1_cores.contains(core)) {
+			solr_url = solr1_url;
 		} else {
-			// core路由
-			if (solr1_cores.contains(core)) {
-				solr_url = solr1_url;
-			} else {
-				solr_url = solr2_url;
-			}
+			solr_url = solr2_url;
 		}
 
 		SolrServer solr = new HttpSolrServer(solr_url + core);
@@ -212,4 +205,84 @@ public class BaseController {
 		return list;
 	}
 
+	/**
+	 * @Description:获取店铺等级中文名称
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午6:34:18
+	 */
+	public static String getShopLevelName(String shop_level) {
+
+		String name = "";
+		
+		switch (shop_level) {
+		case "1":
+			name = "基础版本";
+			break;
+		case "2":
+			name = "VIP扩展版";
+			break;
+		case "3":
+			name = "VIP旗舰版";
+			break;
+		case "4":
+			name = "VIP白金版";
+			break;
+		case "5":
+			name = "VIP钻石版";
+			break;
+		case "6":
+			name = "VIP皇冠版";
+			break;
+		case "7":
+			name = "战略合作版";
+			break;
+		}
+		
+		return name;
+	}
+	
+	/**
+	 * @Description:获取威客品级中文名称
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午6:34:18
+	 */
+	public static String getWLevelName(String w_level) {
+
+		String name = "";
+		
+		switch (w_level) {
+		case "1":
+			name = "九品";
+			break;
+		case "2":
+			name = "八品";
+			break;
+		case "3":
+			name = "七品";
+			break;
+		case "4":
+			name = "六品";
+			break;
+		case "5":
+			name = "五品";
+			break;
+		case "6":
+			name = "四品";
+			break;
+		case "7":
+			name = "三品";
+			break;
+		case "8":
+			name = "二品";
+			break;
+		case "9":
+			name = "一品";
+			break;
+		}
+		
+		return name;
+	}
+	
 }

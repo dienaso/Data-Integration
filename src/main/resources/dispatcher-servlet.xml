@@ -10,8 +10,8 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
   <mvc:default-servlet-handler/>
-  
-  <mvc:resources mapping="/common/**" location="/common/" />
+  <!-- 静态资源访问（不拦截此目录下的东西的访问） 
+  <mvc:resources mapping="/common/**" location="/common/" />-->  
 	
   <context:component-scan base-package="com.epweike.controller"/>
   
@@ -87,6 +87,11 @@
   		<property name="suffix" value=".ftl"/>
   		<property name="contentType" value="text/html; charset=UTF-8"></property>
   </bean>
+  <!--
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/html/" />
+    <property name="suffix" value=".html" />
+  </bean>-->
   
   <!-- 配置JSP视图 -->
   <bean

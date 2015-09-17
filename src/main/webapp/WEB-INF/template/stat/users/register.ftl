@@ -47,9 +47,10 @@
 		        <thead>
 		        	<tr>
 			          	<th rowspan="2">日期</th>
-			          	<th colspan="7">注册数</th>
+			          	<th colspan="8">注册数</th>
 		        	</tr>
 		        	<tr>
+		        		<th>TOTAL</th>
 		                <th>WEB</th>
 		                <th>CPM</th>
 		                <th>APP</th>
@@ -111,6 +112,7 @@
 	        "aoColumns":
 	           [  
 					{ "mData": "label"},
+					{ "mData": "TOTAL"},
 		        	{ "mData": "WEB"},
 		        	{ "mData": "cpm"},
 		        	{ "mData": "APP"},
@@ -123,7 +125,6 @@
 	    		aoData.push( { "name": "reg_start", "value": $("input[name='reg_start']").val() } );
 	    		aoData.push( { "name": "reg_end", "value": $("input[name='reg_end']").val() } );
 	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
-	    		aoData.push( { "name": "come", "value": $("#come option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

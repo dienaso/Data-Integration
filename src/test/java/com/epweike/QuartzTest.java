@@ -1,0 +1,32 @@
+/**
+ * Copyright 2010-2015 epweike.com.
+ * @Description: TODO
+ * @author 吴小平
+ * @date Sep 16, 2015 11:00:36 AM 
+ * 
+ */
+package com.epweike;
+
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
+  
+public class QuartzTest {  
+  
+
+	    public static void main(String[] args) {
+
+	        try {
+	            // Grab the Scheduler instance from the Factory 
+	            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+
+	            // and start it off
+	            scheduler.start();
+
+	            scheduler.shutdown();
+
+	        } catch (SchedulerException se) {
+	            se.printStackTrace();
+	        }
+	    }
+}  

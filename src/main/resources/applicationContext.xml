@@ -30,9 +30,7 @@
        http://www.springframework.org/schema/mvc
 	   http://www.springframework.org/schema/mvc/spring-mvc.xsd
        ">
-
-	<context:component-scan base-package="com.epweike.service" />
-
+	<context:component-scan base-package="com.epweike.service"/>
 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
@@ -45,6 +43,20 @@
 		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
 		<property name="properties" ref="configProperties" />
 	</bean>
+
+	<bean id="schedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+		<!--任务调度数据源  
+	<bean id="scheduleJob"
+	 	class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="dataSource">    
+	        <ref bean="dataSource" /> 
+	    </property>     
+	    <property name="startupDelay" value="100"/>
+		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+		<property name="autoStartup" value="true" />
+	 	<property name="configLocation" value="classpath:quartz.properties" /> 
+	</bean>--> 
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
@@ -68,7 +80,7 @@
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
 	</bean>
-
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">

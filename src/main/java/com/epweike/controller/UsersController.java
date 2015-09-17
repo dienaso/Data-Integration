@@ -115,8 +115,8 @@ public class UsersController extends BaseController {
 	@RequestMapping(value = { "/stat/users/province" })
 	public ModelAndView provinceStat() throws SolrServerException, IOException {
 
-		SolrQuery params = new SolrQuery("*:*").setFacet(true)
-				.addFacetField("province");
+		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField(
+				"province");
 		QueryResponse response = getSolrServer("talent").query(params);
 		SolrDocumentList results = response.getResults();
 
@@ -228,7 +228,7 @@ public class UsersController extends BaseController {
 		String reg_end = getParamFromAodata(aoData, "reg_end");
 		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
 		// 注册渠道
-		String come = getParamFromAodata(aoData, "come");
+		// String come = getParamFromAodata(aoData, "come");
 
 		SolrQuery params = new SolrQuery("*:*");
 		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end
@@ -236,13 +236,12 @@ public class UsersController extends BaseController {
 		params.setFacet(true);
 		params.addFacetPivotField("reg_date,come").setFacetLimit(
 				Integer.MAX_VALUE);
-		if (!come.equals("全部"))
-			params.addFilterQuery("come:" + come);
+		// if (!come.equals("全部"))
+		// params.addFilterQuery("come:" + come);
 		// params.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
 
 		QueryResponse response = getSolrServer("talent").query(params);
 		NamedList<List<PivotField>> namedList = response.getFacetPivot();
-		System.out.println(namedList);// 底下为啥要这样判断，把这个值打印出来，你就明白了
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
@@ -253,15 +252,18 @@ public class UsersController extends BaseController {
 				pivotList = namedList.getVal(i);
 				if (pivotList != null) {
 					for (PivotField pivot : pivotList) {
+						int total = 0;
 						map = new HashMap<String, Object>();
 						map.put("label", pivot.getValue());
 						List<PivotField> fieldList = pivot.getPivot();
 						if (fieldList != null) {
 							for (PivotField field : fieldList) {
-								map.put(field.getValue().toString(),
-										field.getCount());
+								int count = field.getCount();
+								map.put(field.getValue().toString(), count);
+								total += count;
 							}
 						}
+						map.put("TOTAL", total);
 						// 不存在赋值0
 						if (map.get("WEB") == null)
 							map.put("WEB", 0);
@@ -277,6 +279,7 @@ public class UsersController extends BaseController {
 							map.put("background", 0);
 						if (map.get("yun") == null)
 							map.put("yun", 0);
+
 						list.add(map);
 					}
 				}
@@ -316,76 +319,4 @@ public class UsersController extends BaseController {
 		return json.toString();
 	}
 
-	/**
-	 * @Description:获取一品用户登陆明细
-	 * 
-	 * @author 吴小平
-	 * @version 创建时间：2015年6月10日 下午3:28:27
-	 */
-	@RequestMapping(value = "/users/loginDetail/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String getLoginDetail(HttpServletRequest request)
-			throws Exception {
-
-		// 获取查询关键参数
-		String aoData = request.getParameter("aoData");
-		logger.info(aoData);
-		// 解析查询关键参数
-		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
-
-		// 开始时间
-		String startTime = getParamFromAodata(aoData, "start");
-		// 结束时间
-		String endTime = getParamFromAodata(aoData, "end");
-		// 登陆类型类型
-		String loginType = getParamFromAodata(aoData, "loginType");
-		// 用户名
-		String username = getParamFromAodata(aoData, "username");
-		// UID
-		String uid = getParamFromAodata(aoData, "uid");
-		// 过滤条件
-		SolrQuery params = new SolrQuery("*:*");
-
-		params
-				.setFields("uid,country,on_time_str,city,login_type,ip,username");
-		if (!loginType.equals("全部"))
-			params.addFilterQuery("login_type:" + loginType);
-		if (!username.equals(""))
-			params.addFilterQuery("username:" + username);
-
-		if (!uid.equals(""))
-			params.addFilterQuery("uid:" + uid);
-		params.addFilterQuery("on_time:[" + startTime + "T00:00:00Z TO "
-				+ endTime + "T23:59:59Z]");
-		params.setStart(pageModel.getiDisplayStart());
-		params.setRows(pageModel.getiDisplayLength());
-		params.setSort("on_time", SolrQuery.ORDER.desc);
-
-		QueryResponse response = getSolrServer("login").query(params);
-
-		// 获取登陆明细列表
-		SolrDocumentList list = response.getResults();
-
-		// 搜索结果数
-		pageModel.setiTotalDisplayRecords(list.getNumFound());
-		pageModel.setiTotalRecords(list.getNumFound());
-		pageModel.setAaData(list);
-		JSONObject json = JSONObject.fromObject(pageModel);
-		logger.info("获取用户登陆明细列表！！！" + json);
-
-		return json.toString();
-	}
-
-	/**
-	 * @Description:一品用户登陆明细
-	 * 
-	 * @author 吴小平
-	 * @version 创建时间：2015年6月10日 下午3:28:27
-	 */
-	@RequestMapping(value = { "/stat/users/loginDetail" })
-	public ModelAndView loginDetail() throws SolrServerException, IOException {
-		// 返回视图
-		ModelAndView mv = new ModelAndView("stat/users/loginDetail");
-		logger.info("进入用户登陆明细列表！！！");
-		return mv;
-	}
 }
