@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -26,10 +25,9 @@ public class CreateHtml {
 	public static void main(String[] args) {
 		try {
 			// 创建一个合适的Configration对象
-			Configuration configuration = new Configuration();
+			Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 			configuration.setDirectoryForTemplateLoading(new File(
 					"F:\\workspace\\Eclipse\\Data Integration\\src\\main\\webapp\\WEB-INF\\template"));
-			configuration.setObjectWrapper(new DefaultObjectWrapper());
 			configuration.setDefaultEncoding("UTF-8"); // 这个一定要设置，不然在生成的页面中 会乱码
 			// 获取或创建一个模版。
 			Template template = configuration.getTemplate("home.ftl");
