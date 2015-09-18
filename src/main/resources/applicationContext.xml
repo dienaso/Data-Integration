@@ -78,23 +78,15 @@
 			</array>
 		</property>
 		<property name="typeAliasesPackage" value="com.epweike.model" />
-		<property name="plugins">
-			<array>
-				<bean class="tk.mybatis.mapper.mapperhelper.MapperInterceptor">
-					<property name="properties">
-						<value>
-							mappers=tk.mybatis.mapper.common.Mapper
-							IDENTITY=MYSQL
-							notEmpty=true
-						</value>
-					</property>
-				</bean>
-			</array>
-		</property>
 	</bean>
 
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.epweike.mapper" />
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+	    <property name="basePackage" value="com.epweike.mapper"/>
+	    <property name="properties">
+	        <value>
+	            mappers=tk.mybatis.mapper.common.Mapper
+	        </value>
+	    </property>
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
