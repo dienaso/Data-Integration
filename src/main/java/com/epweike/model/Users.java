@@ -1,5 +1,7 @@
 package com.epweike.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Table(name = "users")
@@ -38,10 +40,10 @@ public class Users extends BaseModel<Users> {
     /**
      * 1:正常 0:禁用
      */
-    private String enabled;
+    private Integer enabled;
 
     @Column(name = "on_time")
-    private String onTime;
+    private Date onTime;
 
     /**
      * @return email
@@ -108,7 +110,7 @@ public class Users extends BaseModel<Users> {
      *
      * @return enabled - 1:正常 0:禁用
      */
-    public String getEnabled() {
+    public Integer getEnabled() {
         return enabled;
     }
 
@@ -117,21 +119,21 @@ public class Users extends BaseModel<Users> {
      *
      * @param enabled 0:正常 1:禁用
      */
-    public void setEnabled(String enabled) {
+    public void setEnabled(Integer enabled) {
         this.enabled = enabled;
     }
 
     /**
      * @return on_time
      */
-    public String getOnTime() {
+    public Date getOnTime() {
         return onTime;
     }
 
     /**
      * @param onTime
      */
-    public void setOnTime(String onTime) {
+    public void setOnTime(Date onTime) {
         this.onTime = onTime;
     }
 }

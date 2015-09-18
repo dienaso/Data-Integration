@@ -16,9 +16,19 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
 	public static final String CONCURRENT_IS = "1";
 	public static final String CONCURRENT_NOT = "0";
 	
+	public ScheduleJob() {
+	}
+	
+	/**
+	 * @param sSearch
+	 */
+	public ScheduleJob(String sSearch) {
+		this.jobName = sSearch;
+	}
+	
     @Id
-    @Column(name = "job_id")
-    private Long jobId;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -44,7 +54,7 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     private String beanClass;
 
     /**
-     * 1
+     * 是否允许并行
      */
     @Column(name = "is_concurrent")
     private String isConcurrent;
@@ -55,18 +65,18 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     @Column(name = "method_name")
     private String methodName;
 
-    /**
-     * @return job_id
+	/**
+     * @return id
      */
-    public Long getJobId() {
-        return jobId;
+    public Long getId() {
+        return id;
     }
 
     /**
-     * @param jobId
+     * @param id
      */
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**

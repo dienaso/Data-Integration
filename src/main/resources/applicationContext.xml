@@ -46,17 +46,6 @@
 
 	<bean id="schedulerFactoryBean"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
-		<!--任务调度数据源  
-	<bean id="scheduleJob"
-	 	class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="dataSource">    
-	        <ref bean="dataSource" /> 
-	    </property>     
-	    <property name="startupDelay" value="100"/>
-		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
-		<property name="autoStartup" value="true" />
-	 	<property name="configLocation" value="classpath:quartz.properties" /> 
-	</bean>--> 
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">

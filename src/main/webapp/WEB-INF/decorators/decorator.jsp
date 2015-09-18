@@ -80,6 +80,7 @@
 <script src="/common/matrix/js/select2.min.js"></script>
 <script type="text/javascript" src="/common/matrix/js/dataTables.tableTools.js" charset="utf-8"></script>
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
+<script src="/common/matrix/js/date.utils.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 

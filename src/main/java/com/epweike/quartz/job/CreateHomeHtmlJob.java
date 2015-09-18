@@ -7,11 +7,16 @@
  */
 package com.epweike.quartz.job;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.epweike.controller.IndexController;
 import com.epweike.util.FreeMarkertUtils;
+import com.epweike.util.PathUtils;
 
 /**
  * @author wuxp
@@ -41,7 +46,11 @@ public class CreateHomeHtmlJob extends IndexController {
 		}
 
 		try {
-			FreeMarkertUtils.processTemplate("home.ftl", dataModel, "home.html");
+			// 输出路径
+			String outPath = PathUtils.getWebRootPath() + File.separator + "index.html";
+			Writer out = new OutputStreamWriter(
+					new FileOutputStream(outPath), "UTF-8");
+			FreeMarkertUtils.processTemplate("home.ftl", dataModel, out);
 			System.out.println("home.html生成成功!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

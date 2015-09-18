@@ -37,7 +37,7 @@ import com.epweike.quartz.QuartzJobFactoryDisallowConcurrentExecution;
  * 
  */
 @Service
-public class ScheduleJobService {
+public class ScheduleJobService extends BaseService<ScheduleJob>{
 	public final Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;

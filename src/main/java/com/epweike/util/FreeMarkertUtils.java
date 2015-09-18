@@ -8,9 +8,7 @@
 package com.epweike.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Map;
 
@@ -33,7 +31,7 @@ public class FreeMarkertUtils {
 	 *            输出对象 具体输出到哪里
 	 */
 	public static void processTemplate(String templateName,
-			Map<?, ?> dataModel, String out) {
+			Map<?, ?> dataModel, Writer out) {
 		try {
 			// 创建一个合适的Configration对象
 			Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
@@ -46,13 +44,7 @@ public class FreeMarkertUtils {
 			// 获取或创建一个模版。
 			Template template = configuration.getTemplate("home.ftl");
 
-			// 输出路径
-			String outPath = PathUtils.getWebRootPath() + File.separator
-					+ "html" + File.separator + out;
-
-			Writer writer = new OutputStreamWriter(
-					new FileOutputStream(outPath), "UTF-8");
-			template.process(dataModel, writer);
+			template.process(dataModel, out);
 
 		} catch (IOException e) {
 			e.printStackTrace();
