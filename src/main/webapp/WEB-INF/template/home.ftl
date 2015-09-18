@@ -611,7 +611,7 @@
     wbar.push([${list_index},'${list.count?c}']);
     wticks.push([${list_index},'${list.name}']);
     </#list>
-    var wdataset = [{label: "", data: wbar, color: "#5482FF" }];
+    var wdataset = [{label: "", data: wbar, color: "#2E363F" }];
     console.log(wbar);
     console.log(wticks);
     var woptions = {
@@ -656,7 +656,7 @@
     sbar.push([${list_index},'${list.count?c}']);
     sticks.push([${list_index},'${list.name}']);
     </#list>
-    var sdataset = [{label: "", data: sbar, color: "#5482FF" }];
+    var sdataset = [{label: "", data: sbar, color: "#2E363F" }];
     
     var soptions = {
     	series: {

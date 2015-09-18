@@ -31,6 +31,7 @@
 							<th>cron表达式</th>
 							<th>执行类</th>
 							<th>执行方法</th>
+							<th>是否允许并行</th>
 							<th>创建时间</th>
 							<th>修改时间</th>
 						</tr>
@@ -65,6 +66,15 @@ $(document).ready(function() {
 	        	{ "mData": "cronExpression"},
 	        	{ "mData": "beanClass"},
 	        	{ "mData": "methodName"},
+	        	{ "mData": "isConcurrent",
+	        	  "mRender": function (data, type) {
+            		 if(data == 1){
+                         return "允许" 
+                      }else{
+                         return "禁止"
+                      }
+                  }
+	        	},
 	        	{ "mData": "createTime",
         		  "mRender": function (data, type) {
         		  	return formatDateTime(data.time);

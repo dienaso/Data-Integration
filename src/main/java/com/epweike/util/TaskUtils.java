@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 import com.epweike.model.ScheduleJob;
 
-
 public class TaskUtils {
 	public final static Logger log = Logger.getLogger(TaskUtils.class);
 
@@ -33,7 +32,8 @@ public class TaskUtils {
 
 		}
 		if (object == null) {
-			log.error("任务名称 = [" + scheduleJob.getJobName() + "]---------------未启动成功，请检查是否配置正确！！！");
+			log.error("任务名称 = [" + scheduleJob.getJobName()
+					+ "]---------------未启动成功，请检查是否配置正确！！！");
 			return;
 		}
 		clazz = object.getClass();
@@ -41,7 +41,8 @@ public class TaskUtils {
 		try {
 			method = clazz.getDeclaredMethod(scheduleJob.getMethodName());
 		} catch (NoSuchMethodException e) {
-			log.error("任务名称 = [" + scheduleJob.getJobName() + "]---------------未启动成功，方法名设置错误！！！");
+			log.error("任务名称 = [" + scheduleJob.getJobName()
+					+ "]---------------未启动成功，方法名设置错误！！！");
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,6 +61,7 @@ public class TaskUtils {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("任务名称 = [" + scheduleJob.getJobName() + "]----------启动成功");
+		System.out.println("任务名称 = [" + scheduleJob.getJobName()
+				+ "]----------启动成功");
 	}
 }

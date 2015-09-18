@@ -210,7 +210,7 @@ public class SolrJTest<E> {
 		Date end = new Date();// 结束时间
 		Date start = DateUtils.addDays(end, -10);// 开始时间(20天前)
 		SolrQuery parameters = new SolrQuery("*:*");
-		//parameters.addFilterQuery("on_time:[" + start + " TO " + end + "]");
+		parameters.addFilterQuery("on_time:[" + start + " TO " + end + "]");
 		parameters.setFacet(true);
 		parameters.addFacetPivotField("d,login_type");
 		//parameters.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
