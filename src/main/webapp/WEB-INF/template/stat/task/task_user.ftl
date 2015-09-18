@@ -1,116 +1,125 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>数据统计</title>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<title>数据统计</title>
+</head>
 
-	<body>
+<body>
 
-	  <div id="content-header">
-	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">任务统计(按雇主)</a></div>
-	    <h1>任务统计(按雇主)</h1>
-	  </div>
-	  
-      <div class="widget-box">
-        
-      </div>
-	  
-	  <div class="container-fluid">
-	  	<div class="widget-box">
-	  	
-	  	<div class="widget-title"> <span class="icon"> <i class="icon-search"></i> </span>
-          <h5>搜索区域</h5>
-        </div>
-        <div class="widget-content nopadding form-horizontal">
-            <div class="control-group">
-              <label class="control-label">发布时间 :</label>
-              <div class="controls">
-	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="pub_start" placeholder="开始时间" readonly>
-				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="pub_end" placeholder="结束时间" readonly>
-				  </div>
-			  </div>
-			  
-			  <label class="control-label">托管时间 :</label>
-              <div class="controls">
-	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="cash_start" placeholder="开始时间" readonly>
-				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="cash_end" placeholder="结束时间" readonly>
-				  </div>
-			  </div>
-			  
-              <label class="control-label">任务类型:</label>
-              <div class="controls">
-                <select id="taskType">
-                  <option>全部</option>
-                  <option>单赏</option>
-                  <option>多赏</option>
-                  <option>计件</option>
-                  <option>招标</option>
-                  <option>雇佣</option>
-                  <option>服务</option>
-                  <option>直接雇佣</option>
-                </select>
-              </div>
-              
-              <label class="control-label">任务来源:</label>
-              <div class="controls">
-                <select id="source">
-                  <option>全部</option>
-                  <option>web</option>
-                  <option>iphone</option>
-                  <option>ipad</option>
-                  <option>android</option>
-                  <option>wap</option>
-                  <option>akey_pub</option>
-                </select>
-              </div>
-              
-              <label class="control-label">托管状态:</label>
-              <div class="controls">
-                <select id="cash_status">
-                  <option>全部</option>
-                  <option>未托管</option>
-                  <option>已托管</option>
-                </select>
-              </div>
-              
-              <label class="control-label">用户名:</label>
-              <div class="controls">
-                <input type="text" name="username" placeholder="雇主用户名">
-              </div>
-            </div>
-         
-            <div class="form-actions">
-              <button id="search-btn" class="btn">查询</button>
-            </div>
-        </div>	
-	  	
-		  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-		    <h5>任务统计列表</h5>
-		  </div>
-		  <div class="widget-content nopadding">
-		    <table id="list" class="table table-bordered data-table">
-		        <thead>
-		        	<tr>
-			          	<th>名称</th>
-			          	<th>发布数量</th>
-			          	<th>总额</th>
-			          	<th>最大</th>
-			          	<th>最小</th>
-			          	<th>平均</th>
-			          	<th>标准差</th>
-		        	</tr>
-		     	</thead>
-		    </table>
-		  </div>
+	<div id="content-header">
+		<div id="breadcrumb">
+			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+				Home
+			</a>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
+				数据统计
+			</a>
+			<a href="#" class="current">任务统计(按雇主)</a>
 		</div>
-	    
-	  </div>
-	
+		<h1>任务统计(按雇主)</h1>
+	</div>
+
+	<div class="widget-box"></div>
+
+	<div class="container-fluid">
+		<div class="widget-box">
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-search"></i>
+				</span>
+				<h5>搜索区域</h5>
+			</div>
+			<div class="widget-content nopadding form-horizontal">
+				<div class="control-group">
+					<label class="control-label">发布时间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker">
+							<input type="text" class="input-small" name="pub_start" placeholder="开始时间" readonly>
+							<span class="add-on">to</span>
+							<input type="text" class="input-small" name="pub_end" placeholder="结束时间" readonly></div>
+					</div>
+
+					<label class="control-label">托管时间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker">
+							<input type="text" class="input-small" name="cash_start" placeholder="开始时间" readonly>
+							<span class="add-on">to</span>
+							<input type="text" class="input-small" name="cash_end" placeholder="结束时间" readonly></div>
+					</div>
+
+					<label class="control-label">任务类型:</label>
+					<div class="controls">
+						<select id="taskType">
+							<option>全部</option>
+							<option>单赏</option>
+							<option>多赏</option>
+							<option>计件</option>
+							<option>招标</option>
+							<option>雇佣</option>
+							<option>服务</option>
+							<option>直接雇佣</option>
+						</select>
+					</div>
+
+					<label class="control-label">任务来源:</label>
+					<div class="controls">
+						<select id="source">
+							<option>全部</option>
+							<option>web</option>
+							<option>iphone</option>
+							<option>ipad</option>
+							<option>android</option>
+							<option>wap</option>
+							<option>akey_pub</option>
+						</select>
+					</div>
+
+					<label class="control-label">托管状态:</label>
+					<div class="controls">
+						<select id="cash_status">
+							<option>全部</option>
+							<option>未托管</option>
+							<option>已托管</option>
+						</select>
+					</div>
+
+					<label class="control-label">用户名:</label>
+					<div class="controls">
+						<input type="text" name="username" placeholder="雇主用户名"></div>
+				</div>
+
+				<div class="form-actions">
+					<button id="search-btn" class="btn">查询</button>
+				</div>
+			</div>
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-th"></i>
+				</span>
+				<h5>任务统计列表</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<table id="list" class="table table-bordered data-table">
+					<thead>
+						<tr>
+							<th>名称</th>
+							<th>发布数量</th>
+							<th>总额</th>
+							<th>最大</th>
+							<th>最小</th>
+							<th>平均</th>
+							<th>标准差</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('.input-daterange').datepicker({
@@ -193,5 +202,5 @@
 	} );
 	
 	</script>
-	</body>
+</body>
 </html>

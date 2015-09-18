@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>访客来源统计</title>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<title>访客来源统计</title>
+</head>
 
-	<body>
+<body>
 
-	  <div id="content-header">
-	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">用户分布统计</a></div>
-	    <h1>访客来源统计</h1>
-	  </div>
-	  <div class="container-fluid">
-	    <hr>
-	    <div class="row-fluid"> 
-	      <div class="span12">
-	        <div class="widget-box">
-	          <div class="widget-title"> <span class="icon"> <i class="icon-signal"></i> </span>
-	            <h5>访客来源统计(总数：${total}人)</h5>
-	          </div>
-	          <div class="widget-content">
-	            <div class="bars"></div>
-	          </div>
-	        </div>
-	      </div>
-	     </div>
-	    
-	  </div>
-		
-	<script src="/common/matrix/js/jquery.flot.min.js"></script> 
-	<script src="/common/matrix/js/jquery.flot.pie.min.js"></script> 
-	<script src="/common/matrix/js/jquery.flot.resize.min.js"></script> 
-	<script src="/common/matrix/js/jquery.flot.axislabels.js"></script> 
-	<script src="/common/matrix/js/jquery.peity.min.js"></script> 
+	<div id="content-header">
+		<div id="breadcrumb">
+			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+				Home
+			</a>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
+				数据统计
+			</a>
+			<a href="#" class="current">用户分布统计</a>
+		</div>
+		<h1>访客来源统计</h1>
+	</div>
+	<div class="container-fluid">
+		<hr>
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-signal"></i>
+						</span>
+						<h5>访客来源统计(总数：${total}人)</h5>
+					</div>
+					<div class="widget-content">
+						<div class="bars"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="/common/matrix/js/jquery.flot.min.js"></script>
+	<script src="/common/matrix/js/jquery.flot.pie.min.js"></script>
+	<script src="/common/matrix/js/jquery.flot.resize.min.js"></script>
+	<script src="/common/matrix/js/jquery.flot.axislabels.js"></script>
+	<script src="/common/matrix/js/jquery.peity.min.js"></script>
 	<script type="text/javascript">
 	<!--Bar-chart-js-->
 	var barData = new Array(); //数据  
@@ -140,5 +151,5 @@
     }
 	<!--Bar-chart-js-->	
 	</script>
-	</body>
+</body>
 </html>

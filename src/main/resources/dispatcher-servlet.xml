@@ -9,55 +9,54 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
-  <mvc:default-servlet-handler/>
-  <!-- 静态资源访问（不拦截此目录下的东西的访问） --> 
-  <mvc:resources mapping="/common/**" location="/common/" /> 
-	
-  <context:component-scan base-package="com.epweike.controller"/>
-  
-  <!--主要作用于@Controller激活该模式下面是一种简写形式
+	<mvc:default-servlet-handler/>
+	<!-- 静态资源访问（不拦截此目录下的东西的访问） -->
+	<mvc:resources mapping="/common/**" location="/common/" />
+
+	<context:component-scan base-package="com.epweike.controller"/>
+
+	<!--主要作用于@Controller激活该模式下面是一种简写形式
           它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
-          是spring MVC为@Controllers分发请求所必须的   -->                      
-  <mvc:annotation-driven/>
-  
-  <!--文件上传-->
-  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <property name="maxUploadSize" value="100000"/>
-  </bean>
-  
-  <!-- 配置JSON视图 -->
-  <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    <property name="supportedMediaTypes">
-        <list>
-            <value>application/json; charset=UTF-8</value>
-        </list>
-    </property>     
-    <property name="objectMapper">
-        <bean class="com.fasterxml.jackson.databind.ObjectMapper">
-            <property name="dateFormat">
-                <bean class="java.text.SimpleDateFormat">
-                    <constructor-arg index="0" type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
-                </bean>
-            </property>
-        </bean>
-    </property>
-  </bean>
-  <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>
-  <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-    <property name="messageConverters">
-        <list>
-            <ref bean="mappingJacksonHttpMessageConverter"/>
-            <ref bean="stringHttpMessageConverter"/>
-        </list>
-    </property>
-  </bean>
-  
-  <!-- freemaker配置 -->
-  <bean id="freemarkerConfig"
+          是spring MVC为@Controllers分发请求所必须的   -->
+	<mvc:annotation-driven/>
+
+	<!--文件上传-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000"/>
+	</bean>
+
+	<!-- 配置JSON视图 -->
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json; charset=UTF-8</value>
+			</list>
+		</property>
+		<property name="objectMapper">
+			<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+				<property name="dateFormat">
+					<bean class="java.text.SimpleDateFormat">
+						<constructor-arg index="0" type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>
+	<bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter"/>
+				<ref bean="stringHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- freemaker配置 -->
+	<bean id="freemarkerConfig"
 	class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="freemarkerVariables">
-			<map>
-			</map>
+			<map></map>
 		</property>
 		<property name="templateLoaderPaths">
 			<list>
@@ -80,37 +79,37 @@
 				<prop key="classic_compatible">true</prop>
 			</props>
 		</property>
-  </bean>
-  <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-  		<property name="cache" value="true"/>
- 		<property name="prefix" value=""/>
-  		<property name="suffix" value=".ftl"/>
-  		<property name="contentType" value="text/html; charset=UTF-8"></property>
-  </bean>
-  <!--
+	</bean>
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="cache" value="true"/>
+		<property name="prefix" value=""/>
+		<property name="suffix" value=".ftl"/>
+		<property name="contentType" value="text/html; charset=UTF-8"></property>
+	</bean>
+	<!--
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="prefix" value="/html/" />
-    <property name="suffix" value=".html" />
-  </bean>-->
-  
-  <!-- 配置JSP视图 -->
-  <bean
+	<property name="prefix" value="/html/" />
+	<property name="suffix" value=".html" />
+</bean>
+-->
+<!-- 配置JSP视图 -->
+<bean
     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="viewClass"
+	<property name="viewClass"
       value="org.springframework.web.servlet.view.JstlView" />
-    <property name="prefix" value="/WEB-INF/view/"></property>
-    <property name="suffix" value=".jsp"></property>
-  </bean>
-  
-  <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-    <property name="mediaTypes">
-      <map>
-        <entry key="json"  value="application/json; charset=UTF-8" />
-        <entry key="xml" value="text/xml" />
-        <entry key="htm" value="text/html" />
-      </map>
-    </property>
-    <property name="defaultContentType" value="text/html; charset=UTF-8" />
-  </bean> 
+	<property name="prefix" value="/WEB-INF/view/"></property>
+	<property name="suffix" value=".jsp"></property>
+</bean>
+
+<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	<property name="mediaTypes">
+		<map>
+			<entry key="json"  value="application/json; charset=UTF-8" />
+			<entry key="xml" value="text/xml" />
+			<entry key="htm" value="text/html" />
+		</map>
+	</property>
+	<property name="defaultContentType" value="text/html; charset=UTF-8" />
+</bean>
 
 </beans>

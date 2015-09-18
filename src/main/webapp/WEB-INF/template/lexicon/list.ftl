@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>词库管理</title>
+	<title>词库管理</title>
 </head>
 <body>
-<div id="content-header">
-    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">词库管理</a></div>
-    <h1>词库管理</h1>
-  </div>
-<div class="container-fluid">
-	<div class="widget-box">
-	  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-	    <h5>词条列表</h5>
-	  </div>
-	  <div class="widget-content nopadding">
-	  	
-	    <table id="list" class="table table-bordered data-table">
-	        <thead>
-	        	<tr>
-		          	<th>ID</th>
-		          	<th>词条</th>
-		          	<th>拼音</th>
-		          	<th>词性</th>
-		          	<th>近义词</th>
-	        	</tr>
-	     	</thead>
-	     	
-	    </table>
-	  </div>
+	<div id="content-header">
+		<div id="breadcrumb">
+			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+				Home
+			</a>
+			<a href="#" class="current">词库管理</a>
+		</div>
+		<h1>词库管理</h1>
 	</div>
-</div>
-<script type="text/javascript">
+	<div class="container-fluid">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon"> <i class="icon-th"></i>
+				</span>
+				<h5>词条列表</h5>
+			</div>
+			<div class="widget-content nopadding">
+
+				<table id="list" class="table table-bordered data-table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>词条</th>
+							<th>拼音</th>
+							<th>词性</th>
+							<th>近义词</th>
+						</tr>
+					</thead>
+
+				</table>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
 var oTable;
 $(document).ready(function() {
 	oTable = $("#list").dataTable({
@@ -79,6 +86,6 @@ $(".delete").live('click', function() {
     });    
 });
 
-</script> 
+</script>
 </body>
 </html>

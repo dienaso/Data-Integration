@@ -280,16 +280,16 @@
 		</dependency>
 		<!--任务调度器依赖 -->
 		<dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz</artifactId>
-		    <version>2.2.1</version>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz-jobs</artifactId>
-		    <version>2.2.1</version>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
 		</dependency>
-				
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -408,6 +408,6 @@
 				<contextFolder>${basedir}/src/main/webapp/</contextFolder> <wroFile>${basedir}/src/main/webapp/WEB-INF/wro.xml</wroFile> 
 				<wroManagerFactory>ro.isdc.wro.extensions.manager.standalone.GoogleStandaloneManagerFactory</wroManagerFactory> 
 				<ignoreMissingResources>false</ignoreMissingResources> </configuration> </plugin> -->
-		</plugins>
-	</build>
-</project>
+			</plugins>
+		</build>
+	</project>

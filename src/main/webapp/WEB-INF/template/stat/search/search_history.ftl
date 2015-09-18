@@ -1,72 +1,83 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>数据统计</title>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<title>数据统计</title>
+</head>
 
-	<body>
+<body>
 
-	  <div id="content-header">
-	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">搜索历史</a></div>
-	    <h1>搜索历史</h1>
-	  </div>
-	  
-      <div class="widget-box">
-        
-      </div>
-	  
-	  <div class="container-fluid">
-	  	<div class="widget-box">
-	  	
-	  	<div class="widget-title"> <span class="icon"> <i class="icon-search"></i> </span>
-          <h5>搜索区域</h5>
-        </div>
-        <div class="widget-content nopadding form-horizontal">
-            <div class="control-group">
-              <label class="control-label">时间区间 :</label>
-              <div class="controls">
-	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
-				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="end" placeholder="结束时间" readonly>
-				  </div>
-			  </div>
-              
-              <label class="control-label">搜索类型:</label>
-              <div class="controls">
-                <select id="search_type">
-                  <option value="all">全部</option>
-                  <option value="task">任务</option>
-                  <option value="talent">人才</option>
-                  <option value="service">服务</option>
-                </select>
-              </div>
-              
-            </div>
-         
-            <div class="form-actions">
-              <button id="search-btn" class="btn">查询</button>
-            </div>
-        </div>	
-	  	
-		  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-		    <h5>搜索统计列表</h5>
-		  </div>
-		  <div class="widget-content nopadding">
-		    <table id="list" class="table table-bordered data-table">
-		        <thead>
-		        	<tr>
-			          	<th>关键词</th>
-			          	<th>搜索量</th>
-		        	</tr>
-		     	</thead>
-		    </table>
-		  </div>
+	<div id="content-header">
+		<div id="breadcrumb">
+			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+				Home
+			</a>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
+				数据统计
+			</a>
+			<a href="#" class="current">搜索历史</a>
 		</div>
-	    
-	  </div>
-	
+		<h1>搜索历史</h1>
+	</div>
+
+	<div class="widget-box"></div>
+
+	<div class="container-fluid">
+		<div class="widget-box">
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-search"></i>
+				</span>
+				<h5>搜索区域</h5>
+			</div>
+			<div class="widget-content nopadding form-horizontal">
+				<div class="control-group">
+					<label class="control-label">时间区间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker">
+							<input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
+							<span class="add-on">to</span>
+							<input type="text" class="input-small" name="end" placeholder="结束时间" readonly></div>
+					</div>
+
+					<label class="control-label">搜索类型:</label>
+					<div class="controls">
+						<select id="search_type">
+							<option value="all">全部</option>
+							<option value="task">任务</option>
+							<option value="talent">人才</option>
+							<option value="service">服务</option>
+						</select>
+					</div>
+
+				</div>
+
+				<div class="form-actions">
+					<button id="search-btn" class="btn">查询</button>
+				</div>
+			</div>
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-th"></i>
+				</span>
+				<h5>搜索统计列表</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<table id="list" class="table table-bordered data-table">
+					<thead>
+						<tr>
+							<th>关键词</th>
+							<th>搜索量</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('.input-daterange').datepicker({
@@ -139,5 +150,5 @@
 	} );
 	
 	</script>
-	</body>
+</body>
 </html>

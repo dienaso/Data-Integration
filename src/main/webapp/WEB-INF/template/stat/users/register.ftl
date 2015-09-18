@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>数据统计</title>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<title>数据统计</title>
+</head>
 
-	<body>
+<body>
 
-	  <div id="content-header">
-	    <div id="breadcrumb"><a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" title="Go to Chart" class="tip-bottom"><i class="icon-bar-chart"></i> 数据统计</a> <a href="#" class="current">用户注册统计</a></div>
-	    <h1>用户注册统计</h1>
-	  </div>
-	  
-      <div class="widget-box">
-        
-      </div>
-	  
-	  <div class="container-fluid">
-	  	<div class="widget-box">
-	  	
-	  	<div class="widget-title"> <span class="icon"> <i class="icon-search"></i> </span>
-          <h5>搜索区域</h5>
-        </div>
-        <div class="widget-content nopadding form-horizontal">
-            <div class="control-group">
-              <label class="control-label">注册时间 :</label>
-              <div class="controls">
-	              <div class="input-daterange" id="datepicker">
-				    <input type="text" class="input-small" name="reg_start" placeholder="开始时间" readonly>
-				    <span class="add-on">to</span>
-				    <input type="text" class="input-small" name="reg_end" placeholder="结束时间" readonly>
-				  </div>
-			  </div>
-            </div>
-         
-            <div class="form-actions">
-              <button id="search-btn" class="btn">查询</button>
-            </div>
-        </div>	
-	  	
-		  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-		    <h5>用户组注册统计列表</h5>
-		  </div>
-		  <div class="widget-content nopadding">
-		    <table id="list" class="table table-bordered data-table">
-		        <thead>
-		        	<tr>
-			          	<th rowspan="2">日期</th>
-			          	<th colspan="8">注册数</th>
-		        	</tr>
-		        	<tr>
-		        		<th>TOTAL</th>
-		                <th>WEB</th>
-		                <th>CPM</th>
-		                <th>APP</th>
-		                <th>WAP</th>
-		                <th>酷贝街</th>
-		                <th>后台</th>
-		                <th>云创平台</th>
-		            </tr>
-		     	</thead>
-		    </table>
-		  </div>
+	<div id="content-header">
+		<div id="breadcrumb">
+			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+				Home
+			</a>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
+				数据统计
+			</a>
+			<a href="#" class="current">用户注册统计</a>
 		</div>
-	    
-	  </div>
-	
+		<h1>用户注册统计</h1>
+	</div>
+
+	<div class="widget-box"></div>
+
+	<div class="container-fluid">
+		<div class="widget-box">
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-search"></i>
+				</span>
+				<h5>搜索区域</h5>
+			</div>
+			<div class="widget-content nopadding form-horizontal">
+				<div class="control-group">
+					<label class="control-label">注册时间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker">
+							<input type="text" class="input-small" name="reg_start" placeholder="开始时间" readonly>
+							<span class="add-on">to</span>
+							<input type="text" class="input-small" name="reg_end" placeholder="结束时间" readonly></div>
+					</div>
+				</div>
+
+				<div class="form-actions">
+					<button id="search-btn" class="btn">查询</button>
+				</div>
+			</div>
+
+			<div class="widget-title">
+				<span class="icon">
+					<i class="icon-th"></i>
+				</span>
+				<h5>用户组注册统计列表</h5>
+			</div>
+			<div class="widget-content nopadding">
+				<table id="list" class="table table-bordered data-table">
+					<thead>
+						<tr>
+							<th rowspan="2">日期</th>
+							<th colspan="8">注册数</th>
+						</tr>
+						<tr>
+							<th>TOTAL</th>
+							<th>WEB</th>
+							<th>CPM</th>
+							<th>APP</th>
+							<th>WAP</th>
+							<th>酷贝街</th>
+							<th>后台</th>
+							<th>云创平台</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
 	<script type="text/javascript">
 	$(document).ready(function() {
 		$('.input-daterange').datepicker({
@@ -145,5 +156,5 @@
 	} );
 	
 	</script>
-	</body>
+</body>
 </html>

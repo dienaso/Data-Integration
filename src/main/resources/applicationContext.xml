@@ -69,7 +69,7 @@
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
 	</bean>
-	
+
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">
@@ -81,12 +81,10 @@
 	</bean>
 
 	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
-	    <property name="basePackage" value="com.epweike.mapper"/>
-	    <property name="properties">
-	        <value>
-	            mappers=tk.mybatis.mapper.common.Mapper
-	        </value>
-	    </property>
+		<property name="basePackage" value="com.epweike.mapper"/>
+		<property name="properties">
+			<value>mappers=tk.mybatis.mapper.common.Mapper</value>
+		</property>
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"
@@ -119,8 +117,7 @@
 
 	<!--Druid关联Spring监控 -->
 	<bean id="druid-stat-interceptor"
-		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
-	</bean>
+		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
 
 	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
 		scope="prototype">
