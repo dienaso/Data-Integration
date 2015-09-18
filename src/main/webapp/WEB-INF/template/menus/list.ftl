@@ -63,7 +63,7 @@ $(document).ready(function() {
                      "aTargets": [5],
                      "mData": "id",
                      "mRender": function (data, type, full) {
-                         return '<a href="#" class="delete" tag=' + data + '>删除</a>';
+                         return '<a href="#" class="delete" tag=' + data + '></a>';
                      }
                  }
                 ],
