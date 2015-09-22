@@ -139,7 +139,7 @@
 		$("input[name='end']").val(date);
 		
 		<!--List-->
-		var table = $('#list').dataTable({
+		var table = $('#list').DataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,

@@ -49,9 +49,9 @@
 <script src="/common/matrix/js/select2.min.js"></script>
 <script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
+$(function () {
 
-	var table = $("#list").dataTable({
+	var table = $("#list").DataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,

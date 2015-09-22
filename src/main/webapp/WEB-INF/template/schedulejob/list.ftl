@@ -26,13 +26,13 @@
 					<thead>
 						<tr>
 							<th>ID</th>
-							<th>计划任务名称</th>
+							<th>任务名称</th>
+							<th>任务组</th>
 							<th>状态</th>
 							<th>cron表达式</th>
 							<th>执行类</th>
 							<th>执行方法</th>
 							<th>是否允许并行</th>
-							<th>创建时间</th>
 							<th>最近执行时间</th>
 							<th>操作</th>
 						</tr>
@@ -50,14 +50,20 @@
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 	                        aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="myModalLabel">新增</h4>
+	                <h4 class="modal-title" id="myModalLabel">添加</h4>
 	            </div>
 	            <div class="modal-body form-horizontal">
-					
+					<input type="hidden" id="id">
 	                <div class="control-group">
-	                	<label class="control-label">计划任务名称 :</label>
+	                	<label class="control-label">任务名称 :</label>
 	                	<div class="controls">
 	                    	<input type="text" class="form-control" id="jobName" placeholder="计划任务名称">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                	<label class="control-label">任务组 :</label>
+	                	<div class="controls">
+	                    	<input type="text" class="form-control" id="jobGroup" placeholder="任务组">
 	                    </div>
 	                </div>
 	                <div class="control-group">
@@ -75,6 +81,12 @@
 	                	<label class="control-label">cron表达式:</label>
 		                <div class="controls">
 		                    <input type="text" class="form-control" id="cronExpression" placeholder="cron表达式">
+		                </div>
+	                </div>
+	                <div class="control-group">
+	                	<label class="control-label">SpringID:</label>
+		                <div class="controls">
+		                    <input type="text" class="form-control" id="springId" placeholder="SpringID">
 		                </div>
 	                </div>
 	                <div class="control-group">
@@ -109,13 +121,13 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-info" id="initData">添加模板</button>
-	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 	                <button type="button" class="btn btn-primary" id="save">保存</button>
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 	            </div>
 	        </div>
 	    </div>
 	</div>
-	<script src="/common/matrix/js/handlebars-v4.0.2.js"></script>
+	
 	<!--定义操作列按钮模板-->
 	<script id="tpl" type="text/x-handlebars-template">
 	    {{#each func}}
@@ -127,9 +139,9 @@
     //预编译模板
     var template = Handlebars.compile(tpl);
     var editFlag = false;
-	var oTable;
-	$(document).ready(function() {
-		oTable = $("#list").dataTable({
+	var table;
+	$(function () {
+		table = $("#list").DataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
@@ -139,6 +151,7 @@
 	           [  
 					{ "mData": "id"},
 		        	{ "mData": "jobName"}, 
+		        	{ "mData": "jobGroup"}, 
 		        	{ "mData": "jobStatus",
 		        	  "mRender": function (data, type) {
 	            		 if(data == 1){
@@ -160,13 +173,10 @@
 	                      }
 	                  }
 		        	},
-		        	{ "mData": "createTime",
-	        		  "mRender": function (data, type) {
-	        		  	return formatDateTime(data.time);
-	                  }
-		        	 },
 		        	{ "mData": "lastSucceeTime",
 		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
 	        		  	return formatDateTime(data.time);
 	                  }
 		        	}
@@ -178,7 +188,7 @@
 	                        var context =
 	                        {
 	                            func: [
-	                                {"name": "修改", "fn": "edit(\'" + c.jobName + "\',\'" + c.jobStatus + "\',\'" + c.cronExpression + "\',\'" + c.beanClass + "\',\'" + c.methodName + "\',\'" + c.isConcurrent + "\',\'" + c.description + "\')", "type": "primary"},
+	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.jobName + "\',\'" + c.jobStatus + "\',\'" + c.cronExpression + "\',\'" + c.springId + "\',\'" + c.beanClass + "\',\'" + c.methodName + "\',\'" + c.isConcurrent + "\',\'" + c.description + "\')", "type": "primary"},
 	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
 	                            ]
 	                        };
@@ -189,9 +199,10 @@
 	 
 	            ],
             initComplete: function () {
-				clear();
                 $("#mytool").append('<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">添加</button>');
             	$("#initData").on("click", initData);
+				$("#mytool").on("click", clear);
+				$("#save").click(add);
 			},
 	        "fnServerData" : function(sSource, aoData, fnCallback) {
 				$.ajax({
@@ -214,25 +225,35 @@
      * 添加数据模板
      */
     function initData() {
+    	clear();
+    	editFlag = false;
+    	$("#myModalLabel").text("添加");
         $("#jobName").val("计划任务1");
+        $("#jobGroup").val("test");
         $("input:radio[name=jobStatus][value='1']").parent("span").attr("class","checked");
         $("#cronExpression").val("30 * * * * ?");
+        //$("#springId").val("com.epweike.quartz.job.Test");
         $("#beanClass").val("com.epweike.quartz.job.Test");
         $("input:radio[name=isConcurrent][value='1']").parent("span").attr("class","checked");
         $("#methodName").val("test");
+        $("#description").val("计划任务1");
     }
  
     /**
      * 清除
      */
     function clear() {
+    	editFlag = false;
+    	$("#myModalLabel").text("添加");
+    	$("#id").val("");
         $("#jobName").val("");
+        $("#jobGroup").val("");
         $("#cronExpression").val("");
+        $("#springId").val("");
         $("#beanClass").val("");
         $("#methodName").val("");
-        $("input:radio[name=jobStatus]").attr("checked",false);
-        $("input:radio[name=isConcurrent]").attr("checked",false);
-        editFlag = false;
+        $(".checked").removeClass();
+        $("#description").val("");
     }
  
     /**
@@ -250,28 +271,34 @@
         	}
 		});
         var addJson = {
+        	"id": $("#id").val(),
             "jobName": $("#jobName").val(),
+            "jobGroup": $("#jobGroup").val(),
             "jobStatus": jobStatus,
             "cronExpression": $("#cronExpression").val(),
+            "springId": $("#springId").val(),
             "beanClass": $("#beanClass").val(),
             "methodName": $("#methodName").val(),
             "isConcurrent": isConcurrent,
             "description": $("#description").val(),
         };
- 
+ 		console.log(addJson);
         ajax(addJson);
     }
     
     /**
      *编辑方法
      **/
-    function edit(jobName,jobStatus,cronExpression,beanClass,methodName,isConcurrent,description) {
-        
+    function edit(id,jobName,jobStatus,cronExpression,springId,beanClass,methodName,isConcurrent,description) {
+        clear();
         editFlag = true;
         $("#myModalLabel").text("修改");
+        $("#id").val(id);
         $("#jobName").val(jobName);
+        $("#jobGroup").val(jobGroup);
         $("input:radio[name=jobStatus][value="+jobStatus+"]").parent("span").attr("class","checked");
         $("#cronExpression").val(cronExpression);
+        $("#springId").val(springId);
         $("#beanClass").val(beanClass);
         $("#methodName").val(methodName);
         $("input:radio[name=isConcurrent][value="+isConcurrent+"]").parent("span").attr("class","checked");
@@ -280,26 +307,38 @@
         
     }
  
+ 	/**
+     *ajax提交
+     **/
     function ajax(obj) {
-        var url ="/add.jsp" ;
+        var url ="/schedulejob/add" ;
         if(editFlag){
-            url = "/edit.jsp";
+            url = "/schedulejob/update";
         }
         $.ajax({
-            url:url ,
-            data: {
-                "name": obj.name,
-                "position": obj.position,
-                "salary": obj.salary,
-                "start_date": obj.start_date,
-                "office": obj.office,
-                "extn": obj.extn
+            "url":url ,
+            "type": "post",
+            "data": {
+                "id": obj.id,
+                "jobName": obj.jobName,
+                "jobGroup": obj.jobGroup,
+                "jobStatus": obj.jobStatus,
+                "cronExpression": obj.cronExpression,
+                "springId": obj.springId,
+                "methodName": obj.methodName,
+                "beanClass": obj.beanClass,
+                "isConcurrent": obj.isConcurrent,
+                "description": obj.description
             }, success: function (data) {
                 table.ajax.reload();
                 $("#myModal").modal("hide");
-                $("#myModalLabel").text("新增");
+                $("#myModalLabel").text("添加");
                 clear();
-                console.log("结果" + data);
+                $.gritter.add({
+					title:	'操作提示！',
+					text:	data.msg,
+					sticky: false
+				});	
             }
         });
     }
@@ -307,17 +346,22 @@
  
     /**
      * 删除数据
-     * @param name
+     * @param id
      */
-    function del(name) {
+    function del(id) {
         $.ajax({
-            url: "/del.jsp",
-            data: {
-                "name": name
-            }, success: function (data) {
-                table.ajax.reload();
-                console.log("删除成功" + data);
-            }
+            "url": "/schedulejob/del",
+            "type": "get",
+            "data": {
+	            "id": id
+	         }, success: function (data) {
+	            table.ajax.reload();
+	            $.gritter.add({
+					title:	'操作提示！',
+					text:	data.msg,
+					sticky: false
+				});	
+	         }
         });
     }
 

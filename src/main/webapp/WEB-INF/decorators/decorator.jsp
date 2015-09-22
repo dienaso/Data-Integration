@@ -31,22 +31,19 @@
 
 	//一级菜单
 	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
-	
+
 	//拼接一二级菜单
 	String title = "";
 	Menus menus1 = menusService.get(Integer.parseInt(pid));
 	Menus menus2 = menusService.get(Integer.parseInt(id));
-	if(menus1 != null)
+	if (menus1 != null)
 		title = "-" + menus1.getName();
-	if(!"".equals(title)) {
-		if(menus2 != null)
+	if (!"".equals(title)) {
+		if (menus2 != null)
 			title = title + "-" + menus2.getName();
-	} else{
+	} else {
 		title = "-" + menus2.getName();
 	}
-		
-		
-		
 %>
 <!DOCTYPE html>
 <html>
@@ -70,6 +67,8 @@
 	href="/common/matrix/css/bootstrap-datepicker3.css" />
 <link rel="stylesheet"
 	href="/common/matrix/css/dataTables.tableTools.css" />
+<link rel="stylesheet"
+	href="/common/matrix/css/jquery.gritter.css" />
 
 <script src="/common/matrix/js/jquery.min.js"></script>
 <script src="/common/matrix/js/bootstrap.min.js"></script>
@@ -77,12 +76,16 @@
 <script src="/common/matrix/js/jquery.dataTables.js"></script>
 <script src="/common/matrix/js/jquery.ui.custom.js"></script>
 <script src="/common/matrix/js/jquery.uniform.js"></script>
+<script src="/common/matrix/js/jquery.confirmon.js"></script>
+<script src="/common/matrix/js/jquery.gritter.min.js"></script>
 <script src="/common/matrix/js/select2.min.js"></script>
-<script type="text/javascript" src="/common/matrix/js/dataTables.tableTools.js" charset="utf-8"></script>
+<script type="text/javascript"
+	src="/common/matrix/js/dataTables.tableTools.js" charset="utf-8"></script>
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
 <script src="/common/matrix/js/date.utils.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="/common/matrix/js/handlebars-v4.0.2.js"></script>
 
 <sitemesh:write property='head' />
 </head>

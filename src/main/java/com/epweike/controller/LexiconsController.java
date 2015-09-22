@@ -2,6 +2,7 @@ package com.epweike.controller;
 
 import com.epweike.model.Lexicons;
 import com.epweike.model.PageModel;
+import com.epweike.model.RetModel;
 import com.epweike.service.LexiconsService;
 
 import net.sf.json.JSONObject;
@@ -24,34 +25,137 @@ import javax.servlet.http.HttpServletRequest;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/lexicons")
 public class LexiconsController extends BaseController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(LexiconsController.class);
 
-    @Autowired
-    private LexiconsService lexiconService;
-    
-    public List<Lexicons> lexiconList;
-    
-    @RequestMapping(value = {"/lexicon/list"})
-    public String list(Model model) {
-        return "lexicon/list";
-    }
-    
-    @RequestMapping(value = "/lexicon/update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody int update(HttpServletRequest  request) throws IOException {
-    	
-    	//获取主键
-    	String id = request.getParameter("pk"); 
-    	
-    	System.out.println("--------------------"+id);
-    	
-    	//int result = this.lexiconService.update(new Lexicons());
-    	int result = 0;
-		return result;
-    }
-    
-	@RequestMapping(value = "/lexicon/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	private static final Logger logger = LoggerFactory
+			.getLogger(LexiconsController.class);
+
+	@Autowired
+	private LexiconsService lexiconService;
+
+	public List<Lexicons> lexiconList;
+
+	@RequestMapping(value = { "list" })
+	public String list(Model model) {
+		return "lexicon/list";
+	}
+
+	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel add(HttpServletRequest request)
+			throws IOException {
+		//返回结果对象
+        RetModel retModel = new RetModel();
+		// 获取请求参数
+		String word = request.getParameter("word");
+		String pinyin = request.getParameter("pinyin");
+		String pos = request.getParameter("pos");
+		String synonym = request.getParameter("synonym");
+		// 数据校验
+		if ("".equals(word)) {
+			retModel.setFlag(false);
+			retModel.setMsg("词条不能为空！");
+			return retModel;
+		} else {// 校验词条是否存在
+			Lexicons lexicons = new Lexicons(word);
+			lexicons = lexiconService.selectOne(lexicons);
+			if (lexicons != null) {
+				retModel.setFlag(false);
+				retModel.setMsg("词条:'" + word + "'已存在！");
+				return retModel;
+			}
+		}
+
+		if (retModel.isFlag()) {
+			try {
+				Lexicons lexicons = new Lexicons();
+				lexicons.setWord(word);
+				lexicons.setPinyin(pinyin);
+				lexicons.setPos(pos);
+				lexicons.setSynonym(synonym);
+				// 更新数据库
+				lexiconService.insert(lexicons);
+				retModel.setMsg("新增成功！");
+			} catch (Exception e) {
+				e.printStackTrace();
+				retModel.setFlag(false);
+				retModel.setMsg("新增失败！");
+				return retModel;
+			}
+		}
+		return retModel;
+	}
+
+	@RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel RetModel(HttpServletRequest request)
+			throws IOException {
+		//返回结果对象
+        RetModel retModel = new RetModel();
+		// 获取删除主键
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		try {
+			this.lexiconService.delete(id);
+			retModel.setMsg("删除成功！");
+		} catch (Exception e) {
+			retModel.setFlag(false);
+			retModel.setMsg("删除失败！");
+			retModel.setObj(e);
+			e.printStackTrace();
+		}
+
+		return retModel;
+	}
+
+	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel update(HttpServletRequest request)
+			throws IOException {
+		//返回结果对象
+        RetModel retModel = new RetModel();
+		// 获取请求参数
+		int id = Integer.parseInt(request.getParameter("id"));
+		String word = request.getParameter("word");
+		String pinyin = request.getParameter("pinyin");
+		String pos = request.getParameter("pos");
+		String synonym = request.getParameter("synonym");
+		// 数据校验
+		if ("".equals(word)) {
+			retModel.setFlag(false);
+			retModel.setMsg("词条不能为空！");
+			return retModel;
+		} else {// 校验词条是否存在
+			Lexicons lexicons = new Lexicons(word);
+			lexicons = lexiconService.selectOne(lexicons);
+			System.out.println("lexicons------------------" + lexicons);
+			if (lexicons != null && lexicons.getId() != id) {
+				retModel.setFlag(false);
+				retModel.setMsg("词条:'" + word + "'已存在！");
+				return retModel;
+			}
+		}
+
+		if (retModel.isFlag()) {
+			try {
+				Lexicons lexicons = new Lexicons();
+				lexicons.setId(id);
+				lexicons.setWord(word);
+				lexicons.setPinyin(pinyin);
+				lexicons.setPos(pos);
+				lexicons.setSynonym(synonym);
+				// 更新数据库
+				lexiconService.update(lexicons);
+				retModel.setMsg("修改成功！");
+			} catch (Exception e) {
+				e.printStackTrace();
+				retModel.setFlag(false);
+				retModel.setMsg("保存失败！");
+				return retModel;
+			}
+		}
+		return retModel;
+	}
+
+	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String paginationDataTables(HttpServletRequest request)
 			throws IOException {
 
@@ -77,37 +181,28 @@ public class LexiconsController extends BaseController {
 
 		return json.toString();
 	}
-    
-//    @RequestMapping(value = "/lexicon/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-//    public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
-//    	
-//    	//当前页数
-//    	String page = request.getParameter("page");
-//    	logger.info("获取page！！！"+page);
-//    	//显示条数
-//    	String rows = request.getParameter("rows");
-//    	logger.info("获取rows！！！"+rows);
-//    	//总条数
-//    	int total = this.lexiconService.count(new Lexicons());
-//    	
-//    	//搜索结果集
-//    	lexiconList = this.lexiconService.select(new Lexicons());
-//		
-//    	JSONObject json = JSONObject.fromObject(lexiconList);
-//    	logger.info("获取词语列表！！！"+json);
-//	
-//		return json.toString();
-//    }
-    
-    @RequestMapping(value = "/lexicon/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody int del(HttpServletRequest  request) throws IOException {
-    	
-    	//获取删除主键
-    	String id = request.getParameter("id"); 
-    	
-    	int result = this.lexiconService.delete(id);
-	
-		return result;
-    }
-    
+
+	// @RequestMapping(value = "/lexicon/get", method = RequestMethod.GET,
+	// produces = "application/json;charset=UTF-8")
+	// public @ResponseBody String paginationDataTables(HttpServletRequest
+	// request) throws IOException {
+	//
+	// //当前页数
+	// String page = request.getParameter("page");
+	// logger.info("获取page！！！"+page);
+	// //显示条数
+	// String rows = request.getParameter("rows");
+	// logger.info("获取rows！！！"+rows);
+	// //总条数
+	// int total = this.lexiconService.count(new Lexicons());
+	//
+	// //搜索结果集
+	// lexiconList = this.lexiconService.select(new Lexicons());
+	//
+	// JSONObject json = JSONObject.fromObject(lexiconList);
+	// logger.info("获取词语列表！！！"+json);
+	//
+	// return json.toString();
+	// }
+
 }

@@ -69,9 +69,7 @@ public class TaskUtils {
 		
 		//更新任务信息数据
 		scheduleJob.setLastSucceeTime(new Date());
-		System.out.println("scheduleJob="+scheduleJob);
-		
 		ScheduleJobService scheduleJobService = SpringUtils.getBean("scheduleJobService");
-		scheduleJobService.update(scheduleJob);
+		scheduleJobService.updateBySelective(scheduleJob);
 	}
 }

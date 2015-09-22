@@ -30,6 +30,10 @@ public abstract class BaseService<T> {
 	public int update(T record) {
 		return mapper.updateByPrimaryKey(record);
 	}
+	
+	public int updateBySelective(T record) {
+		return mapper.updateByPrimaryKeySelective(record);
+	}
 
 	public T get(int key) {
 		return mapper.selectByPrimaryKey(key);

@@ -45,7 +45,7 @@ public class BaseController {
 	private static String solr1_cores = "system_log,msg,login,search_history,feed,search_history,ip_area";
 	//@Value("#{configProperties['solr2.cores']}")
 	private static String solr2_cores = "article,ask_question,longword,service,shop_article,shop_case,talent,task,task_work,topic,favorite,finance,messqueue";
-
+	
 	// 最终路由地址
 	private static String solr_url;
 	

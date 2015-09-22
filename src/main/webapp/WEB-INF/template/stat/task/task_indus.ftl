@@ -158,7 +158,7 @@
 		$("input[name='cash_end']").val(date);
 		
 		<!--dateTable-->
-		var table = $('#list').dataTable({
+		var table = $('#list').DataTable({
 			"bDestroy": true,
 			"bStateSave": true,
 			"bServerSide": true,

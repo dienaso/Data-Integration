@@ -79,7 +79,7 @@
 	</div>
 
 	<script type="text/javascript">
-	$(document).ready(function() {
+	$(function () {
 		$('.input-daterange').datepicker({
 		    format: "yyyy-m-d",
     		language: "zh-CN",
@@ -114,7 +114,7 @@
 		$("input[name='end']").val(date);
 		
 		<!--dateTable-->
-		var table = $('#list').dataTable({
+		var table = $('#list').DataTable({
 			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,

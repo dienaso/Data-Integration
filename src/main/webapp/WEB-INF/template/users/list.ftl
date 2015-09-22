@@ -38,7 +38,7 @@
 	<script type="text/javascript">
 $(document).ready(function() {
 
-    $("#list").dataTable({
+    $("#list").DataTable({
 		"bServerSide" : true,
 		"bDestroy": true,
 		"bStateSave": true,

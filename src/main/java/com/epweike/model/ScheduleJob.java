@@ -28,7 +28,7 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
 	
     @Id
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
 	@Column(name = "create_time")
     private Date createTime;
@@ -59,14 +59,14 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     /**
 	 * @return the id
 	 */
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
     

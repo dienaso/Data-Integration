@@ -24,7 +24,7 @@ import com.epweike.util.PathUtils;
  *
  */
 public class CreateHomeHtmlJob extends IndexController {
-
+	
 	/**
 	 * 实现execute方法
 	 */
