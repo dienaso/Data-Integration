@@ -64,7 +64,7 @@
 <link rel="stylesheet"
 	href="/common/matrix/font-awesome/css/font-awesome.css" />
 <link rel='stylesheet'
-	href='http://fonts.useso.com/css?family=Open+Sans:400,700,800'
+	href='/common/matrix/font-open+sans/css/font-open+sans.css'
 	type='text/css'>
 <link rel="stylesheet"
 	href="/common/matrix/css/bootstrap-datepicker3.css" />

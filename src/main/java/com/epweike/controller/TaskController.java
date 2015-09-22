@@ -95,7 +95,7 @@ public class TaskController extends BaseController {
 		cash_end = (!"".equals(cash_end)) ? cash_end + "T23:59:59Z" : "*";
 		// 任务类型
 		String taskType = getParamFromAodata(aoData, "taskType");
-		// 来源(web、iphoe、Android等)
+		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
 		// 是否已托管
 		String cash_status = getParamFromAodata(aoData, "cash_status");
@@ -256,7 +256,7 @@ public class TaskController extends BaseController {
 		cash_end = (!"".equals(cash_end)) ? cash_end + "T23:59:59Z" : "*";
 		// 任务类型
 		String taskType = getParamFromAodata(aoData, "taskType");
-		// 来源(web、iphoe、Android等)
+		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
 		// 用户名
 		String username = getParamFromAodata(aoData, "username");

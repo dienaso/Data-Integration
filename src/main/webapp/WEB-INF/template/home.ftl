@@ -179,17 +179,17 @@
 				label: "WAP",
 				data: wap
 			},
+			"云创平台": {
+				label: "云创平台",
+				data: yun
+			},
 			"酷贝街": {
 				label: "酷贝街",
 				data: mall
 			},
-			"后台注册": {
+			"后台": {
 				label: "后台",
 				data: background
-			},
-			"云创平台": {
-				label: "云创平台",
-				data: yun
 			}
 		};
 		

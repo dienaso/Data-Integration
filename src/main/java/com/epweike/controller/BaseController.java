@@ -27,7 +27,7 @@ import com.epweike.util.DateUtils;
  * @version 创建时间：2014年12月10日 下午2:36:07
  */
 /**
- * @author Administrator
+ * @author wuxp
  *
  */
 public class BaseController {
@@ -38,16 +38,18 @@ public class BaseController {
 	 * 从配置文件中读取SOLR配置
 	 */
 	//@Value("#{configProperties['solr1.url']}")
-	private String solr1_url = "http://solr.api.epweike.com/";
+	private static String solr1_url = "http://solr.api.epweike.com/";
 	//@Value("#{configProperties['solr2.url']}")
-	private String solr2_url = "http://solr2.api.epweike.com/";;
+	private static String solr2_url = "http://solr2.api.epweike.com/";;
 	//@Value("#{configProperties['solr1.cores']}")
-	private String solr1_cores = "system_log,msg,login,search_history,feed,search_history,ip_area";
+	private static String solr1_cores = "system_log,msg,login,search_history,feed,search_history,ip_area";
 	//@Value("#{configProperties['solr2.cores']}")
-	private String solr2_cores = "article,ask_question,longword,service,shop_article,shop_case,talent,task,task_work,topic,favorite,finance,messqueue";
+	private static String solr2_cores = "article,ask_question,longword,service,shop_article,shop_case,talent,task,task_work,topic,favorite,finance,messqueue";
 
 	// 最终路由地址
-	private String solr_url;
+	private static String solr_url;
+	
+	private static SolrServer solr = null;
 
 	/**
 	 * @Description:连接solr服务器
@@ -55,7 +57,7 @@ public class BaseController {
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月11日 上午9:32:13
 	 */
-	public SolrServer getSolrServer(String core) {
+	public static SolrServer getSolrServer(String core) {
 		logger.info("solr1.url=" + solr1_url);
 		logger.info("solr2.url=" + solr1_url);
 		logger.info("solr1.cores=" + solr1_cores);
@@ -68,7 +70,7 @@ public class BaseController {
 			solr_url = solr2_url;
 		}
 
-		SolrServer solr = new HttpSolrServer(solr_url + core);
+		solr = new HttpSolrServer(solr_url + core);
 		logger.info("SOLR URL IS:" + solr_url + core);
 		return solr;
 	}
@@ -139,7 +141,7 @@ public class BaseController {
 		String taskType = getParamFromAodata(aoData, "taskType");
 		// 统计类型(日、月、年)
 		String statType = getParamFromAodata(aoData, "statType");
-		// 来源(web、iphoe、Android等)
+		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)

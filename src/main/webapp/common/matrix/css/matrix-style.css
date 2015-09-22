@@ -997,6 +997,9 @@ span.icon .checker {
 	left:5px; width:50%;
 	top: -2px;
 }
+#mytool {
+	margin: 7px 5px 0;
+}
 .dataTables_length div {
 	vertical-align: middle;
 }

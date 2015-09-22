@@ -44,6 +44,8 @@
 		<property name="properties" ref="configProperties" />
 	</bean>
 
+	<bean id="springUtils" class="com.epweike.util.SpringUtils" />
+
 	<bean id="schedulerFactoryBean"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
 

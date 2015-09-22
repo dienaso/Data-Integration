@@ -30,13 +30,16 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "create_time")
+	@Column(name = "create_time")
     private Date createTime;
 
     @Column(name = "update_time")
     private Date updateTime;
+    
+    @Column(name = "last_succee_time")
+    private Date lastSucceeTime;
 
-    @Column(name = "job_name")
+	@Column(name = "job_name")
     private String jobName;
 
     @Column(name = "job_group")
@@ -54,6 +57,20 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     private String beanClass;
 
     /**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+    
+    /**
      * 是否允许并行
      */
     @Column(name = "is_concurrent")
@@ -64,20 +81,6 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
 
     @Column(name = "method_name")
     private String methodName;
-
-	/**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * @return create_time
@@ -107,6 +110,20 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
         this.updateTime = updateTime;
     }
 
+    /**
+  	 * @return the lastSucceeTime
+  	 */
+  	public Date getLastSucceeTime() {
+  		return lastSucceeTime;
+  	}
+
+  	/**
+  	 * @param lastSucceeTime the lastSucceeTime to set
+  	 */
+  	public void setLastSucceeTime(Date lastSucceeTime) {
+  		this.lastSucceeTime = lastSucceeTime;
+  	}
+    
     /**
      * @return job_name
      */

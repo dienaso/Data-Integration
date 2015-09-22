@@ -66,9 +66,9 @@
 							<th>CPM</th>
 							<th>APP</th>
 							<th>WAP</th>
+							<th>云创平台</th>
 							<th>酷贝街</th>
 							<th>后台</th>
-							<th>云创平台</th>
 						</tr>
 					</thead>
 				</table>
@@ -128,9 +128,9 @@
 		        	{ "mData": "cpm"},
 		        	{ "mData": "APP"},
 		        	{ "mData": "WAP"},
+		        	{ "mData": "yun"},
 		        	{ "mData": "mall"},
-		        	{ "mData": "background"},
-		        	{ "mData": "yun"}
+		        	{ "mData": "background"}
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "reg_start", "value": $("input[name='reg_start']").val() } );

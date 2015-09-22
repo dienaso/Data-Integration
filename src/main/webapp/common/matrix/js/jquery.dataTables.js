@@ -11081,7 +11081,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sDom": 'T<"clear"><"H"lfr>t<"F"ip>',
+		"sDom": 'T<"#mytool"><"clear"><"H"lfr>t<"F"ip>',
 	
 	
 		/**

@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/finance")
 public class FinanceController extends BaseController {
 
 	private static final Logger logger = LoggerFactory
@@ -59,7 +60,7 @@ public class FinanceController extends BaseController {
 		String taskType = getParamFromAodata(aoData, "taskType");
 		// 统计类型(日、月、年)
 		String statType = getParamFromAodata(aoData, "statType");
-		// 来源(web、iphoe、Android等)
+		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
 
 		SolrQuery params = new SolrQuery("*:*").setFacet(true)
@@ -130,7 +131,7 @@ public class FinanceController extends BaseController {
 	 * @author 吴小平
 	 * @version 创建时间：2015年8月27日 下午5:29:08
 	 */
-	@RequestMapping(value = "/finance/date/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "date/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getFinanceFacetByDate(HttpServletRequest request)
 			throws Exception {
 
@@ -158,7 +159,7 @@ public class FinanceController extends BaseController {
 	 * @author 吴小平
 	 * @version 创建时间：2015年8月27日 下午5:29:08
 	 */
-	@RequestMapping(value = "/finance/user/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "user/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getFinanceFacetListByUser(
 			HttpServletRequest request) throws Exception {
 
@@ -176,7 +177,7 @@ public class FinanceController extends BaseController {
 		// Date end = DateUtils.parseDateTime(endString + " 23:59:59");
 		// 任务类型
 		String taskType = getParamFromAodata(aoData, "taskType");
-		// 来源(web、iphoe、Android等)
+		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
 		// 用户名
 		String username = getParamFromAodata(aoData, "username");
@@ -304,21 +305,21 @@ public class FinanceController extends BaseController {
 		return json.toString();
 	}
 
-	@RequestMapping(value = { "/stat/finance/date" })
+	@RequestMapping(value = { "stat/date" })
 	public ModelAndView financeStatByDate() throws SolrServerException,
 			IOException {
 		// 返回视图
-		ModelAndView mv = new ModelAndView("stat/finance/finance_date");
+		ModelAndView mv = new ModelAndView("finance/finance_date");
 		logger.info("进入接单统计(按时间)！！！");
 		return mv;
 	}
 
-	@RequestMapping(value = { "/stat/finance/user" })
+	@RequestMapping(value = { "stat/user" })
 	public ModelAndView financeStatByUser() throws SolrServerException,
 			IOException {
 		// 返回视图
-		ModelAndView mv = new ModelAndView("stat/finance/finance_user");
-		logger.info("进入接单统计(按用户)！！！");
+		ModelAndView mv = new ModelAndView("finance/finance_user");
+		logger.info("进入接单统计(按威客)！！！");
 		return mv;
 	}
 
