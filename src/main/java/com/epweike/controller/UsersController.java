@@ -1,8 +1,10 @@
 package com.epweike.controller;
 
 import com.epweike.model.PageModel;
+import com.epweike.model.RetModel;
 import com.epweike.model.Users;
 import com.epweike.service.UsersService;
+import com.epweike.util.MD5Utils;
 import com.epweike.util.StatUtils;
 
 import net.sf.json.JSONObject;
@@ -104,6 +106,57 @@ public class UsersController extends BaseController {
 		int result = this.usersService.delete(id);
 
 		return result;
+	}
+
+	@RequestMapping(value = "/users/changePassword", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel changePassword(HttpServletRequest request)
+			throws IOException {
+
+		RetModel retModel = new RetModel();
+		// 获取请求参数
+		String userName = request.getParameter("username");
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword = request.getParameter("newPassword");
+		String confirmPassword = request.getParameter("confirmPassword");
+
+		// 判断新密码与确认密码是否一致
+		if (!newPassword.equals(confirmPassword)) {
+			retModel.setFlag(false);
+			retModel.setMsg("新密码与确认密码不一致！");
+			return retModel;
+		}
+		// 判断旧密码是否正确
+		Users users = new Users();
+		users.setUserName(userName);
+		users.setPassword(MD5Utils.getMD5(oldPassword, userName));
+		Users existUsers = usersService.selectOne(users);
+		if (existUsers == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("旧密码不正确！");
+			return retModel;
+		}
+
+		// 修改密码
+		if (retModel.isFlag()) {
+			try {
+				users.setPassword(MD5Utils.getMD5(newPassword, userName));
+				int result = usersService.updateBySelective(users);
+				if (result > 0) {
+					retModel.setMsg("密码修改成功！");
+				} else {
+					retModel.setFlag(false);
+					retModel.setMsg("密码修改失败！");
+					return retModel;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				retModel.setFlag(false);
+				retModel.setMsg("新增失败！");
+				return retModel;
+			}
+		}
+
+		return retModel;
 	}
 
 	/**

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/menus")
 public class MenusController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(MenusController.class);
 
@@ -32,12 +33,12 @@ public class MenusController extends BaseController {
     
     public List<Menus> menusList;
     
-    @RequestMapping(value = {"/menus/list"})
+    @RequestMapping(value = {"list"})
     public String list(Model model) {
         return "menus/list";
     }
     
-    @RequestMapping(value = "/menus/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public @ResponseBody String paginationDataTables(HttpServletRequest  request) throws IOException {
     	
     	//获取查询关键参数
@@ -61,7 +62,7 @@ public class MenusController extends BaseController {
 		return json.toString();
     }
     
-    @RequestMapping(value = "/menus/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public @ResponseBody int del(HttpServletRequest  request) throws IOException {
     	
     	//获取删除主键

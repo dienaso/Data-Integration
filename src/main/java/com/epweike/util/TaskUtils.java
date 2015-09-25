@@ -7,8 +7,8 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.epweike.mapper.ScheduleJobMapper;
 import com.epweike.model.ScheduleJob;
-import com.epweike.service.ScheduleJobService;
 
 public class TaskUtils {
 	public final static Logger log = Logger.getLogger(TaskUtils.class);
@@ -69,7 +69,7 @@ public class TaskUtils {
 		
 		//更新任务信息数据
 		scheduleJob.setLastSucceeTime(new Date());
-		ScheduleJobService scheduleJobService = SpringUtils.getBean("scheduleJobService");
-		scheduleJobService.updateBySelective(scheduleJob);
+		ScheduleJobMapper scheduleJobMapper = SpringUtils.getBean("scheduleJobMapper");
+		scheduleJobMapper.updateByPrimaryKeySelective(scheduleJob);
 	}
 }

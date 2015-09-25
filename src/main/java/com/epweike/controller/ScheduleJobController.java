@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import com.epweike.model.RetModel;
 import com.epweike.model.ScheduleJob;
 import com.epweike.model.PageModel;
+import com.epweike.service.QuartzService;
 import com.epweike.service.ScheduleJobService;
 import com.epweike.util.SpringUtils;
 
@@ -38,6 +39,9 @@ public class ScheduleJobController extends BaseController {
 	
     @Autowired
     private ScheduleJobService scheduleJobService;
+    
+    @Autowired
+    private QuartzService quartzService;
     
     public List<ScheduleJob> scheduleJobList;
     
@@ -100,6 +104,7 @@ public class ScheduleJobController extends BaseController {
         RetModel retModel = new RetModel();
     	//获取请求参数
     	String jobName = request.getParameter("jobName"); 
+    	String jobGroup = request.getParameter("jobGroup"); 
     	String jobStatus = request.getParameter("jobStatus"); 
     	String cronExpression = request.getParameter("cronExpression"); 
     	String springId = request.getParameter("springId"); 
@@ -109,6 +114,7 @@ public class ScheduleJobController extends BaseController {
     	String description = request.getParameter("description"); 
 		ScheduleJob job = new ScheduleJob();
     	job.setJobName(jobName);
+    	job.setJobGroup(jobGroup);
     	job.setJobStatus(jobStatus);
     	job.setCronExpression(cronExpression);
     	job.setSpringId(springId);
@@ -116,7 +122,7 @@ public class ScheduleJobController extends BaseController {
     	job.setMethodName(methodName);
     	job.setIsConcurrent(isConcurrent);
     	job.setDescription(description);
-    	job.setCreateTime(new Date());
+    	job.setOnTime(new Date());
 		job.setUpdateTime(new Date());
     	//校验计划任务
     	retModel = checkJob(job, retModel);
@@ -124,8 +130,14 @@ public class ScheduleJobController extends BaseController {
     	if(retModel.isFlag()){
     		try {
     			//新增到数据库和计划任务
-    			scheduleJobService.addTaskJob(job);
-    			retModel.setMsg("新增成功！");
+    			int result = quartzService.addTaskJob(job);
+    			if(result > 0){
+					retModel.setMsg("新增成功！");
+				}else {
+					retModel.setFlag(false);
+					retModel.setMsg("新增失败！");
+					return retModel;
+				}
     		} catch (Exception e) {
     			e.printStackTrace();
     			retModel.setFlag(false);
@@ -139,14 +151,14 @@ public class ScheduleJobController extends BaseController {
     }
     
     @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public @ResponseBody RetModel RetModel(HttpServletRequest  request) throws IOException {
+    public @ResponseBody RetModel del(HttpServletRequest  request) throws IOException {
     	//返回结果对象
         RetModel retModel = new RetModel();
-    	//获取删除主键
+    	//获取主键
     	int id = Integer.parseInt(request.getParameter("id")); 
     	
 		try {
-			this.scheduleJobService.deleteTaskJob(id);
+			quartzService.deleteTaskJob(id);
 			retModel.setMsg("删除成功！");
 		} catch (Exception e) {
 			retModel.setFlag(false);
@@ -165,6 +177,7 @@ public class ScheduleJobController extends BaseController {
     	//获取请求参数
     	String id = request.getParameter("id"); 
     	String jobName = request.getParameter("jobName"); 
+    	String jobGroup = request.getParameter("jobGroup"); 
     	String jobStatus = request.getParameter("jobStatus"); 
     	String cronExpression = request.getParameter("cronExpression"); 
     	String springId = request.getParameter("springId"); 
@@ -175,6 +188,7 @@ public class ScheduleJobController extends BaseController {
 		ScheduleJob job = new ScheduleJob();
     	job.setId(Integer.parseInt(id));
     	job.setJobName(jobName);
+    	job.setJobGroup(jobGroup);
     	job.setJobStatus(jobStatus);
     	job.setCronExpression(cronExpression);
     	job.setSpringId(springId);
@@ -190,8 +204,14 @@ public class ScheduleJobController extends BaseController {
     	if(retModel.isFlag()){
 			try {
 				//更新数据库和计划任务
-				scheduleJobService.updateTaskJob(job);
-				retModel.setMsg("修改成功！");
+				int result = quartzService.updateTaskJob(job);
+				if(result > 0){
+					retModel.setMsg("修改成功！");
+				}else {
+					retModel.setFlag(false);
+					retModel.setMsg("修改失败！");
+					return retModel;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
@@ -204,8 +224,28 @@ public class ScheduleJobController extends BaseController {
     	
     }
     
+    @RequestMapping(value = "run", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public @ResponseBody RetModel run(HttpServletRequest  request) throws IOException {
+    	//返回结果对象
+        RetModel retModel = new RetModel();
+    	//获取主键
+    	int id = Integer.parseInt(request.getParameter("id")); 
+    	ScheduleJob scheduleJob = this.scheduleJobService.get(id);
+		try {
+			quartzService.runAJobNow(scheduleJob);
+			retModel.setMsg("执行成功！");
+		} catch (Exception e) {
+			retModel.setFlag(false);
+			retModel.setMsg("执行失败,或许该任务被禁用！");
+			retModel.setObj(e);
+			e.printStackTrace();
+		}
+	
+		return retModel;
+    }
+    
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+	public @ResponseBody String get(HttpServletRequest request)
 			throws IOException {
 
 		// 获取查询关键参数

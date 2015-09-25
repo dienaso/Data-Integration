@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>词库管理</title>
+	<title>系统参数管理</title>
 </head>
 <body>
 	<div id="content-header">
@@ -9,16 +9,16 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" class="current">词库管理</a>
+			<a href="#" class="current">系统参数管理</a>
 		</div>
-		<h1>词库管理</h1>
+		<h1>系统参数管理</h1>
 	</div>
 	<div class="container-fluid">
 		<div class="widget-box">
 			<div class="widget-title">
 				<span class="icon"> <i class="icon-th"></i>
 				</span>
-				<h5>词条列表</h5>
+				<h5>系统参数列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 
@@ -26,14 +26,14 @@
 					<thead>
 						<tr>
 							<th>ID</th>
-							<th>词条</th>
-							<th>拼音</th>
-							<th>词性</th>
-							<th>近义词</th>
+							<th>参数名称</th>
+							<th>参数值</th>
+							<th>参数组</th>
+							<th>创建时间</th>
 							<th>操作</th>
 						</tr>
 					</thead>
-
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
@@ -51,29 +51,29 @@
 	            <div class="modal-body form-horizontal">
 					<input type="hidden" id="id">
 	                <div class="control-group">
-	                	<label class="control-label">词条 :</label>
+	                	<label class="control-label">参数名称 :</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="word" placeholder="词条">
+	                    	<input type="text" class="form-control" id="varName" placeholder="系统参数名称">
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                	<label class="control-label">拼音 :</label>
+	                	<label class="control-label">参数值 :</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="pinyin" placeholder="拼音">
+	                    	<input type="text" class="form-control" id="varValue" placeholder="任务值">
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                	<label class="control-label">词性 :</label>
+	                	<label class="control-label">参数值组:</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="pos" placeholder="词性">
+	                    	<input type="text" class="form-control" id="varGroup" placeholder="任务组">
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                	<label class="control-label">近义词 :</label>
-	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="synonym" placeholder="近义词">
-	                    </div>
-	                </div>
+						<label class="control-label">描述:</label>
+						<div class="controls">
+							<textarea id="description"></textarea>
+						</div>
+					</div>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-primary" id="save">保存</button>
@@ -101,14 +101,20 @@
 			"bDestroy": true,
 			"bStateSave": true,
 			"bFilter": false,
-	        "sAjaxSource": '/lexicons/get', 
+	        "sAjaxSource": '/sysconfig/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "id"},
-		        	{ "mData": "word"}, 
-		        	{ "mData": "pinyin"},
-		        	{ "mData": "pos"},
-		        	{ "mData": "synonym"},
+		        	{ "mData": "varName"}, 
+		        	{ "mData": "varValue"}, 
+		        	{ "mData": "varGroup"},
+		        	{ "mData": "onTime",
+		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
+	        		  	return formatDateTime(data.time);
+	                  }
+		        	}
 	        	],
 	        "columnDefs": [
 	                {
@@ -117,7 +123,7 @@
 	                        var context =
 	                        {
 	                            func: [
-	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.word + "\',\'" + c.pinyin + "\',\'" + c.pos + "\',\'" + c.synonym + "\')", "type": "primary"},
+	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.varName + "\',\'" + c.varValue + "\',\'" + c.varGroup + "\',\'" + c.description + "\')", "type": "primary"},
 	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
 	                            ]
 	                        };
@@ -147,17 +153,18 @@
 			}
 		});
 	} );
-	
+ 
     /**
      * 清除
      */
     function clear() {
     	editFlag = false;
     	$("#myModalLabel").text("添加");
-        $("#word").val("");
-        $("#pinyin").val("");
-        $("#pos").val("");
-        $("#synonym").val("");
+    	$("#id").val("");
+        $("#varName").val("");
+        $("#varValue").val("");
+        $("#varGroup").val("");
+        $("#description").val("");
     }
  
     /**
@@ -166,10 +173,10 @@
     function add() {
         var addJson = {
         	"id": $("#id").val(),
-            "word": $("#word").val(),
-            "pinyin": $("#pinyin").val(),
-            "pos": $("#pos").val(),
-            "synonym": $("#synonym").val(),
+            "varName": $("#varName").val(),
+            "varValue": $("#varValue").val(),
+            "varGroup": $("#varGroup").val(),
+            "description": $("#description").val()
         };
  		console.log(addJson);
         ajax(addJson);
@@ -178,38 +185,40 @@
     /**
      *编辑方法
      **/
-    function edit(id,word,pinyin,pos,synonym) {
+    function edit(id,varName,varValue,varGroup,description) {
         clear();
         editFlag = true;
         $("#myModalLabel").text("修改");
         $("#id").val(id);
-        $("#word").val(word);
-        $("#pinyin").val(pinyin);
-        $("#pos").val(pos);
-        $("#synonym").val(synonym);
+        $("#varName").val(varName);
+        $("#varValue").val(varValue);
+        $("#varGroup").val(varGroup);
+        $("#description").val(description);
         $("#myModal").modal("show");
+        
     }
  
  	/**
      *ajax提交
      **/
     function ajax(obj) {
-        var url ="/lexicons/add" ;
+        var url ="/sysconfig/add" ;
         if(editFlag){
-            url = "/lexicons/update";
+            url = "/sysconfig/update";
         }
         $.ajax({
             "url":url ,
             "type": "post",
             "data": {
                 "id": obj.id,
-                "word": obj.word,
-                "pinyin": obj.pinyin,
-                "pos": obj.pos,
-                "synonym": obj.synonym
+                "varName": obj.varName,
+                "varValue": obj.varValue,
+                "varGroup": obj.varGroup,
+                "description": obj.description
             }, success: function (data) {
                 table.ajax.reload();
                 $("#myModal").modal("hide");
+                $("#myModalLabel").text("添加");
                 clear();
                 $.gritter.add({
 					title:	'操作提示！',
@@ -220,13 +229,14 @@
         });
     }
  
+ 
     /**
      * 删除数据
      * @param id
      */
     function del(id) {
         $.ajax({
-            "url": "/lexicons/del",
+            "url": "/sysconfig/del",
             "type": "get",
             "data": {
 	            "id": id
@@ -241,6 +251,6 @@
         });
     }
     
-	</script>
+</script>
 </body>
 </html>

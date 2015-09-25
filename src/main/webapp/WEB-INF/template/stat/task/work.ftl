@@ -170,13 +170,11 @@
 				});
 			}
 		});
-		
+		//查询方法
 		$('#search-btn').on( 'click', function () {
-		    table.fnDraw();
+		    table.ajax.reload();
 		} );
-		
 	} );
-	
 	</script>
 </body>
 </html>

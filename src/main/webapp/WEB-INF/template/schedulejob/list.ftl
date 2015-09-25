@@ -71,10 +71,10 @@
 		                <div class="controls">
 			                <label>
 			                  <div class="radio"><span><input type="radio" value="1" name="jobStatus" style="opacity: 0;"></span></div>
-			                  	开启 </label>
+			                  	启用</label>
 			                <label>
 			                  <div class="radio"><span><input type="radio" value="0" name="jobStatus" style="opacity: 0;"></span></div>
-			                 	 关闭</label>
+			                 	 禁用</label>
 		                </div>
 	                </div>
 	                <div class="control-group">
@@ -188,7 +188,8 @@
 	                        var context =
 	                        {
 	                            func: [
-	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.jobName + "\',\'" + c.jobStatus + "\',\'" + c.cronExpression + "\',\'" + c.springId + "\',\'" + c.beanClass + "\',\'" + c.methodName + "\',\'" + c.isConcurrent + "\',\'" + c.description + "\')", "type": "primary"},
+	                            	{"name": "执行", "fn": "run(\'" + c.id + "\')", "type": "info"},
+	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.jobName + "\',\'" + c.jobGroup + "\',\'" + c.jobStatus + "\',\'" + c.cronExpression + "\',\'" + c.springId + "\',\'" + c.beanClass + "\',\'" + c.methodName + "\',\'" + c.isConcurrent + "\',\'" + c.description + "\')", "type": "primary"},
 	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
 	                            ]
 	                        };
@@ -228,13 +229,13 @@
     	clear();
     	editFlag = false;
     	$("#myModalLabel").text("添加");
-        $("#jobName").val("计划任务1");
+        $("#jobName").val("taskJob1");
         $("#jobGroup").val("test");
         $("input:radio[name=jobStatus][value='1']").parent("span").attr("class","checked");
         $("#cronExpression").val("30 * * * * ?");
         //$("#springId").val("com.epweike.quartz.job.Test");
         $("#beanClass").val("com.epweike.quartz.job.Test");
-        $("input:radio[name=isConcurrent][value='1']").parent("span").attr("class","checked");
+        $("input:radio[name=isConcurrent][value='0']").parent("span").attr("class","checked");
         $("#methodName").val("test");
         $("#description").val("计划任务1");
     }
@@ -280,7 +281,7 @@
             "beanClass": $("#beanClass").val(),
             "methodName": $("#methodName").val(),
             "isConcurrent": isConcurrent,
-            "description": $("#description").val(),
+            "description": $("#description").val()
         };
  		console.log(addJson);
         ajax(addJson);
@@ -289,7 +290,7 @@
     /**
      *编辑方法
      **/
-    function edit(id,jobName,jobStatus,cronExpression,springId,beanClass,methodName,isConcurrent,description) {
+    function edit(id,jobName,jobGroup,jobStatus,cronExpression,springId,beanClass,methodName,isConcurrent,description) {
         clear();
         editFlag = true;
         $("#myModalLabel").text("修改");
@@ -364,7 +365,27 @@
 	         }
         });
     }
-
+    
+    /**
+     * 立即执行
+     * @param id
+     */
+	function run(id) {
+        $.ajax({
+            "url": "/schedulejob/run",
+            "type": "get",
+            "data": {
+	            "id": id
+	         }, success: function (data) {
+	            table.ajax.reload();
+	            $.gritter.add({
+					title:	'操作提示！',
+					text:	data.msg,
+					sticky: false
+				});	
+	         }
+        });
+    }
 </script>
 </body>
 </html>

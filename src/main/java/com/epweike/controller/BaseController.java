@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
+import com.epweike.util.SysconfigUtils;
 
 /**  
  * @Description:控制器通用方法类
@@ -34,34 +35,21 @@ public class BaseController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BaseController.class);
 
-	/*
-	 * 从配置文件中读取SOLR配置
-	 */
-	//@Value("#{configProperties['solr1.url']}")
-	private static String solr1_url = "http://solr.api.epweike.com/";
-	//@Value("#{configProperties['solr2.url']}")
-	private static String solr2_url = "http://solr2.api.epweike.com/";;
-	//@Value("#{configProperties['solr1.cores']}")
-	private static String solr1_cores = "system_log,msg,login,search_history,feed,search_history,ip_area";
-	//@Value("#{configProperties['solr2.cores']}")
-	private static String solr2_cores = "article,ask_question,longword,service,shop_article,shop_case,talent,task,task_work,topic,favorite,finance,messqueue";
-	
 	// 最终路由地址
-	private static String solr_url;
+	protected String solr_url;
 	
-	private static SolrServer solr = null;
-
+	protected SolrServer solr = null;
+	
 	/**
 	 * @Description:连接solr服务器
 	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月11日 上午9:32:13
 	 */
-	public static SolrServer getSolrServer(String core) {
-		logger.info("solr1.url=" + solr1_url);
-		logger.info("solr2.url=" + solr1_url);
-		logger.info("solr1.cores=" + solr1_cores);
-		logger.info("solr2.cores=" + solr2_cores);
+	public SolrServer getSolrServer(String core) {
+		String solr1_url = SysconfigUtils.getVarValue("solr1_url");
+		String solr2_url = SysconfigUtils.getVarValue("solr2_url");
+		String solr1_cores = SysconfigUtils.getVarValue("solr1_cores");
 
 		// core路由
 		if (solr1_cores.contains(core)) {

@@ -20,11 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/logs")
 public class LogsController extends BaseController {
 
 	private static final Logger logger = LoggerFactory.getLogger(LogsController.class);
 	
-	@RequestMapping(value = {"/logs/stat"})
+	@RequestMapping(value = {"stat"})
     public ModelAndView stat() throws SolrServerException, IOException {
 		
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
@@ -44,7 +45,7 @@ public class LogsController extends BaseController {
         return mv;
     }
 	
-	@RequestMapping(value = {"/logs/userAgent"})
+	@RequestMapping(value = {"userAgent"})
     public ModelAndView userAgent() throws SolrServerException, IOException {
 		
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");

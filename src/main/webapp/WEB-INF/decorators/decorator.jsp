@@ -76,13 +76,12 @@
 <script src="/common/matrix/js/jquery.dataTables.js"></script>
 <script src="/common/matrix/js/jquery.ui.custom.js"></script>
 <script src="/common/matrix/js/jquery.uniform.js"></script>
-<script src="/common/matrix/js/jquery.confirmon.js"></script>
 <script src="/common/matrix/js/jquery.gritter.min.js"></script>
 <script src="/common/matrix/js/select2.min.js"></script>
 <script type="text/javascript"
 	src="/common/matrix/js/dataTables.tableTools.js" charset="utf-8"></script>
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
-<script src="/common/matrix/js/date.utils.js"></script>
+<script src="/common/matrix/js/common.js"></script>
 <script
 	src="/common/matrix/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="/common/matrix/js/handlebars-v4.0.2.js"></script>
@@ -108,25 +107,22 @@
 					class="text">Welcome <sec:authentication property="name" /></span><b
 					class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a href="javascript:void(0)"><i class="icon-user"></i>
-							My Profile</a></li>
+					<li><a id="showChangePassword" href="javascript:void(0)"><i class="icon-key"></i>
+							修改密码</a></li>
 					<li class="divider"></li>
-					<li><a href="javascript:void(0)"><i class="icon-check"></i>
-							My Tasks</a></li>
-					<li class="divider"></li>
-					<li><a href="/j_spring_security_logout"><i
-							class="icon-key"></i> Log Out</a></li>
+					<li><a id="clear" href="javascript:void(0)"><i
+							class="icon-refresh"></i> 刷新系统参数</a></li>
 				</ul></li>
 			<li class=""><a title="" href="/j_spring_security_logout"><i
-					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+					class="icon icon-share-alt"></i> <span class="text">退出</span></a></li>
 		</ul>
 	</div>
 	<!--close-top-Header-menu-->
 	<!--start-top-serch
-<div id="search">
-  <input type="text" placeholder="Search here..."/>
-  <button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
-</div>-->
+	<div id="search">
+	  <input type="text" placeholder="Search here..."/>
+	  <button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
+	</div>-->
 	<!--close-top-serch-->
 	<!--sidebar-menu-->
 	<div id="sidebar">
@@ -239,7 +235,164 @@
 			www.epweike.com 一品威客网络科技有限公司版权所有</div>
 	</div>
 
+	<!-- Modal -->
+	<div class="modal fade" id="myPasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+	                        aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+	            </div>
+	            <div class="modal-body form-horizontal">
+					<input type="hidden" id="id">
+	                <div class="control-group">
+	                	<label class="control-label">原始密码 :</label>
+	                	<div class="controls">
+	                    	<input type="password" class="form-control" id="oldPassword" placeholder="原始密码">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                	<label class="control-label">新密码 :</label>
+	                	<div class="controls">
+	                    	<input type="password" class="form-control" id="newPassword" placeholder="新密码">
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                	<label class="control-label">确认密码 :</label>
+	                	<div class="controls">
+	                    	<input type="password" class="form-control" id="confirmPassword" placeholder="确认密码">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-primary" id="changePassword">保存</button>
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
 	<!--end-Footer-part-->
 	<script src="/common/matrix/js/matrix.tables.js"></script>
+	<script type="text/javascript">
+	$(function () {
+		$("#showChangePassword").on("click", showChangePassword);
+		$("#changePassword").click(changePassword);
+		$("#clear").on("click", clearConfig);
+	} );
+	/**
+     * 清空缓存
+     * @param id
+     */
+	function clearConfig() {
+        $.ajax({
+            "url": "/sysconfig/clear",
+            "type": "get",
+            success: function (data) {
+	            $.gritter.add({
+					title:	'操作提示！',
+					text:	data.msg,
+					sticky: false
+				});	
+	         }
+        });
+    }
+	/**
+     * 显示修改密码界面
+     * @param id
+     */
+	function showChangePassword() {
+		clear();
+		$("#myPasswordModal").modal("show");
+    }
+	/**
+     * 清除
+     */
+    function clear() {
+    	editFlag = false;
+    	$("#oldPassword").val("");
+        $("#newPassword").val("");
+        $("#confirmPassword").val("");
+    }
+	/**
+     * 保存
+     **/
+    function changePassword() {
+        var addJson = {
+        	"username": "<sec:authentication property="name" />",
+            "oldPassword": $("#oldPassword").val(),
+            "newPassword": $("#newPassword").val(),
+            "confirmPassword": $("#confirmPassword").val()
+        };
+ 		console.log(addJson);
+        ajax(addJson);
+    }
+	
+    /**
+     *ajax提交
+     **/
+    function ajax(obj) {
+    	
+    	if(obj.oldPassword == "") {
+    		$("#myPasswordModal").modal("hide");
+    		$.gritter.add({
+				title:	'操作提示！',
+				text:	'旧密码不能为空！',
+				sticky: false
+			});	
+    		return;
+    	}
+    	
+    	if(obj.newPassword == "") {
+    		$("#myPasswordModal").modal("hide");
+    		$.gritter.add({
+				title:	'操作提示！',
+				text:	'新密码不能为空！',
+				sticky: false
+			});	
+    		return;
+    	}
+    	
+    	if(obj.confirmPassword == "") {
+    		$("#myPasswordModal").modal("hide");
+    		$.gritter.add({
+				title:	'操作提示！',
+				text:	'确认密码不能为空！',
+				sticky: false
+			});	
+    		return;
+    	}
+    	
+    	if(obj.newPassword != obj.confirmPassword) {
+    		$("#myPasswordModal").modal("hide");
+    		$.gritter.add({
+				title:	'操作提示！',
+				text:	'新密码与确认密码不一致！',
+				sticky: false
+			});	
+    		return;
+    	}
+    	
+        $.ajax({
+            "url": "/users/changePassword" ,
+            "type": "post",
+            "data": {
+                "username": obj.username,
+                "oldPassword": obj.oldPassword,
+                "newPassword": obj.newPassword,
+                "confirmPassword": obj.confirmPassword
+            }, success: function (data) {
+                $("#myPasswordModal").modal("hide");
+                clear();
+                $.gritter.add({
+					title:	'操作提示！',
+					text:	data.msg,
+					sticky: false
+				});	
+            }
+        });
+    }
+	</script>
 </body>
 </html>

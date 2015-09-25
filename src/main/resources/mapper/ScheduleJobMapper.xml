@@ -6,7 +6,7 @@
       WARNING - @mbggenerated
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="on_time" property="onTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="last_succee_time" property="lastSucceeTime" jdbcType="TIMESTAMP" />
     <result column="job_name" property="jobName" jdbcType="VARCHAR" />

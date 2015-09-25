@@ -74,8 +74,14 @@ public class LexiconsController extends BaseController {
 				lexicons.setPos(pos);
 				lexicons.setSynonym(synonym);
 				// 更新数据库
-				lexiconService.insert(lexicons);
-				retModel.setMsg("新增成功！");
+				int result = lexiconService.insert(lexicons);
+				if(result > 0){
+					retModel.setMsg("新增成功！");
+				}else {
+					retModel.setFlag(false);
+					retModel.setMsg("新增失败！");
+					return retModel;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
@@ -91,7 +97,7 @@ public class LexiconsController extends BaseController {
 			throws IOException {
 		//返回结果对象
         RetModel retModel = new RetModel();
-		// 获取删除主键
+		// 获取主键
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
@@ -143,12 +149,18 @@ public class LexiconsController extends BaseController {
 				lexicons.setPos(pos);
 				lexicons.setSynonym(synonym);
 				// 更新数据库
-				lexiconService.update(lexicons);
-				retModel.setMsg("修改成功！");
+				int result = lexiconService.update(lexicons);
+				if(result > 0){
+					retModel.setMsg("修改成功！");
+				}else {
+					retModel.setFlag(false);
+					retModel.setMsg("修改失败！");
+					return retModel;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
-				retModel.setMsg("保存失败！");
+				retModel.setMsg("修改失败！");
 				return retModel;
 			}
 		}

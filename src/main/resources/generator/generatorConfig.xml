@@ -34,7 +34,7 @@
   <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
     <property name="beginningDelimiter" value="`"/>
     <property name="endingDelimiter" value="`"/>
-    <property name="caseSensitive" value="true"/>
+    <property name="caseSensitive" value="false"/>
     <plugin type="${mapper.plugin}">
       <property name="mappers" value="${mapper.Mapper}"/>
     </plugin>
@@ -54,7 +54,7 @@
 	<!-- 生成mapxml对应client，也就是接口mapper -->  
     <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
 
-    <table tableName="schedule_job" >
+    <table tableName="sysconfig" >
     </table>
   </context>
 </generatorConfiguration>

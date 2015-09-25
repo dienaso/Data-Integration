@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epweike.mapper.SysconfigMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.Sysconfig">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="var_name" jdbcType="VARCHAR" property="varName" />
+    <result column="var_value" jdbcType="VARCHAR" property="varValue" />
+    <result column="var_group" jdbcType="VARCHAR" property="varGroup" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="on_time" jdbcType="TIMESTAMP" property="onTime" />
+  </resultMap>
+</mapper>

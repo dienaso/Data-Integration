@@ -1,7 +1,9 @@
 package com.epweike.mapper;
 
-import com.epweike.model.ScheduleJob;
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.special.InsertUseGeneratedKeysMapper;
 
-public interface ScheduleJobMapper extends Mapper<ScheduleJob> {
+import com.epweike.model.ScheduleJob;
+
+public interface ScheduleJobMapper extends Mapper<ScheduleJob> ,InsertUseGeneratedKeysMapper<ScheduleJob>{
 }

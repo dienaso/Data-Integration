@@ -30,8 +30,8 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     @Column(name = "id")
     private Integer id;
 
-	@Column(name = "create_time")
-    private Date createTime;
+	@Column(name = "on_time")
+    private Date onTime;
 
     @Column(name = "update_time")
     private Date updateTime;
@@ -85,15 +85,15 @@ public class ScheduleJob extends BaseModel<ScheduleJob> {
     /**
      * @return create_time
      */
-    public Date getCreateTime() {
-        return createTime;
+    public Date getOnTime() {
+        return onTime;
     }
 
     /**
      * @param createTime
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setOnTime(Date onTime) {
+        this.onTime = onTime;
     }
 
     /**

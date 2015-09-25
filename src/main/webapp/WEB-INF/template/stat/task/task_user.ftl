@@ -197,7 +197,7 @@
 		});
 		<!--search-->
 		$('#search-btn').on( 'click', function () {
-		    table.fnDraw();
+		    table.ajax.reload();
 		} );
 	} );
 	
