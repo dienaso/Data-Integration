@@ -253,7 +253,7 @@
         $("#springId").val("");
         $("#beanClass").val("");
         $("#methodName").val("");
-        $(".checked").removeClass();
+        $(".checked").removeClass("checked");
         $("#description").val("");
     }
  

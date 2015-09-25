@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
+import com.epweike.util.SolrUtils;
 
 import net.sf.json.JSONObject;
 
@@ -106,7 +107,7 @@ public class FinanceController extends BaseController {
 			endIndex = 7;
 		}
 
-		QueryResponse response = getSolrServer(core).query(params);
+		QueryResponse response = SolrUtils.getSolrServer(core).query(params);
 		// 获取区间统计列表
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
@@ -237,7 +238,7 @@ public class FinanceController extends BaseController {
 		}
 
 		// 查询统计财务报表
-		QueryResponse response = getSolrServer("finance").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("finance").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();

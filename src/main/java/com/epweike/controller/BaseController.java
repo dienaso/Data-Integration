@@ -10,16 +10,12 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
-import com.epweike.util.SysconfigUtils;
+import com.epweike.util.SolrUtils;
 
 /**  
  * @Description:控制器通用方法类
@@ -32,36 +28,6 @@ import com.epweike.util.SysconfigUtils;
  *
  */
 public class BaseController {
-	private static final Logger logger = LoggerFactory
-			.getLogger(BaseController.class);
-
-	// 最终路由地址
-	protected String solr_url;
-	
-	protected SolrServer solr = null;
-	
-	/**
-	 * @Description:连接solr服务器
-	 * 
-	 * @author 吴小平
-	 * @version 创建时间：2015年6月11日 上午9:32:13
-	 */
-	public SolrServer getSolrServer(String core) {
-		String solr1_url = SysconfigUtils.getVarValue("solr1_url");
-		String solr2_url = SysconfigUtils.getVarValue("solr2_url");
-		String solr1_cores = SysconfigUtils.getVarValue("solr1_cores");
-
-		// core路由
-		if (solr1_cores.contains(core)) {
-			solr_url = solr1_url;
-		} else {
-			solr_url = solr2_url;
-		}
-
-		solr = new HttpSolrServer(solr_url + core);
-		logger.info("SOLR URL IS:" + solr_url + core);
-		return solr;
-	}
 
 	/**
 	 * @Description:从json数据中解析关键分页参数
@@ -176,7 +142,7 @@ public class BaseController {
 			endIndex = 7;
 		}
 
-		QueryResponse response = getSolrServer(core).query(parameters);
+		QueryResponse response = SolrUtils.getSolrServer(core).query(parameters);
 		// 获取区间统计列表
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();

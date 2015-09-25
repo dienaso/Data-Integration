@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.epweike.model.PageModel;
+import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
 
 import net.sf.json.JSONObject;
@@ -66,7 +67,7 @@ public class SearchHistoryController extends BaseController {
 		if (!searchType.equals("all"))// 搜索类型过滤
 			params.addFilterQuery("search_type:" + searchType);
 
-		QueryResponse response = getSolrServer("search_history").query(
+		QueryResponse response = SolrUtils.getSolrServer("search_history").query(
 				params);
 		// 获取统计列表
 		List<FacetField> facetFields = response.getFacetFields();

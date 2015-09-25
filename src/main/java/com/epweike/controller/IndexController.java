@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.epweike.util.DateUtils;
+import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
 
 import net.sf.json.JSONArray;
@@ -38,7 +39,7 @@ public class IndexController extends BaseController {
 		 * 用户注册渠道统计
 		 * --------------------------------------------------------------
 		 * */
-		SolrServer solr1 = getSolrServer("talent");
+		SolrServer solr1 = SolrUtils.getSolrServer("talent");
 		
 		// TOTAL
 		SolrQuery regParams = new SolrQuery("*:*").setFacet(true)
@@ -105,7 +106,7 @@ public class IndexController extends BaseController {
 		 * 用户登陆渠道统计
 		 * --------------------------------------------------------------
 		 * */
-		SolrServer solr2 = getSolrServer("login");
+		SolrServer solr2 = SolrUtils.getSolrServer("login");
 		
 		// TOTAL
 		SolrQuery loginParams = new SolrQuery("*:*").setFacet(true)
@@ -176,7 +177,7 @@ public class IndexController extends BaseController {
 		 * 任务发布数统计
 		 * --------------------------------------------------------------
 		 * */
-		SolrServer solr3 = getSolrServer("task");
+		SolrServer solr3 = SolrUtils.getSolrServer("task");
 		
 		// TOTAL
 		SolrQuery taskPubParams = new SolrQuery("*:*").setFacet(true)
@@ -247,7 +248,7 @@ public class IndexController extends BaseController {
 		 * 任务已圆满完成统计
 		 * --------------------------------------------------------------
 		 * */
-		SolrServer solr4 = getSolrServer("task");
+		SolrServer solr4 = SolrUtils.getSolrServer("task");
 		
 		// TOTAL
 		SolrQuery taskDoneParams = new SolrQuery("*:*").setFacet(true)
@@ -326,7 +327,7 @@ public class IndexController extends BaseController {
 		 * --------------------------------------------------------------
 		 * */
 		SolrQuery wParams = new SolrQuery("*:*").setFacet(true).addFacetField("w_level");
-		QueryResponse wResponse = getSolrServer("talent").query(wParams);
+		QueryResponse wResponse = SolrUtils.getSolrServer("talent").query(wParams);
 		List<FacetField> wFacetFields = wResponse.getFacetFields(); 
 		/*
 		 * --------------------------------------------------------------
@@ -334,7 +335,7 @@ public class IndexController extends BaseController {
 		 * --------------------------------------------------------------
 		 * */
 		SolrQuery sParams = new SolrQuery("*:*").setFacet(true).addFacetField("shop_level");
-		QueryResponse sResponse = getSolrServer("talent").query(sParams);
+		QueryResponse sResponse = SolrUtils.getSolrServer("talent").query(sParams);
 		List<FacetField> sFacetFields = sResponse.getFacetFields(); 
 
 		// 返回结果

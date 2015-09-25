@@ -60,7 +60,7 @@
 
 					<label class="control-label">UID:</label>
 					<div class="controls">
-						<input type="text" name="uid" placeholder="UID"></div>
+						<input type="text" name="uid" placeholder="UID" autocomplete="off" value=""></div>
 				</div>
 
 				<div class="form-actions">

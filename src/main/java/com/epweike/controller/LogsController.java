@@ -3,6 +3,7 @@ package com.epweike.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -29,7 +30,7 @@ public class LogsController extends BaseController {
     public ModelAndView stat() throws SolrServerException, IOException {
 		
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
-		QueryResponse response = getSolrServer("logs").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("logs").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//地区分布统计
@@ -49,7 +50,7 @@ public class LogsController extends BaseController {
     public ModelAndView userAgent() throws SolrServerException, IOException {
 		
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
-		QueryResponse response = getSolrServer("logs").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("logs").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//地区分布统计

@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.epweike.model.PageModel;
+import com.epweike.util.SolrUtils;
 
 import net.sf.json.JSONObject;
 
@@ -157,7 +158,7 @@ public class TaskController extends BaseController {
 		}
 
 		// 查询统计任务报表
-		QueryResponse response = getSolrServer("task").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("task").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();
@@ -318,7 +319,7 @@ public class TaskController extends BaseController {
 		}
 
 		// 查询统计任务报表
-		QueryResponse response = getSolrServer("task").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("task").query(params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();

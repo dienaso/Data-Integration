@@ -249,19 +249,19 @@
 	                <div class="control-group">
 	                	<label class="control-label">原始密码 :</label>
 	                	<div class="controls">
-	                    	<input type="password" class="form-control" id="oldPassword" placeholder="原始密码">
+	                    	<input type="text" class="form-control" id="oldPassword" placeholder="原始密码">
 	                    </div>
 	                </div>
 	                <div class="control-group">
 	                	<label class="control-label">新密码 :</label>
 	                	<div class="controls">
-	                    	<input type="password" class="form-control" id="newPassword" placeholder="新密码">
+	                    	<input type="text" class="form-control" id="newPassword" placeholder="新密码">
 	                    </div>
 	                </div>
 	                <div class="control-group">
 	                	<label class="control-label">确认密码 :</label>
 	                	<div class="controls">
-	                    	<input type="password" class="form-control" id="confirmPassword" placeholder="确认密码">
+	                    	<input type="text" class="form-control" id="confirmPassword" placeholder="确认密码">
 	                    </div>
 	                </div>
 	            </div>
@@ -303,13 +303,13 @@
      * @param id
      */
 	function showChangePassword() {
-		clear();
+		clearPassword();
 		$("#myPasswordModal").modal("show");
     }
 	/**
      * 清除
      */
-    function clear() {
+    function clearPassword() {
     	editFlag = false;
     	$("#oldPassword").val("");
         $("#newPassword").val("");
@@ -326,13 +326,13 @@
             "confirmPassword": $("#confirmPassword").val()
         };
  		console.log(addJson);
-        ajax(addJson);
+ 		ajaxPassword(addJson);
     }
 	
     /**
      *ajax提交
      **/
-    function ajax(obj) {
+    function ajaxPassword(obj) {
     	
     	if(obj.oldPassword == "") {
     		$("#myPasswordModal").modal("hide");

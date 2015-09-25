@@ -63,7 +63,7 @@
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                	<label class="control-label">参数值组:</label>
+	                	<label class="control-label">参数组:</label>
 	                	<div class="controls">
 	                    	<input type="text" class="form-control" id="varGroup" placeholder="任务组">
 	                    </div>

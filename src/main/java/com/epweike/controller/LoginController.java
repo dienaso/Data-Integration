@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.epweike.model.PageModel;
+import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
 
 /**
@@ -49,7 +50,7 @@ public class LoginController extends BaseController {
     public ModelAndView loginTypeStat() throws SolrServerException, IOException {
 		
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("login_type");
-		QueryResponse response = getSolrServer("login").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("login").query(params);
 		SolrDocumentList results = response.getResults();
 		
 		//登录类型统计
@@ -110,7 +111,7 @@ public class LoginController extends BaseController {
 		params.setRows(pageModel.getiDisplayLength());
 		params.setSort("on_time", SolrQuery.ORDER.desc);
 
-		QueryResponse response = getSolrServer("login").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("login").query(params);
 
 		// 获取登陆明细列表
 		SolrDocumentList list = response.getResults();

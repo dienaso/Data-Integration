@@ -5,6 +5,7 @@ import com.epweike.model.RetModel;
 import com.epweike.model.Users;
 import com.epweike.service.UsersService;
 import com.epweike.util.MD5Utils;
+import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
 
 import net.sf.json.JSONObject;
@@ -170,7 +171,7 @@ public class UsersController extends BaseController {
 
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField(
 				"province");
-		QueryResponse response = getSolrServer("talent").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
 		SolrDocumentList results = response.getResults();
 
 		// 地区分布统计
@@ -233,7 +234,7 @@ public class UsersController extends BaseController {
 	// .addDateRangeFacet("reg_time_date", start, end, statType)
 	// .setFacetLimit(1000);
 	//
-	// QueryResponse response = getSolrServer("talent").query(params);
+	// QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
 	//
 	// // 日期根据统计类型截取
 	// int endIndex = 10;
@@ -293,7 +294,7 @@ public class UsersController extends BaseController {
 		// params.addFilterQuery("come:" + come);
 		// params.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
 
-		QueryResponse response = getSolrServer("talent").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
 		NamedList<List<PivotField>> namedList = response.getFacetPivot();
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
