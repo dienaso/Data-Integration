@@ -94,7 +94,7 @@
     	barData.push([${list_index},'${list.count}']);
     	ticks.push([${list_index},'${list.name}']);
     </#list>
-	var dataset = [{label: "用户登录类型", data: barData, color: "#5482FF" }];
+	var dataset = [{label: "用户登录类型", data: barData, color: "#2E363F" }];
 	
 	var options = {
         series: {
