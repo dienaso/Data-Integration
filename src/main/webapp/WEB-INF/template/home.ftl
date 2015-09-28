@@ -586,9 +586,10 @@
 			}
 			
 		} else {
-			$('#tooltip').fadeOut(200,function(){
-				$(this).remove();
-			});
+			//$('#tooltip').fadeOut(200,function(){
+				//$(this).remove();
+			//});
+			$("#tooltip").remove();
 			previousPoint = null;           
 		}   
 	});	
