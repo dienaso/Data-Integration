@@ -2,19 +2,13 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<%@ page import="org.springframework.context.ApplicationContext"%>
-<%@ page
-	import="org.springframework.context.support.ClassPathXmlApplicationContext"%>
 <%@ page import="com.epweike.service.MenusService"%>
 <%@ page import="com.epweike.model.Menus"%>
+<%@ page import="com.epweike.util.SpringUtils"%>
 <%@ page import="java.util.List"%>
 
 <%
-	@SuppressWarnings("resource")
-	ApplicationContext context = new ClassPathXmlApplicationContext(
-			new String[] { "classpath:applicationContext.xml" });
-	MenusService menusService = (MenusService) context
-			.getBean("menusService");
+	MenusService menusService = SpringUtils.getBean("menusService");
 
 	String id = "1";
 	String pid = "0";
@@ -276,6 +270,18 @@
 	<!--end-Footer-part-->
 	<script src="/common/matrix/js/matrix.tables.js"></script>
 	<script type="text/javascript">
+	/**
+	  * 设置全局AJAX请求默认选项
+	  * 主要设置了AJAX请求遇到Session过期的情况
+	  */
+	$.ajaxSetup({
+		type: 'POST',
+	    complete: function(xhr,status) {
+	        if(status == "parsererror") {
+	        	window.location.href="/"; 
+	        }
+	  	}
+	});
 	$(function () {
 		$("#showChangePassword").on("click", showChangePassword);
 		$("#changePassword").click(changePassword);
@@ -283,7 +289,6 @@
 	} );
 	/**
      * 清空缓存
-     * @param id
      */
 	function clearConfig() {
         $.ajax({
@@ -300,11 +305,14 @@
     }
 	/**
      * 显示修改密码界面
-     * @param id
      */
 	function showChangePassword() {
 		clearPassword();
 		$("#myPasswordModal").modal("show");
+		//修改type属性为密码框，防止火狐自动填充用户名故采用js
+		document.getElementById("oldPassword").type="password"; 
+		document.getElementById("newPassword").type="password"; 
+		document.getElementById("confirmPassword").type="password"; 
     }
 	/**
      * 清除
@@ -384,7 +392,7 @@
                 "confirmPassword": obj.confirmPassword
             }, success: function (data) {
                 $("#myPasswordModal").modal("hide");
-                clear();
+                clearPassword();
                 $.gritter.add({
 					title:	'操作提示！',
 					text:	data.msg,

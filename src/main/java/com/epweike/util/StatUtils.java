@@ -4,6 +4,8 @@
 package com.epweike.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,7 @@ import com.epweike.controller.BaseController;
  * @author 吴小平
  * @version 创建时间：2015年4月30日 上午10:00:29
  */
-public class StatUtils extends BaseController{
+public class StatUtils extends BaseController {
 
 	/**
 	 * @Description:饼状图json数据转换
@@ -152,12 +154,31 @@ public class StatUtils extends BaseController{
 					}
 					break;
 				case "shop_level":// 商铺等级统计
+					// 全部vip个数
+					int totalVip = 0;
 					for (Count count : ff.getValues()) {
 						Map<String, Object> map = new HashMap<String, Object>();
+						if (Integer.parseInt(count.getName()) > 1) {
+							totalVip += count.getCount();
+						}
 						map.put("name", getShopLevelName(count.getName()));
 						map.put("count", count.getCount());
 						list.add(map);
 					}
+					// 全部vip
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("name", "全部VIP");
+					map.put("count", totalVip);
+					list.add(map);
+					// 排序(按vip个数)
+					Collections.sort(list,
+							new Comparator<Map<String, Object>>() {
+								public int compare(Map<String, Object> arg0,
+										Map<String, Object> arg1) {
+									return -(Integer.valueOf(arg0.get("count").toString()))
+											.compareTo(Integer.valueOf(arg1.get("count").toString()));
+								}
+							});
 					break;
 				}
 			}

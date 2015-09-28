@@ -7,11 +7,13 @@
 	<http pattern="/login*" security="none" />
 	<http pattern="/common/**" security="none" />
 	<http pattern="/favicon.ico" security="none" />
-	<http disable-url-rewriting="false">
-		<headers disabled="true"/>
+	<http auto-config="true" disable-url-rewriting="false">
+	
+		<headers disabled="false"/>
 		<csrf disabled="true"/>
-
 		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER,ROLE_ADMIN')"/>
+		<access-denied-handler ref="accessDeniedHandler"/>  
+		
 		<form-login login-page="/login"
 					username-parameter="j_username" 
 					password-parameter="j_password" 
@@ -34,10 +36,17 @@
 		<b:property name="passwordEncoder" ref="passwordEncode" />
 		<b:property name="saltSource" ref="saltSource" />
 	</b:bean>
-
+	<!--自定义权限处理  -->
+	<b:bean id="accessDeniedHandler"   
+		class="com.epweike.security.MyAccessDeniedHandlerImpl">  
+		<b:property name="accessDeniedUrl" value="/accessDenied" />  
+	</b:bean> 
+	<!--自定义认证失败处理  -->
+	<b:bean id="authFailureHandler" class="com.epweike.security.MyAuthenticationFailureHandler">
+	</b:bean>
 	<!--国际化-->
 	<b:bean id="messageSource"
-    class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    	class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<b:property name="basename" value="classpath:/messages/messages_zh_CN" />
 	</b:bean>
 	<b:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
