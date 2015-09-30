@@ -1,5 +1,12 @@
 
 $(document).ready(function(){
+	//回车提交事件
+    $("input").keydown(function(e){  
+        var curKey = e.which;  
+        if(curKey == 13){  
+        	$('#loginform').submit();
+        }  
+    });  
 
 	var login = $('#loginform');
 	var recover = $('#recoverform');

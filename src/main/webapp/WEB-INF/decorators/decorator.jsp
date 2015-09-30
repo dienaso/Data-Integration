@@ -5,6 +5,7 @@
 <%@ page import="com.epweike.service.MenusService"%>
 <%@ page import="com.epweike.model.Menus"%>
 <%@ page import="com.epweike.util.SpringUtils"%>
+<%@ page import="com.epweike.util.SysconfigUtils"%>
 <%@ page import="java.util.List"%>
 
 <%
@@ -26,7 +27,7 @@
 	//一级菜单
 	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
 
-	//拼接一二级菜单
+	//拼接一二级菜单作为网页标题
 	String title = "";
 	Menus menus1 = menusService.get(Integer.parseInt(pid));
 	Menus menus2 = menusService.get(Integer.parseInt(id));
@@ -38,11 +39,14 @@
 	} else {
 		title = "-" + menus2.getName();
 	}
+	
+	//网站名称
+	String webName = SysconfigUtils.getVarValue("web_name");
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Data Integration<%=title%></title>
+<title><%=webName%><%=title%></title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/common/matrix/css/bootstrap.min.css" />
