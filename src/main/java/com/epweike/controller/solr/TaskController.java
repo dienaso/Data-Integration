@@ -1,4 +1,4 @@
-package com.epweike.controller;
+package com.epweike.controller.solr;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.epweike.controller.BaseController;
 import com.epweike.model.PageModel;
 import com.epweike.util.SolrUtils;
 
@@ -18,12 +19,15 @@ import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.StatsParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +43,66 @@ public class TaskController extends BaseController {
 			.getLogger(TaskController.class);
 
 	private static DecimalFormat df = new DecimalFormat("######0.000");// 保留3位
+
+	@RequestMapping(value = { "/task/list" })
+	public String list(Model model) {
+
+		return "solr/task/list";
+	}
+
+	/**
+	 * @Description:ajax获取任务列表
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年9月29日 下午3:28:27
+	 * @throws SolrServerException
+	 */
+	@RequestMapping(value = "/task/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+			throws IOException, SolrServerException {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// task_id
+		String task_id = getParamFromAodata(aoData, "task_id");
+		// uid
+		String uid = getParamFromAodata(aoData, "uid");
+		// 任务标题
+		String task_title = getParamFromAodata(aoData, "task_title");
+
+		SolrQuery params = new SolrQuery("*:*");
+		params.addSort(new SortClause("pub_time", SolrQuery.ORDER.desc));
+		params.setStart(pageModel.getiDisplayStart());
+		params.setRows(pageModel.getiDisplayLength());
+
+		if (!uid.equals(""))
+			params.addFilterQuery("uid:" + uid);
+
+		if (!task_id.equals(""))
+			params.addFilterQuery("task_id:" + task_id);
+
+		if (!task_title.equals(""))
+			params.addFilterQuery("task_title:" + task_title);
+
+		QueryResponse response = SolrUtils.query(params, "task");
+		// 获取服务列表
+		SolrDocumentList list = response.getResults();
+		// 总条数
+		long total = response.getResults().getNumFound();
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(total);
+		pageModel.setiTotalRecords(total);
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取任务列表！！！" + json);
+
+		return json.toString();
+	}
 
 	/**
 	 * @Description:任务来源统计列表（按时间）
@@ -127,17 +191,15 @@ public class TaskController extends BaseController {
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:2");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:2");
 			break;
 		case "直接雇佣":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:3");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:3");
 		default:
 			break;
 		}
-		params.addFilterQuery("pub_time_date:[" + pub_start + " TO "
-				+ pub_end + "]");
+		params.addFilterQuery("pub_time_date:[" + pub_start + " TO " + pub_end
+				+ "]");
 		params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
 				+ cash_end + "]");
 		if (!"".equals(indus_name))
@@ -181,7 +243,7 @@ public class TaskController extends BaseController {
 				Map<String, List<FieldStatsInfo>> map = statsInfo.getFacets();
 				List<FieldStatsInfo> statisList = map.get("indus_name");
 				if (statisList != null && statisList.size() > 0) {
-					for (int i = 0; i < statisList.size(); i++) {
+					for (int i = 0, len = statisList.size(); i < len; i++) {
 						// count大于0才统计
 						if (statisList.get(i).getCount() > 0) {
 							Map<String, Object> tmp2 = new HashMap<String, Object>();
@@ -288,19 +350,17 @@ public class TaskController extends BaseController {
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:2");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:2");
 			break;
 		case "直接雇佣":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:3");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:3");
 		default:
 			break;
 		}
-		params.addFilterQuery("pub_time_date:[" + pub_start
-				+ " TO " + pub_end + "]");
-		params.addFilterQuery("cash_time_date:[" + cash_start
-				+ " TO " + cash_end + "]");
+		params.addFilterQuery("pub_time_date:[" + pub_start + " TO " + pub_end
+				+ "]");
+		params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
+				+ cash_end + "]");
 		if (!"".equals(username))
 			params.addFilterQuery("username:" + username);
 		params.setGetFieldStatistics(true);
@@ -342,7 +402,7 @@ public class TaskController extends BaseController {
 				Map<String, List<FieldStatsInfo>> map = statsInfo.getFacets();
 				List<FieldStatsInfo> statisList = map.get("username");
 				if (statisList != null && statisList.size() > 0) {
-					for (int i = 0; i < statisList.size(); i++) {
+					for (int i = 0, len = statisList.size(); i < len; i++) {
 						// count大于0才统计
 						if (statisList.get(i).getCount() > 0) {
 							Map<String, Object> tmp2 = new HashMap<String, Object>();

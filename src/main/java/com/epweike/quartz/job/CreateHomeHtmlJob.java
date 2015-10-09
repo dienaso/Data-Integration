@@ -48,7 +48,7 @@ public class CreateHomeHtmlJob extends IndexController {
 			Writer out = new OutputStreamWriter(new FileOutputStream(outPath),
 					"UTF-8");
 			FreeMarkertUtils.processTemplate("home.ftl", dataModel, out);
-			System.out.println("home.html生成成功!");
+			System.out.println(outPath+"生成成功!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

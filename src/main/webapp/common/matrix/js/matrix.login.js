@@ -1,5 +1,7 @@
 
 $(document).ready(function(){
+	//聚焦
+	$("input[name='j_username']").focus();
 	//回车提交事件
     $("input").keydown(function(e){  
         var curKey = e.which;  

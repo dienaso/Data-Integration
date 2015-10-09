@@ -33,7 +33,6 @@
 							<th>操作</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
 				</table>
 			</div>
 		</div>
@@ -53,19 +52,19 @@
 	                <div class="control-group">
 	                	<label class="control-label">参数名称 :</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="varName" placeholder="系统参数名称">
+	                    	<input type="text" class="form-control" id="varName" placeholder="参数名称">
 	                    </div>
 	                </div>
 	                <div class="control-group">
 	                	<label class="control-label">参数值 :</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="varValue" placeholder="任务值">
+	                    	<input type="text" class="form-control" id="varValue" placeholder="参数值">
 	                    </div>
 	                </div>
 	                <div class="control-group">
 	                	<label class="control-label">参数组:</label>
 	                	<div class="controls">
-	                    	<input type="text" class="form-control" id="varGroup" placeholder="任务组">
+	                    	<input type="text" class="form-control" id="varGroup" placeholder="参数组">
 	                    </div>
 	                </div>
 	                <div class="control-group">

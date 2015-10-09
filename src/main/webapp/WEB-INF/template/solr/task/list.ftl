@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>服务管理</title>
+	<title>任务管理</title>
 </head>
 <body>
 	<div id="content-header">
@@ -12,9 +12,9 @@
 			<a href="#" title="Go to Solr" class="tip-bottom"> <i class="icon-cloud"></i>
 				索引管理
 			</a>
-			<a href="#" class="current">服务管理</a>
+			<a href="#" class="current">任务管理</a>
 		</div>
-		<h1>服务管理</h1>
+		<h1>任务管理</h1>
 	</div>
 	<div class="container-fluid">
 	
@@ -28,17 +28,17 @@
 			</div>
 			<div class="widget-content nopadding form-horizontal">
 				<div class="control-group">
-					<label class="control-label">用户名:</label>
+					<label class="control-label">标题:</label>
 					<div class="controls">
-						<input type="text" name="username" placeholder="用户名"></div>
+						<input type="text" name="task_title" placeholder="标题"></div>
 
 					<label class="control-label">UID:</label>
 					<div class="controls">
 						<input type="text" name="uid" placeholder="UID" value=""></div>
 						
-					<label class="control-label">SERVICE_ID:</label>
+					<label class="control-label">TASK_ID:</label>
 					<div class="controls">
-						<input type="text" name="service_id" placeholder="SERVICE_ID" value=""></div>
+						<input type="text" name="task_id" placeholder="TASK_ID" value=""></div>
 				</div>
 
 				<div class="form-actions">
@@ -50,7 +50,7 @@
 			<div class="widget-title">
 				<span class="icon"> <i class="icon-th"></i>
 				</span>
-				<h5>服务列表</h5>
+				<h5>任务列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
@@ -58,10 +58,12 @@
 						<tr>
 							<th>ID</th>
 							<th>UID</th>
-							<th>用户名</th>
-							<th>商铺名</th>
 							<th>标题</th>
 							<th>价格</th>
+							<th>状态</th>
+							<th>发布时间</th>
+							<th>截止时间</th>
+							<th>浏览量</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -93,15 +95,59 @@ $(function () {
 			"bDestroy": true,
 			"bStateSave": true,
 			"bFilter": false,
-	        "sAjaxSource": '/service/get', 
+	        "sAjaxSource": '/task/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "service_id"},
+					{ "mData": "task_id"},
 					{ "mData": "uid"}, 
-		        	{ "mData": "username"}, 
-		        	{ "mData": "shop_name"},
-		        	{ "mData": "title"},
-		        	{ "mData": "price"},
+		        	{ "mData": "task_title"}, 
+		        	{ "mData": "task_cash"},
+		        	{ "mData": "task_status",
+		        	  "mRender": function (data, type) {
+	            		 if(data == -1){
+	                         return "未确认" 
+	                      }else if(data == 0){
+	                         return "未付款"
+	                      }else if(data == 1){
+	                         return "待审核"
+	                      }else if(data == 2){
+	                         return "投稿中"
+	                      }else if(data == 3){
+	                         return "选稿中"
+	                      }else if(data == 4){
+	                         return "摇奖中"
+	                      }else if(data == 5){
+	                         return "公示中"
+	                      }else if(data == 6){
+	                         return "交付"
+	                      }else if(data == 7){
+	                         return "冻结"
+	                      }else if(data == 8){
+	                         return "结束"
+	                      }else if(data == 9){
+	                         return "失败"
+	                      }else if(data == 10){
+	                         return "审核失败"
+	                      }else if(data == 11){
+	                         return "仲裁"
+	                      }
+	                  }
+		        	},
+		        	{ "mData": "pub_time",
+		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
+	        		  	return formatDateTime(data * 1000);
+	                  }
+		        	},
+		        	{ "mData": "end_time",
+		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
+	        		  	return formatDateTime(data * 1000);
+	                  }
+		        	},
+		        	{ "mData": "view_num"}
 	        	],
 	        "columnDefs": [
 	        		{
@@ -109,13 +155,13 @@ $(function () {
 					 	aTargets: [ '_all' ]
 					},
 	                {
-	                    targets: 6,
+	                    targets: 8,
 	                    render: function (a, b, c, d) {
 	                        var context =
 	                        {
 	                            func: [
-	                            	{"name": "更新", "fn": "update(\'" + c.service_id + "\')", "type": "info"},
-	                                {"name": "删除", "fn": "del(\'" + c.service_id + "\')", "type": "danger"}
+	                            	{"name": "更新", "fn": "update(\'" + c.task_id + "\')", "type": "info"},
+	                                {"name": "删除", "fn": "del(\'" + c.task_id + "\')", "type": "danger"}
 	                            ]
 	                        };
 	                        var html = template(context);
@@ -125,9 +171,9 @@ $(function () {
 	 
 	            ],
 	        "fnServerData" : function(sSource, aoData, fnCallback) {
-	        	aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
+	        	aoData.push( { "name": "task_title", "value": $("input[name='task_title']").val() } );
 	    		aoData.push( { "name": "uid", "value": $("input[name='uid']").val() } );
-	    		aoData.push( { "name": "service_id", "value": $("input[name='service_id']").val() } );
+	    		aoData.push( { "name": "task_id", "value": $("input[name='task_id']").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,
@@ -151,14 +197,14 @@ $(function () {
 
 	/**
      * 删除索引
-     * @param service_id
+     * @param task_id
      */
-	function del(service_id) {
+	function del(task_id) {
         $.ajax({
-            "url": "/service/del",
+            "url": "/task/del",
             "type": "get",
             "data": {
-	            "service_id": service_id
+	            "task_id": task_id
 	         }, success: function (data) {
 	            table.ajax.reload();
 	            $.gritter.add({
@@ -174,12 +220,12 @@ $(function () {
      * 修改索引
      * @param uid
      */
-	function update(service_id) {
+	function update(task_id) {
         $.ajax({
-            "url": "/service/update",
+            "url": "/task/update",
             "type": "post",
             "data": {
-	            "service_id": service_id
+	            "task_id": task_id
 	         }, success: function (data) {
 	            table.ajax.reload();
 	            $.gritter.add({

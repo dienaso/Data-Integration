@@ -100,6 +100,7 @@ public class SysconfigController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
+				retModel.setObj(e);
 				retModel.setMsg("新增失败！");
 				return retModel;
 			}
@@ -119,11 +120,13 @@ public class SysconfigController extends BaseController {
 
 		try {
 			sysconfigService.delete(id);
+			// 清空系统参数
+			SysconfigUtils.sysconfigMap = null;
 			retModel.setMsg("删除成功！");
 		} catch (Exception e) {
 			retModel.setFlag(false);
-			retModel.setMsg("删除失败！");
 			retModel.setObj(e);
+			retModel.setMsg("删除失败！");
 			e.printStackTrace();
 		}
 
@@ -170,17 +173,19 @@ public class SysconfigController extends BaseController {
 			try {
 				// 更新数据库和计划任务
 				sysconfigService.update(sysconfig);
+				// 清空系统参数
+				SysconfigUtils.sysconfigMap = null;
 				retModel.setMsg("修改成功！");
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
+				retModel.setObj(e);
 				retModel.setMsg("保存失败！");
 				return retModel;
 			}
 		}
 
 		return retModel;
-
 	}
 
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

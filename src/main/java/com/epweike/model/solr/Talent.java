@@ -741,10 +741,4 @@ public class Talent extends BaseModel<Talent> {
 		this.indus_names = indus_names;
 	}
 
-	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 }

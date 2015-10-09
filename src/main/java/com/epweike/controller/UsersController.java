@@ -171,7 +171,8 @@ public class UsersController extends BaseController {
 
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField(
 				"province");
-		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("talent")
+				.query(params);
 		SolrDocumentList results = response.getResults();
 
 		// 地区分布统计
@@ -294,7 +295,8 @@ public class UsersController extends BaseController {
 		// params.addFilterQuery("come:" + come);
 		// params.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
 
-		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("talent")
+				.query(params);
 		NamedList<List<PivotField>> namedList = response.getFacetPivot();
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -302,7 +304,7 @@ public class UsersController extends BaseController {
 
 		if (namedList != null) {
 			List<PivotField> pivotList = null;
-			for (int i = 0; i < namedList.size(); i++) {
+			for (int i = 0, len = namedList.size(); i < len; i++) {
 				pivotList = namedList.getVal(i);
 				if (pivotList != null) {
 					for (PivotField pivot : pivotList) {

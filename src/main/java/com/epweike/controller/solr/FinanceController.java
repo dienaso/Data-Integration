@@ -1,4 +1,4 @@
-package com.epweike.controller;
+package com.epweike.controller.solr;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.epweike.controller.BaseController;
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
 import com.epweike.util.SolrUtils;
@@ -90,12 +91,10 @@ public class FinanceController extends BaseController {
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:2");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:2");
 			break;
 		case "直接雇佣":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:3");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:3");
 		default:
 			break;
 		}
@@ -210,12 +209,10 @@ public class FinanceController extends BaseController {
 					.addFilterQuery("task_cash_coverage:0");
 			break;
 		case "服务":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:2");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:2");
 			break;
 		case "直接雇佣":
-			params.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:3");
+			params.addFilterQuery("model_id:4").addFilterQuery("task_type:3");
 		default:
 			break;
 		}
@@ -238,7 +235,8 @@ public class FinanceController extends BaseController {
 		}
 
 		// 查询统计财务报表
-		QueryResponse response = SolrUtils.getSolrServer("finance").query(params);
+		QueryResponse response = SolrUtils.getSolrServer("finance").query(
+				params);
 
 		Map<String, Object> tmp1 = new HashMap<String, Object>();
 		Map<String, FieldStatsInfo> stats = response.getFieldStatsInfo();
@@ -262,7 +260,7 @@ public class FinanceController extends BaseController {
 				Map<String, List<FieldStatsInfo>> map = statsInfo.getFacets();
 				List<FieldStatsInfo> statisList = map.get("username");
 				if (statisList != null && statisList.size() > 0) {
-					for (int i = 0; i < statisList.size(); i++) {
+					for (int i = 0, len = statisList.size(); i < len; i++) {
 						// count大于0才统计
 						if (statisList.get(i).getCount() > 0) {
 							Map<String, Object> tmp2 = new HashMap<String, Object>();

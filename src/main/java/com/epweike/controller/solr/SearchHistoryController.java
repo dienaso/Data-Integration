@@ -1,4 +1,4 @@
-package com.epweike.controller;
+package com.epweike.controller.solr;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.epweike.controller.BaseController;
 import com.epweike.model.PageModel;
 import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;

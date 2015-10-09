@@ -9,7 +9,7 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-cloud"></i>
+			<a href="#" title="Go to Solr" class="tip-bottom"> <i class="icon-cloud"></i>
 				索引管理
 			</a>
 			<a href="#" class="current">人才管理</a>
@@ -175,7 +175,7 @@ $(function () {
     }
     
     /**
-     * 删除索引
+     * 修改索引
      * @param uid
      */
 	function update(uid) {

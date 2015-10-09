@@ -40,7 +40,7 @@ public class BaseController {
 		JSONArray ja = (JSONArray) JSONArray.fromObject(aoData);
 		PageModel<T> pageModel = new PageModel<T>();
 
-		for (int i = 0; i < ja.size(); i++) {
+		for (int i = 0, len = ja.size(); i < len; i++) {
 			JSONObject obj = (JSONObject) ja.get(i);
 			if (obj.get("name").equals("sEcho"))
 				pageModel.setsEcho(obj.get("value").toString());
@@ -57,7 +57,7 @@ public class BaseController {
 		}
 		return pageModel;
 	}
-	
+
 	/**
 	 * @Description:获取前台传递的自定义参数
 	 * 
@@ -68,14 +68,14 @@ public class BaseController {
 
 		JSONArray ja = (JSONArray) JSONArray.fromObject(aoData);
 		String param = "";
-		for (int i = 0; i < ja.size(); i++) {
+		for (int i = 0, len = ja.size(); i < len; i++) {
 			JSONObject obj = (JSONObject) ja.get(i);
 			if (obj.get("name").equals(name))
 				param = obj.get("value").toString();
 		}
 		return param;
 	}
-	
+
 	/**
 	 * @Description:通用获取任务、稿件统计列表,根据时间分组
 	 * 
@@ -142,7 +142,8 @@ public class BaseController {
 			endIndex = 7;
 		}
 
-		QueryResponse response = SolrUtils.getSolrServer(core).query(parameters);
+		QueryResponse response = SolrUtils.getSolrServer(core)
+				.query(parameters);
 		// 获取区间统计列表
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
@@ -170,34 +171,34 @@ public class BaseController {
 	public static String getShopLevelName(String shop_level) {
 
 		String name = "";
-		
+
 		switch (shop_level) {
 		case "1":
 			name = "基础版本";
 			break;
 		case "2":
-			name = "VIP扩展版";
+			name = "扩展版";
 			break;
 		case "3":
-			name = "VIP旗舰版";
+			name = "旗舰版";
 			break;
 		case "4":
-			name = "VIP白金版";
+			name = "白金版";
 			break;
 		case "5":
-			name = "VIP钻石版";
+			name = "钻石版";
 			break;
 		case "6":
-			name = "VIP皇冠版";
+			name = "皇冠版";
 			break;
 		case "7":
 			name = "战略合作版";
 			break;
 		}
-		
+
 		return name;
 	}
-	
+
 	/**
 	 * @Description:获取威客品级中文名称
 	 * 
@@ -207,7 +208,7 @@ public class BaseController {
 	public static String getWLevelName(String w_level) {
 
 		String name = "";
-		
+
 		switch (w_level) {
 		case "1":
 			name = "九品";
@@ -237,8 +238,8 @@ public class BaseController {
 			name = "一品";
 			break;
 		}
-		
+
 		return name;
 	}
-	
+
 }

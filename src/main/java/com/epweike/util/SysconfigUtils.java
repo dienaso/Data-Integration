@@ -40,7 +40,7 @@ public class SysconfigUtils {
 			String varName = "", varValue = "";
 			if (list != null && list.size() > 0) {
 				Sysconfig sysconfig = new Sysconfig();
-				for (int i = 0; i < list.size(); i++) {
+				for (int i = 0, len = list.size(); i < len; i++) {
 					sysconfig = (Sysconfig) list.get(i);
 					if(sysconfig != null) {
 						varName = sysconfig.getVarName();
