@@ -68,12 +68,7 @@
 			</div>
 		</div>
 	</div>
-
-<script src="/common/matrix/js/jquery.dataTables.js"></script>
-<script src="/common/matrix/js/jquery.ui.custom.js"></script>
-<script src="/common/matrix/js/jquery.uniform.js"></script>
-<script src="/common/matrix/js/select2.min.js"></script>
-<script src="/common/matrix/js/matrix.tables.js"></script>
+</div>
 <!--定义操作列按钮模板-->
 <script id="tpl" type="text/x-handlebars-template">
     {{#each func}}

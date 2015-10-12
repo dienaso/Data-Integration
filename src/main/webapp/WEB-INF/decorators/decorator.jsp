@@ -42,6 +42,9 @@
 	
 	//网站名称
 	String webName = SysconfigUtils.getVarValue("web_name");
+	//网站名称
+	String webCopyright = SysconfigUtils.getVarValue("web_copyright");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -229,8 +232,7 @@
 	<!--Footer-part-->
 
 	<div class="row-fluid">
-		<div id="footer" class="span12">Copyright © 2010-2015
-			www.epweike.com 一品威客网络科技有限公司版权所有</div>
+		<div id="footer" class="span12"><%=webCopyright %></div>
 	</div>
 
 	<!-- Modal -->

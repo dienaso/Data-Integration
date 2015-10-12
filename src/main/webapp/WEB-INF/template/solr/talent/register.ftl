@@ -58,10 +58,14 @@
 					<thead>
 						<tr>
 							<th rowspan="2">日期</th>
-							<th colspan="8">注册数</th>
+							<th rowspan="2">TOTAL</th>
+							<th colspan="3">身份类型</th>
+							<th colspan="8">注册渠道</th>
 						</tr>
 						<tr>
-							<th>TOTAL</th>
+							<th>威客</th>
+							<th>雇主</th>
+							<th>威客雇主</th>
 							<th>WEB</th>
 							<th>CPM</th>
 							<th>APP</th>
@@ -119,11 +123,14 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/users/register/get', 
+	        "sAjaxSource": '/talent/register/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "label"},
 					{ "mData": "TOTAL"},
+					{ "mData": "witkey"},
+					{ "mData": "employer"},
+					{ "mData": "both"},
 		        	{ "mData": "WEB"},
 		        	{ "mData": "cpm"},
 		        	{ "mData": "APP"},

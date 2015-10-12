@@ -15,6 +15,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.GroupParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -111,30 +112,44 @@ public class IndexController extends BaseController {
 		// TOTAL
 		SolrQuery loginParams = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// WEB
 		SolrQuery loginParams1 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams1.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams1.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// APP
 		SolrQuery loginParams2 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:app")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams2.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams2.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// WAP
 		SolrQuery loginParams3 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:wap")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams3.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams3.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// WEB_QQ
 		SolrQuery loginParams4 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web_qq")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams4.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams4.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// APP_QZone
 		SolrQuery loginParams5 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:app_QZone")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams5.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams5.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// WEB_SINA
 		SolrQuery loginParams6 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web_sina")
 				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams6.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams6.setParam(GroupParams.GROUP_FIELD, "uid");  
 		// OTHER
 		SolrQuery loginParams7 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("NOT login_type:web_sina")

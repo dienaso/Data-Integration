@@ -15,7 +15,6 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" class="current">主页</a>
 		</div>
 		<h1>主页</h1>
 	</div>

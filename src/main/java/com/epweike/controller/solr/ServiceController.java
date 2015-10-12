@@ -152,7 +152,13 @@ public class ServiceController extends BaseController {
 			e.printStackTrace();
 			return retModel;
 		}
-
+		
+		if(service == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("未找到该记录，暂时无法更新！");
+			return retModel;
+		}
+		
 		Class<? extends Service> clazz = service.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		// 拼装索引对象

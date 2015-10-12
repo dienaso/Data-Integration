@@ -17,6 +17,7 @@ import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.common.params.GroupParams;
 import org.apache.solr.common.params.StatsParams;
 import org.apache.solr.common.util.NamedList;
 import org.junit.Test;
@@ -286,5 +287,30 @@ public class SolrJTest<E> {
 //		List<FacetField> sFacetFields = sResponse.getFacetFields(); 
 //		System.out.println("sFacetFields="+StatUtils.barJson(sFacetFields));
 		System.out.println("贺卡。并且在贺卡中还是附上一段祝福语".length());
+	}
+	
+	@Test
+	public void getLoginFacetRange() throws Exception {
+		String urlString = "http://solr.api.epweike.net/login";
+		SolrServer solr = new HttpSolrServer(urlString);
+
+		// 注册统计
+		Date end = new Date();// 结束时间
+		Date start = DateUtils.addDays(end, -20);// 开始时间(20天前)
+		// 统计类型(日、月、年)
+		String statType = "+1DAY";
+
+		SolrQuery loginParams = new SolrQuery("*:*").setFacet(true)
+				.addDateRangeFacet("on_time", start, end, statType);
+		loginParams.setParam(GroupParams.GROUP_FACET, true);  
+		loginParams.setParam(GroupParams.GROUP_FIELD, "uid");  
+
+		QueryResponse response = null;
+		// 获取各个注册来源区间统计列表
+		response = solr.query(loginParams);
+		List<Map<String, Object>> list = StatUtils.getFacetRangeList(response.getFacetRanges(),
+				0, 10);
+		
+		System.out.println("list:======="+JSONArray.fromObject(list));
 	}
 }
