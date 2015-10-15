@@ -40,6 +40,22 @@
 						<span class="icon">
 							<i class="icon-signal"></i>
 						</span>
+						<h5>注册身份类型统计</h5>
+					</div>
+					<div class="widget-content">
+						<div id="regType_placeholder" class="chart"></div>
+						<p id="regType_choices" class="choices"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box">
+					<div class="widget-title">
+						<span class="icon">
+							<i class="icon-signal"></i>
+						</span>
 						<h5>登陆渠道统计</h5>
 					</div>
 					<div class="widget-content">
@@ -158,7 +174,7 @@
 		});
 		
 		var datasets = {
-			"TOTAL": {
+			"TOTAL1": {
 				label: "TOTAL",
 				data: total
 			}, 
@@ -233,6 +249,94 @@
 	    plotAccordingToChoices();
 	    
 	});
+	//注册身份类型统计
+	$(function () {
+		var total = new Array();
+		var witkey = new Array();
+		var employer = new Array();
+		var both = new Array();
+		var uncertain = new Array();
+		
+		$.each(${totalReg}, function(i, item) {
+			total.push([gd(item.date),item.count]);
+		});
+		$.each(${witkeyReg}, function(i, item) {
+			witkey.push([gd(item.date),item.count]);
+		});
+		$.each(${employerReg}, function(i, item) {
+			employer.push([gd(item.date),item.count]);
+		});
+		$.each(${bothReg}, function(i, item) {
+			both.push([gd(item.date),item.count]);
+		});
+		$.each(${uncertainReg}, function(i, item) {
+			uncertain.push([gd(item.date),item.count]);
+		});
+		
+		var datasets = {
+			"TOTAL2": {
+				label: "TOTAL",
+				data: total
+			}, 
+			"uncertain": {
+				label: "未确定",
+				data: uncertain
+			},
+			"witkey": {
+				label: "威客",
+				data: witkey
+			}, 
+			"employer": {
+				label: "雇主",
+				data: employer
+			},        
+			"both": {
+				label: "雇主威客",
+				data: both
+			}
+		};
+		
+	    // hard-code color indices to prevent them from shifting as
+	    // countries are turned on/off
+	    var i = 0;
+	    $.each(datasets, function(key, val) {
+	    	val.color = i;
+	    	++i;
+	    });
+	    
+	    // insert checkboxes 
+	    var choiceContainer = $("#regType_choices");
+	    $.each(datasets, function(key, val) {
+	    	choiceContainer.append('<br/><input type="checkbox" name="' + key +
+	    		'" checked="checked" id="id' + key + '">' +
+	    		'<label for="id' + key + '">'
+	    		+ val.label + '</label>');
+	    });
+	    choiceContainer.find("input").click(plotAccordingToChoices);
+	    
+	    function plotAccordingToChoices() {
+	    	var data = [];
+	    	
+	    	choiceContainer.find("input:checked").each(function () {
+	    		var key = $(this).attr("name");
+	    		if (key && datasets[key])
+	    			data.push(datasets[key]);
+	    	});
+	    	if (data.length > 0)
+	    		$.plot($("#regType_placeholder"), data, {
+	    			yaxis: { min: 0 },
+	    			grid: { hoverable: true, clickable: true },
+	    			xaxis:{
+	    				mode: "time",
+	    				timeformat: "%m/%d",
+	    				tickSize: [3, "day"]
+	    			}
+	    		});
+	    }
+	    
+	    plotAccordingToChoices();
+	    
+	});
 	//登陆渠道统计
 	$(function () {
 		var total = new Array();
@@ -270,7 +374,7 @@
 		});
 		
 		var datasets = {
-			"TOTAL": {
+			"TOTAL3": {
 				label: "TOTAL",
 				data: total
 			},  
@@ -381,7 +485,7 @@
 		});
 		
 		var datasets = {
-			"TOTAL": {
+			"TOTAL4": {
 				label: "TOTAL",
 				data: total
 			},  
@@ -492,7 +596,7 @@
 		});
 		
 		var datasets = {
-			"TOTAL": {
+			"TOTAL5": {
 				label: "TOTAL",
 				data: total
 			},  

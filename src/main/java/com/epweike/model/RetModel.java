@@ -16,6 +16,39 @@ public class RetModel {
 	private String msg;
 	private Object obj;
 	
+	public void setInsertFail(Object obj) {
+		this.obj = obj;
+		this.msg = "添加失败！";
+		this.setFlag(false);
+	}
+	
+	public void setDelFucceed() {
+		this.msg = "删除成功！";
+		this.setFlag(true);
+	}
+	
+	public void setDelFail(Object obj) {
+		this.obj = obj;
+		this.msg = "删除失败！";
+		this.setFlag(false);
+	}
+	
+	public void setInsertFucceed() {
+		this.msg = "添加成功！";
+		this.setFlag(true);
+	}
+	
+	public void setUpdateFail(Object obj) {
+		this.obj = obj;
+		this.msg = "保存失败！";
+		this.setFlag(false);
+	}
+	
+	public void setUpdateFucceed() {
+		this.msg = "保存成功！";
+		this.setFlag(true);
+	}
+	
 	/**
 	 * @return the flag
 	 */

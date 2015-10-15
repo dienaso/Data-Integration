@@ -2,6 +2,6 @@
     <!-- 指明满足“/*”的页面，将被“/common/decorators/decorator.jsp”所装饰 -->
     <mapping path="/*" decorator="/WEB-INF/decorators/decorator.jsp" />
     <!-- 指明以下的页面，将被排除，不被装饰 -->
-    <mapping path="/login*" exclude="true" />
+    <mapping path="/login" exclude="true" />
     <mapping path="/common/*" exclude="true"/> 
 </sitemesh>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/users")
 public class UsersController extends BaseController {
 
 	private static final Logger logger = LoggerFactory
@@ -40,58 +42,92 @@ public class UsersController extends BaseController {
 
 	public User user;
 
-	@RequestMapping(value = { "/users/list" })
+	@RequestMapping(value = { "list" })
 	public String list(Model model) {
 		user = (User) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 
 		return "users/list";
 	}
-
-	/**
-	 * @Description:ajax获取系统用户列表
-	 * 
-	 * @author 吴小平
-	 * @version 创建时间：2015年6月10日 下午3:28:27
-	 */
-	@RequestMapping(value = "/users/get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+	
+	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel add(HttpServletRequest request)
 			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取请求参数
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		String enabled = request.getParameter("enabled");
 
-		// 获取查询关键参数
-		String aoData = request.getParameter("aoData");
-		// 解析查询关键参数
-		PageModel<Users> pageModel = parsePageParamFromJson(aoData);
-		// 搜索条件
-		String sSearch = pageModel.getsSearch();
-		// 总条数
-		int total = this.usersService.count(new Users());
-		// 搜索结果集
-		usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
-		pageModel.setiTotalDisplayRecords(total);
-		pageModel.setiTotalRecords(total);
-		pageModel.setAaData(usersList);
+		// 数据校验
+		if ("".equals(username) || username == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("用户名不能为空！");
+			return retModel;
+		}else if ("".equals(password) || password == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("密码不能为空！");
+			return retModel;
+		} else {// 校验用户名是否存在
+			Users users = new Users(username);
+			users = usersService.selectOne(users);
+			if (users != null) {
+				retModel.setFlag(false);
+				retModel.setMsg("用户:'" + username + "'已存在！");
+				return retModel;
+			}
+		}
+		
+		//md5加密
+		password = MD5Utils.getMD5(password, username);
 
-		JSONObject json = JSONObject.fromObject(pageModel);
-		logger.info("获取用户列表！！！" + json);
+		Users users = new Users();
+		users.setUserName(username);
+		users.setPassword(password);;
+		users.setEmail(email);
+		users.setTel(tel);
+		users.setEnabled(Integer.parseInt(enabled));
+		users.setOnTime(new Date());
 
-		return json.toString();
+		if (retModel.isFlag()) {
+			try {
+				// 新增到数据库和计划任务
+				usersService.insert(users);
+				retModel.setInsertFucceed();
+			} catch (Exception e) {
+				e.printStackTrace();
+				retModel.setInsertFail(e);
+				return retModel;
+			}
+		}
+
+		return retModel;
+
 	}
 
-	@RequestMapping(value = "/users/del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public @ResponseBody int del(HttpServletRequest request) throws IOException {
+	@RequestMapping(value = "del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel del(HttpServletRequest request) throws IOException {
 
-		// 获取删除主键
-		String id = request.getParameter("id");
+		//返回结果对象
+        RetModel retModel = new RetModel();
+		// 获取主键
+		int id = Integer.parseInt(request.getParameter("id"));
 
-		System.out.println("--------------------" + id);
+		try {
+			this.usersService.delete(id);
+			retModel.setDelFucceed();
+		} catch (Exception e) {
+			retModel.setDelFail(e);
+			e.printStackTrace();
+		}
 
-		int result = this.usersService.delete(id);
-
-		return result;
+		return retModel;
 	}
 
-	@RequestMapping(value = "/users/changePassword", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "changePassword", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel changePassword(HttpServletRequest request)
 			throws IOException {
 
@@ -134,7 +170,7 @@ public class UsersController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
-				retModel.setMsg("新增失败！");
+				retModel.setMsg("添加失败！");
 				return retModel;
 			}
 		}
@@ -142,4 +178,83 @@ public class UsersController extends BaseController {
 		return retModel;
 	}
 
+	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel update(HttpServletRequest request)
+			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取请求参数
+		int id = Integer.parseInt(request.getParameter("id"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		String enabled = request.getParameter("enabled");
+
+		// 数据校验
+		if ("".equals(username) || username == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("用户名不能为空！");
+			return retModel;
+		}else if ("".equals(password) || password == null) {
+			retModel.setFlag(false);
+			retModel.setMsg("密码不能为空！");
+			return retModel;
+		} 
+		
+		//md5加密
+		password = MD5Utils.getMD5(password, username);
+
+		Users users = new Users();
+		users.setId(id);
+		users.setUserName(username);
+		users.setPassword(password);;
+		users.setEmail(email);
+		users.setTel(tel);
+		users.setEnabled(Integer.parseInt(enabled));
+
+		if (retModel.isFlag()) {
+			try {
+				// 更新数据库和计划任务
+				usersService.update(users);
+				retModel.setUpdateFucceed();
+			} catch (Exception e) {
+				e.printStackTrace();
+				retModel.setUpdateFail(e);
+				return retModel;
+			}
+		}
+
+		return retModel;
+	}
+
+	/**
+	 * @Description:ajax获取系统用户列表
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = "get", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+			throws IOException {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		// 解析查询关键参数
+		PageModel<Users> pageModel = parsePageParamFromJson(aoData);
+		// 搜索条件
+		String sSearch = pageModel.getsSearch();
+		// 总条数
+		int total = this.usersService.count(new Users());
+		// 搜索结果集
+		usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
+		pageModel.setiTotalDisplayRecords(total);
+		pageModel.setiTotalRecords(total);
+		pageModel.setAaData(usersList);
+
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取用户列表！！！" + json);
+
+		return json.toString();
+	}
 }

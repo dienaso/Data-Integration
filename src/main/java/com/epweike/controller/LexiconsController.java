@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,8 @@ public class LexiconsController extends BaseController {
 	public String list(Model model) {
 		return "lexicon/list";
 	}
-
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel add(HttpServletRequest request)
 			throws IOException {
@@ -66,32 +68,24 @@ public class LexiconsController extends BaseController {
 			}
 		}
 
-		if (retModel.isFlag()) {
-			try {
-				Lexicons lexicons = new Lexicons();
-				lexicons.setWord(word);
-				lexicons.setPinyin(pinyin);
-				lexicons.setPos(pos);
-				lexicons.setSynonym(synonym);
-				// 更新数据库
-				int result = lexiconService.insert(lexicons);
-				if(result > 0){
-					retModel.setMsg("新增成功！");
-				}else {
-					retModel.setFlag(false);
-					retModel.setMsg("新增失败！");
-					return retModel;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				retModel.setFlag(false);
-				retModel.setMsg("新增失败！");
-				return retModel;
-			}
+		try {
+			Lexicons lexicons = new Lexicons();
+			lexicons.setWord(word);
+			lexicons.setPinyin(pinyin);
+			lexicons.setPos(pos);
+			lexicons.setSynonym(synonym);
+			// 更新数据库
+			lexiconService.insert(lexicons);
+			retModel.setInsertFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setInsertFail(e);
+			return retModel;
 		}
 		return retModel;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel RetModel(HttpServletRequest request)
 			throws IOException {
@@ -102,17 +96,16 @@ public class LexiconsController extends BaseController {
 
 		try {
 			this.lexiconService.delete(id);
-			retModel.setMsg("删除成功！");
+			retModel.setDelFucceed();
 		} catch (Exception e) {
-			retModel.setFlag(false);
-			retModel.setMsg("删除失败！");
-			retModel.setObj(e);
+			retModel.setDelFail(e);
 			e.printStackTrace();
 		}
 
 		return retModel;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel update(HttpServletRequest request)
 			throws IOException {
@@ -132,7 +125,6 @@ public class LexiconsController extends BaseController {
 		} else {// 校验词条是否存在
 			Lexicons lexicons = new Lexicons(word);
 			lexicons = lexiconService.selectOne(lexicons);
-			System.out.println("lexicons------------------" + lexicons);
 			if (lexicons != null && lexicons.getId() != id) {
 				retModel.setFlag(false);
 				retModel.setMsg("词条:'" + word + "'已存在！");
@@ -140,29 +132,20 @@ public class LexiconsController extends BaseController {
 			}
 		}
 
-		if (retModel.isFlag()) {
-			try {
-				Lexicons lexicons = new Lexicons();
-				lexicons.setId(id);
-				lexicons.setWord(word);
-				lexicons.setPinyin(pinyin);
-				lexicons.setPos(pos);
-				lexicons.setSynonym(synonym);
-				// 更新数据库
-				int result = lexiconService.update(lexicons);
-				if(result > 0){
-					retModel.setMsg("修改成功！");
-				}else {
-					retModel.setFlag(false);
-					retModel.setMsg("修改失败！");
-					return retModel;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				retModel.setFlag(false);
-				retModel.setMsg("修改失败！");
-				return retModel;
-			}
+		try {
+			Lexicons lexicons = new Lexicons();
+			lexicons.setId(id);
+			lexicons.setWord(word);
+			lexicons.setPinyin(pinyin);
+			lexicons.setPos(pos);
+			lexicons.setSynonym(synonym);
+			// 更新数据库
+			lexiconService.update(lexicons);
+			retModel.setUpdateFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setUpdateFail(e);
+			return retModel;
 		}
 		return retModel;
 	}
@@ -193,28 +176,5 @@ public class LexiconsController extends BaseController {
 
 		return json.toString();
 	}
-
-	// @RequestMapping(value = "/lexicon/get", method = RequestMethod.GET,
-	// produces = "application/json;charset=UTF-8")
-	// public @ResponseBody String paginationDataTables(HttpServletRequest
-	// request) throws IOException {
-	//
-	// //当前页数
-	// String page = request.getParameter("page");
-	// logger.info("获取page！！！"+page);
-	// //显示条数
-	// String rows = request.getParameter("rows");
-	// logger.info("获取rows！！！"+rows);
-	// //总条数
-	// int total = this.lexiconService.count(new Lexicons());
-	//
-	// //搜索结果集
-	// lexiconList = this.lexiconService.select(new Lexicons());
-	//
-	// JSONObject json = JSONObject.fromObject(lexiconList);
-	// logger.info("获取词语列表！！！"+json);
-	//
-	// return json.toString();
-	// }
 
 }

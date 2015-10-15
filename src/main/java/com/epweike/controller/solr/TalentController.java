@@ -369,7 +369,7 @@ public class TalentController extends BaseController {
 		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end
 				+ "]");
 		params.setFacet(true);
-		params.addFacetPivotField("reg_date,user_type,come").setFacetLimit(
+		params.addFacetPivotField("reg_date,user_role,come").setFacetLimit(
 				Integer.MAX_VALUE);
 		// if (!come.equals("全部"))
 		// params.addFilterQuery("come:" + come);
@@ -398,7 +398,10 @@ public class TalentController extends BaseController {
 								String value = field.getValue().toString();
 								System.out.println("field=" + field.getField());
 								String tmp = "";
-								if ("1".equals(value)) {// 威客
+								if ("0".equals(value)) {// 未确定
+									tmp = "uncertain";
+								}
+								else if ("1".equals(value)) {// 威客
 									tmp = "witkey";
 								} else if ("2".equals(value)) {// 雇主
 									tmp = "employer";

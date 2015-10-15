@@ -28,7 +28,9 @@ public class Users extends BaseModel<Users> {
      * 即登陆账号
      */
     @Id
-    @Column(name = "username")
+    private Integer id;
+    
+	@Column(name = "username")
     private String userName;
 
     private String password;
@@ -37,6 +39,20 @@ public class Users extends BaseModel<Users> {
 
     private String tel;
 
+    /**
+   	 * @return the id
+   	 */
+   	public Integer getId() {
+   		return id;
+   	}
+
+   	/**
+   	 * @param id the id to set
+   	 */
+   	public void setId(Integer id) {
+   		this.id = id;
+   	}
+    
     /**
      * 1:正常 0:禁用
      */

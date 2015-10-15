@@ -71,7 +71,7 @@ public class SysconfigController extends BaseController {
 		String description = request.getParameter("description");
 
 		// 数据校验
-		if ("".equals(varName) || "null".equals(varName)) {
+		if ("".equals(varName) || varName == null) {
 			retModel.setFlag(false);
 			retModel.setMsg("参数名不能为空！");
 			return retModel;
@@ -92,18 +92,14 @@ public class SysconfigController extends BaseController {
 		sysconfig.setDescription(description);
 		sysconfig.setOnTime(new Date());
 
-		if (retModel.isFlag()) {
-			try {
-				// 新增到数据库和计划任务
-				sysconfigService.insert(sysconfig);
-				retModel.setMsg("新增成功！");
-			} catch (Exception e) {
-				e.printStackTrace();
-				retModel.setFlag(false);
-				retModel.setObj(e);
-				retModel.setMsg("新增失败！");
-				return retModel;
-			}
+		try {
+			// 添加到数据库
+			sysconfigService.insert(sysconfig);
+			retModel.setInsertFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setInsertFail(e);
+			return retModel;
 		}
 
 		return retModel;
@@ -122,11 +118,9 @@ public class SysconfigController extends BaseController {
 			sysconfigService.delete(id);
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
-			retModel.setMsg("删除成功！");
+			retModel.setDelFucceed();
 		} catch (Exception e) {
-			retModel.setFlag(false);
-			retModel.setObj(e);
-			retModel.setMsg("删除失败！");
+			retModel.setDelFail(e);
 			e.printStackTrace();
 		}
 
@@ -144,11 +138,9 @@ public class SysconfigController extends BaseController {
 		String varValue = request.getParameter("varValue");
 		String varGroup = request.getParameter("varGroup");
 		String description = request.getParameter("description");
-		System.out.println("---------------------------"+varName);
-		System.out.println("---------------------------"+varValue);
 
 		// 数据校验
-		if ("".equals(varName) || "null".equals(varName)) {
+		if ("".equals(varName) || varName == null) {
 			retModel.setFlag(false);
 			retModel.setMsg("参数名不能为空！");
 			return retModel;
@@ -169,20 +161,16 @@ public class SysconfigController extends BaseController {
 		sysconfig.setVarGroup(varGroup);
 		sysconfig.setDescription(description);
 
-		if (retModel.isFlag()) {
-			try {
-				// 更新数据库和计划任务
-				sysconfigService.update(sysconfig);
-				// 清空系统参数
-				SysconfigUtils.sysconfigMap = null;
-				retModel.setMsg("修改成功！");
-			} catch (Exception e) {
-				e.printStackTrace();
-				retModel.setFlag(false);
-				retModel.setObj(e);
-				retModel.setMsg("保存失败！");
-				return retModel;
-			}
+		try {
+			// 更新数据库和计划任务
+			sysconfigService.update(sysconfig);
+			// 清空系统参数
+			SysconfigUtils.sysconfigMap = null;
+			retModel.setUpdateFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setUpdateFail(e);
+			return retModel;
 		}
 
 		return retModel;

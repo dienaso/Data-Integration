@@ -27,9 +27,9 @@ import org.springframework.stereotype.Controller;
 public class IndexController extends BaseController {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(IndexController.class);	
+			.getLogger(IndexController.class);
 
-	public Map<String, Object> getIndexDataModel() throws Exception {       
+	public Map<String, Object> getIndexDataModel() throws Exception {
 
 		Date end = new Date();// 结束时间
 		Date start = DateUtils.addDays(end, -31);// 开始时间(31天前)
@@ -39,13 +39,13 @@ public class IndexController extends BaseController {
 		 * --------------------------------------------------------------
 		 * 用户注册渠道统计
 		 * --------------------------------------------------------------
-		 * */
+		 */
 		SolrServer solr1 = SolrUtils.getSolrServer("talent");
-		
+
 		// TOTAL
 		SolrQuery regParams = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet("reg_time_date", start, end, statType);
-				
+
 		// WEB
 		SolrQuery regParams1 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("come:WEB")
@@ -104,52 +104,91 @@ public class IndexController extends BaseController {
 
 		/*
 		 * --------------------------------------------------------------
+		 * 用户注册身份类型统计
+		 * --------------------------------------------------------------
+		 */
+		SolrServer solr5 = SolrUtils.getSolrServer("talent");
+
+		// 威客
+		SolrQuery regParams8 = new SolrQuery("*:*").setFacet(true)
+				.addFilterQuery("user_role:1")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		// 威客
+		SolrQuery regParams9 = new SolrQuery("*:*").setFacet(true)
+				.addFilterQuery("user_role:2")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		// 威客、雇主
+		SolrQuery regParams10 = new SolrQuery("*:*").setFacet(true)
+				.addFilterQuery("user_role:3")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+		// 未确定
+		SolrQuery regParams11 = new SolrQuery("*:*").setFacet(true)
+				.addFilterQuery("user_role:0")
+				.addDateRangeFacet("reg_time_date", start, end, statType);
+
+		QueryResponse response5 = null;
+		// 获取各个注册来源区间统计列表
+		response5 = solr5.query(regParams8);
+		List<Map<String, Object>> regList8 = StatUtils.getFacetRangeList(
+				response5.getFacetRanges(), 4, 10);
+		response5 = solr5.query(regParams9);
+		List<Map<String, Object>> regList9 = StatUtils.getFacetRangeList(
+				response5.getFacetRanges(), 4, 10);
+		response5 = solr5.query(regParams10);
+		List<Map<String, Object>> regList10 = StatUtils.getFacetRangeList(
+				response5.getFacetRanges(), 4, 10);
+		response5 = solr5.query(regParams11);
+		List<Map<String, Object>> regList11 = StatUtils.getFacetRangeList(
+				response5.getFacetRanges(), 4, 10);
+
+		/*
+		 * --------------------------------------------------------------
 		 * 用户登陆渠道统计
 		 * --------------------------------------------------------------
-		 * */
+		 */
 		SolrServer solr2 = SolrUtils.getSolrServer("login");
-		
+
 		// TOTAL
 		SolrQuery loginParams = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams.setParam(GroupParams.GROUP_FACET, true);
+		loginParams.setParam(GroupParams.GROUP_FIELD, "uid");
 		// WEB
 		SolrQuery loginParams1 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams1.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams1.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams1.setParam(GroupParams.GROUP_FACET, true);
+		loginParams1.setParam(GroupParams.GROUP_FIELD, "uid");
 		// APP
 		SolrQuery loginParams2 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:app")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams2.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams2.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams2.setParam(GroupParams.GROUP_FACET, true);
+		loginParams2.setParam(GroupParams.GROUP_FIELD, "uid");
 		// WAP
 		SolrQuery loginParams3 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:wap")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams3.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams3.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams3.setParam(GroupParams.GROUP_FACET, true);
+		loginParams3.setParam(GroupParams.GROUP_FIELD, "uid");
 		// WEB_QQ
 		SolrQuery loginParams4 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web_qq")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams4.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams4.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams4.setParam(GroupParams.GROUP_FACET, true);
+		loginParams4.setParam(GroupParams.GROUP_FIELD, "uid");
 		// APP_QZone
 		SolrQuery loginParams5 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:app_QZone")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams5.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams5.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams5.setParam(GroupParams.GROUP_FACET, true);
+		loginParams5.setParam(GroupParams.GROUP_FIELD, "uid");
 		// WEB_SINA
 		SolrQuery loginParams6 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("login_type:web_sina")
 				.addDateRangeFacet("on_time", start, end, statType);
-		loginParams6.setParam(GroupParams.GROUP_FACET, true);  
-		loginParams6.setParam(GroupParams.GROUP_FIELD, "uid");  
+		loginParams6.setParam(GroupParams.GROUP_FACET, true);
+		loginParams6.setParam(GroupParams.GROUP_FIELD, "uid");
 		// OTHER
 		SolrQuery loginParams7 = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("NOT login_type:web_sina")
@@ -186,14 +225,14 @@ public class IndexController extends BaseController {
 		response2 = solr2.query(loginParams7);
 		List<Map<String, Object>> loginList7 = StatUtils.getFacetRangeList(
 				response2.getFacetRanges(), 4, 10);
-		
+
 		/*
 		 * --------------------------------------------------------------
 		 * 任务发布数统计
 		 * --------------------------------------------------------------
-		 * */
+		 */
 		SolrServer solr3 = SolrUtils.getSolrServer("task");
-		
+
 		// TOTAL
 		SolrQuery taskPubParams = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet("pub_time_date", start, end, statType);
@@ -211,8 +250,8 @@ public class IndexController extends BaseController {
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 招标
 		SolrQuery taskPubParams4 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:{* TO 2}")
+				.addFilterQuery("model_id:4")
+				.addFilterQuery("task_type:{* TO 2}")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 雇佣
 		SolrQuery taskPubParams5 = new SolrQuery("*:*").setFacet(true)
@@ -222,13 +261,11 @@ public class IndexController extends BaseController {
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 服务
 		SolrQuery taskPubParams6 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:2")
+				.addFilterQuery("model_id:4").addFilterQuery("task_type:2")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 直接雇佣
 		SolrQuery taskPubParams7 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:3")
+				.addFilterQuery("model_id:4").addFilterQuery("task_type:3")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 
 		QueryResponse response3 = null;
@@ -257,57 +294,50 @@ public class IndexController extends BaseController {
 		response3 = solr3.query(taskPubParams7);
 		List<Map<String, Object>> taskPubList7 = StatUtils.getFacetRangeList(
 				response3.getFacetRanges(), 0, 10);
-		
+
 		/*
 		 * --------------------------------------------------------------
 		 * 任务已圆满完成统计
 		 * --------------------------------------------------------------
-		 * */
+		 */
 		SolrServer solr4 = SolrUtils.getSolrServer("task");
-		
+
 		// TOTAL
 		SolrQuery taskDoneParams = new SolrQuery("*:*").setFacet(true)
 				.addFilterQuery("task_status:8")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 单赏
 		SolrQuery taskDoneParams1 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:1")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:1")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 多赏
 		SolrQuery taskDoneParams2 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:2")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:2")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 计件
 		SolrQuery taskDoneParams3 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:3")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:3")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 招标
 		SolrQuery taskDoneParams4 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:{* TO 2}")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:4")
+				.addFilterQuery("task_type:{* TO 2}")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 雇佣
 		SolrQuery taskDoneParams5 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:4")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:4")
 				.addFilterQuery("task_type:{* TO 2}")
 				.addFilterQuery("task_cash_coverage:0")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 服务
 		SolrQuery taskDoneParams6 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:2")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:4")
+				.addFilterQuery("task_type:2")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 		// 直接雇佣
 		SolrQuery taskDoneParams7 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("task_status:8")
-				.addFilterQuery("model_id:4").addFilterQuery(
-						"task_type:3")
+				.addFilterQuery("task_status:8").addFilterQuery("model_id:4")
+				.addFilterQuery("task_type:3")
 				.addDateRangeFacet("pub_time_date", start, end, statType);
 
 		QueryResponse response4 = null;
@@ -340,22 +370,26 @@ public class IndexController extends BaseController {
 		 * --------------------------------------------------------------
 		 * 用户能力品级统计
 		 * --------------------------------------------------------------
-		 * */
-		SolrQuery wParams = new SolrQuery("*:*").setFacet(true).addFacetField("w_level");
-		QueryResponse wResponse = SolrUtils.getSolrServer("talent").query(wParams);
-		List<FacetField> wFacetFields = wResponse.getFacetFields(); 
+		 */
+		SolrQuery wParams = new SolrQuery("*:*").setFacet(true).addFacetField(
+				"w_level");
+		QueryResponse wResponse = SolrUtils.getSolrServer("talent").query(
+				wParams);
+		List<FacetField> wFacetFields = wResponse.getFacetFields();
 		/*
 		 * --------------------------------------------------------------
 		 * 用户商铺等级统计
 		 * --------------------------------------------------------------
-		 * */
-		SolrQuery sParams = new SolrQuery("*:*").setFacet(true).addFacetField("shop_level");
-		QueryResponse sResponse = SolrUtils.getSolrServer("talent").query(sParams);
-		List<FacetField> sFacetFields = sResponse.getFacetFields(); 
+		 */
+		SolrQuery sParams = new SolrQuery("*:*").setFacet(true).addFacetField(
+				"shop_level");
+		QueryResponse sResponse = SolrUtils.getSolrServer("talent").query(
+				sParams);
+		List<FacetField> sFacetFields = sResponse.getFacetFields();
 
 		// 返回结果
 		Map<String, Object> map = new HashMap<String, Object>();
-		//用户注册渠道统计
+		// 用户注册渠道统计
 		map.put("totalReg", JSONArray.fromObject(regList).toString());
 		map.put("webReg", JSONArray.fromObject(regList1).toString());
 		map.put("cpmReg", JSONArray.fromObject(regList2).toString());
@@ -364,7 +398,12 @@ public class IndexController extends BaseController {
 		map.put("mallReg", JSONArray.fromObject(regList5).toString());
 		map.put("backgroundReg", JSONArray.fromObject(regList6).toString());
 		map.put("yunReg", JSONArray.fromObject(regList7).toString());
-		//用户登陆渠道统计
+		// 用户注册身份类型统计
+		map.put("witkeyReg", JSONArray.fromObject(regList8).toString());
+		map.put("employerReg", JSONArray.fromObject(regList9).toString());
+		map.put("bothReg", JSONArray.fromObject(regList10).toString());
+		map.put("uncertainReg", JSONArray.fromObject(regList11).toString());
+		// 用户登陆渠道统计
 		map.put("totalLogin", JSONArray.fromObject(loginList).toString());
 		map.put("webLogin", JSONArray.fromObject(loginList1).toString());
 		map.put("appLogin", JSONArray.fromObject(loginList2).toString());
@@ -373,46 +412,56 @@ public class IndexController extends BaseController {
 		map.put("appqzoneLogin", JSONArray.fromObject(loginList5).toString());
 		map.put("websinaLogin", JSONArray.fromObject(loginList6).toString());
 		map.put("otherLogin", JSONArray.fromObject(loginList7).toString());
-		//任务发布统计
+		// 任务发布统计
 		map.put("totaltaskPub", JSONArray.fromObject(taskPubList).toString());
-		map.put("danshangtaskPub", JSONArray.fromObject(taskPubList1).toString());
-		map.put("duoshangtaskPub", JSONArray.fromObject(taskPubList2).toString());
+		map.put("danshangtaskPub", JSONArray.fromObject(taskPubList1)
+				.toString());
+		map.put("duoshangtaskPub", JSONArray.fromObject(taskPubList2)
+				.toString());
 		map.put("jijiantaskPub", JSONArray.fromObject(taskPubList3).toString());
-		map.put("zhaobiaotaskPub", JSONArray.fromObject(taskPubList4).toString());
+		map.put("zhaobiaotaskPub", JSONArray.fromObject(taskPubList4)
+				.toString());
 		map.put("guyongtaskPub", JSONArray.fromObject(taskPubList5).toString());
 		map.put("fuwutaskPub", JSONArray.fromObject(taskPubList6).toString());
-		map.put("zhijieguyongtaskPub", JSONArray.fromObject(taskPubList7).toString());
-		//任务托管赏金统计
+		map.put("zhijieguyongtaskPub", JSONArray.fromObject(taskPubList7)
+				.toString());
+		// 任务托管赏金统计
 		map.put("totaltaskDone", JSONArray.fromObject(taskDoneList).toString());
-		map.put("danshangtaskDone", JSONArray.fromObject(taskDoneList1).toString());
-		map.put("duoshangtaskDone", JSONArray.fromObject(taskDoneList2).toString());
-		map.put("jijiantaskDone", JSONArray.fromObject(taskDoneList3).toString());
-		map.put("zhaobiaotaskDone", JSONArray.fromObject(taskDoneList4).toString());
-		map.put("guyongtaskDone", JSONArray.fromObject(taskDoneList5).toString());
+		map.put("danshangtaskDone", JSONArray.fromObject(taskDoneList1)
+				.toString());
+		map.put("duoshangtaskDone", JSONArray.fromObject(taskDoneList2)
+				.toString());
+		map.put("jijiantaskDone", JSONArray.fromObject(taskDoneList3)
+				.toString());
+		map.put("zhaobiaotaskDone", JSONArray.fromObject(taskDoneList4)
+				.toString());
+		map.put("guyongtaskDone", JSONArray.fromObject(taskDoneList5)
+				.toString());
 		map.put("fuwutaskDone", JSONArray.fromObject(taskDoneList6).toString());
-		map.put("zhijieguyongtaskDone", JSONArray.fromObject(taskDoneList7).toString());
-		//用户能力品级柱形图数据
+		map.put("zhijieguyongtaskDone", JSONArray.fromObject(taskDoneList7)
+				.toString());
+		// 用户能力品级柱形图数据
 		map.put("wlevel", StatUtils.barJson(wFacetFields));
-		//用户商铺等级柱形图数据
+		// 用户商铺等级柱形图数据
 		map.put("slevel", StatUtils.barJson(sFacetFields));
 
-		logger.info("getIndexDataModel="+map);
+		logger.info("getIndexDataModel=" + map);
 		return map;
 	}
-	
-//	@RequestMapping(value = { "/" })
-//	public ModelAndView index() throws Exception {       
-//
-//		// 返回视图
-//		ModelAndView mv = new ModelAndView("/html/home.html");
-////		Map<String, Object> map = getIndexDataModel();
-////		for (String key : map.keySet()) {
-////			System.out.println("key= "+ key + " and value= " + map.get(key));
-////			mv.addObject(key, map.get(key));
-////	    }
-//
-//		logger.info("进入主页！！！");
-//		return mv;
-//	}
+
+	// @RequestMapping(value = { "/" })
+	// public ModelAndView index() throws Exception {
+	//
+	// // 返回视图
+	// ModelAndView mv = new ModelAndView("/html/home.html");
+	// // Map<String, Object> map = getIndexDataModel();
+	// // for (String key : map.keySet()) {
+	// // System.out.println("key= "+ key + " and value= " + map.get(key));
+	// // mv.addObject(key, map.get(key));
+	// // }
+	//
+	// logger.info("进入主页！！！");
+	// return mv;
+	// }
 
 }

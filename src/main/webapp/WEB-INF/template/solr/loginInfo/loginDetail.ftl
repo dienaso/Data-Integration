@@ -134,7 +134,7 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": true,
-	        "sAjaxSource": '/login/loginDetail/get', 
+	        "sAjaxSource": '/loginInfo/loginDetail/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "uid"},
@@ -142,7 +142,13 @@
 		        	{ "mData": "login_type"},
 		        	{ "mData": "ip"},
 		        	{ "mData": "city"},
-		        	{ "mData": "on_time_str"}
+		        	{ "mData": "on_time_str",
+		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
+	        		  	return data.substr(0, data.length-2);
+	                  }
+		        	}
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );

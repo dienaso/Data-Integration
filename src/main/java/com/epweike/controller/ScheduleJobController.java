@@ -70,7 +70,6 @@ public class ScheduleJobController extends BaseController {
 		try {
 			if (StringUtils.isNotBlank(job.getSpringId())) {
 				obj = SpringUtils.getBean(job.getSpringId());
-				System.out.println("---------------------spring---------------------");
 			} else {
 				Class<?> clazz = Class.forName(job.getBeanClass());
 				obj = clazz.newInstance();
@@ -127,24 +126,17 @@ public class ScheduleJobController extends BaseController {
     	//校验计划任务
     	retModel = checkJob(job, retModel);
     	
-    	if(retModel.isFlag()){
-    		try {
-    			//新增到数据库和计划任务
-    			int result = quartzService.addTaskJob(job);
-    			if(result > 0){
-					retModel.setMsg("新增成功！");
-				}else {
-					retModel.setFlag(false);
-					retModel.setMsg("新增失败！");
-					return retModel;
-				}
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    			retModel.setFlag(false);
-    			retModel.setMsg("新增失败，检查 name group 组合是否有重复！");
-    			return retModel;
-    		}
-    	}
+		try {
+			//添加到数据库和计划任务
+			quartzService.addTaskJob(job);
+			retModel.setInsertFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setFlag(false);
+			retModel.setObj(e);
+			retModel.setMsg("添加失败，检查 name group 组合是否有重复！");
+			return retModel;
+		}
 
 		return retModel;
     	
@@ -159,11 +151,9 @@ public class ScheduleJobController extends BaseController {
     	
 		try {
 			quartzService.deleteTaskJob(id);
-			retModel.setMsg("删除成功！");
+			retModel.setDelFucceed();
 		} catch (Exception e) {
-			retModel.setFlag(false);
-			retModel.setMsg("删除失败！");
-			retModel.setObj(e);
+			retModel.setDelFail(e);
 			e.printStackTrace();
 		}
 	
@@ -201,24 +191,16 @@ public class ScheduleJobController extends BaseController {
     	//校验计划任务
     	retModel = checkJob(job, retModel);
     	
-    	if(retModel.isFlag()){
-			try {
-				//更新数据库和计划任务
-				int result = quartzService.updateTaskJob(job);
-				if(result > 0){
-					retModel.setMsg("修改成功！");
-				}else {
-					retModel.setFlag(false);
-					retModel.setMsg("修改失败！");
-					return retModel;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				retModel.setFlag(false);
-				retModel.setMsg("保存失败，检查 name group 组合是否有重复！");
-				return retModel;
-			}
-    	}
+		try {
+			//更新数据库和计划任务
+			quartzService.updateTaskJob(job);
+			retModel.setUpdateFucceed();
+		} catch (Exception e) {
+			e.printStackTrace();
+			retModel.setFlag(false);
+			retModel.setMsg("保存失败，检查 name group 组合是否有重复！");
+			return retModel;
+		}
 
     	return retModel;
     	

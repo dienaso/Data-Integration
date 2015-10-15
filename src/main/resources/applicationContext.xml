@@ -30,7 +30,7 @@
        http://www.springframework.org/schema/mvc
 	   http://www.springframework.org/schema/mvc/spring-mvc.xsd
        ">
-	<context:component-scan base-package="com.epweike.service"/>
+	
 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
@@ -111,9 +111,9 @@
 
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="select*" read-only="true" />
-			<tx:method name="find*" read-only="true" />
-			<tx:method name="get*" read-only="true" />
+			<tx:method name="add*" read-only="true" />
+			<tx:method name="del*" read-only="true" />
+			<tx:method name="update*" read-only="true" />
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
@@ -142,5 +142,7 @@
 		<aop:advisor advice-ref="druid-stat-interceptor"
 			pointcut-ref="druid-stat-pointcut" />
 	</aop:config>
-
+	<context:annotation-config />
+	<context:component-scan base-package="com.epweike.service"/>
+	<context:component-scan base-package="com.epweike.security"/>
 </beans>

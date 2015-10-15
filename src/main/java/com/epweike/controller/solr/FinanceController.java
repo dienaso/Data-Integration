@@ -304,20 +304,11 @@ public class FinanceController extends BaseController {
 		return json.toString();
 	}
 
-	@RequestMapping(value = { "stat/date" })
-	public ModelAndView financeStatByDate() throws SolrServerException,
-			IOException {
-		// 返回视图
-		ModelAndView mv = new ModelAndView("finance/finance_date");
-		logger.info("进入接单统计(按时间)！！！");
-		return mv;
-	}
-
 	@RequestMapping(value = { "stat/user" })
 	public ModelAndView financeStatByUser() throws SolrServerException,
 			IOException {
 		// 返回视图
-		ModelAndView mv = new ModelAndView("finance/finance_user");
+		ModelAndView mv = new ModelAndView("solr/finance/finance_user");
 		logger.info("进入接单统计(按威客)！！！");
 		return mv;
 	}
