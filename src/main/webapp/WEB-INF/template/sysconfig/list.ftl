@@ -170,7 +170,6 @@
      * 添加数据
      **/
     function add() {
-    	clear();
         var addJson = {
         	"id": $("#id").val(),
             "varName": $("#varName").val(),

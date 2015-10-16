@@ -260,7 +260,6 @@
      * 添加数据
      **/
     function add() {
-    	clear();
     	var isConcurrent;
         var jobStatus;
         //遍历选中单选框

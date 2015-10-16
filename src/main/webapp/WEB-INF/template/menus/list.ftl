@@ -37,17 +37,6 @@
 		</div>
 	</div>
 
-	<script src="/common/matrix/js/jquery.dataTables.js"></script>
-	<!--
-<script src="/common/matrix/js/dataTables.tableTools.js"></script>
-<script src="/common/matrix/js/dataTables.editor.js"></script>
-<script src="/common/matrix/js/dataTables.bootstrap.js"></script>
-<script src="/common/matrix/js/editor.bootstrap.js"></script>
--->
-<script src="/common/matrix/js/jquery.ui.custom.js"></script>
-<script src="/common/matrix/js/jquery.uniform.js"></script>
-<script src="/common/matrix/js/select2.min.js"></script>
-<script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(function () {
 

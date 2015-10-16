@@ -189,7 +189,6 @@
 	     * 添加数据
 	     **/
 	    function add() {
-	    	clear();
 	    	var enabled;
 	        //遍历选中单选框
 	        $(".checked").each(function(){
