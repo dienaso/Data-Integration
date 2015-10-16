@@ -260,6 +260,7 @@
      * 添加数据
      **/
     function add() {
+    	clear();
     	var isConcurrent;
         var jobStatus;
         //遍历选中单选框
@@ -329,16 +330,6 @@
                 "beanClass": obj.beanClass,
                 "isConcurrent": obj.isConcurrent,
                 "description": obj.description
-            }, success: function (data) {
-                table.ajax.reload();
-                $("#myModal").modal("hide");
-                $("#myModalLabel").text("添加");
-                clear();
-                $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
             }
         });
     }
@@ -354,13 +345,6 @@
             "type": "get",
             "data": {
 	            "id": id
-	         }, success: function (data) {
-	            table.ajax.reload();
-	            $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
 	         }
         });
     }
@@ -375,13 +359,6 @@
             "type": "get",
             "data": {
 	            "id": id
-	         }, success: function (data) {
-	            table.ajax.reload();
-	            $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
 	         }
         });
     }

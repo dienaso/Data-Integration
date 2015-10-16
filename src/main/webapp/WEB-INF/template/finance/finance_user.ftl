@@ -191,10 +191,6 @@
 				});
 			}
 		});
-		<!--search-->
-		$('#search-btn').on( 'click', function () {
-		    table.ajax.reload();
-		} );
 	} );
 	
 	</script>

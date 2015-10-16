@@ -170,6 +170,7 @@
      * 添加数据
      **/
     function add() {
+    	clear();
         var addJson = {
         	"id": $("#id").val(),
             "varName": $("#varName").val(),
@@ -214,16 +215,6 @@
                 "varValue": obj.varValue,
                 "varGroup": obj.varGroup,
                 "description": obj.description
-            }, success: function (data) {
-                table.ajax.reload();
-                $("#myModal").modal("hide");
-                $("#myModalLabel").text("添加");
-                clear();
-                $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
             }
         });
     }
@@ -239,13 +230,6 @@
             "type": "get",
             "data": {
 	            "id": id
-	         }, success: function (data) {
-	            table.ajax.reload();
-	            $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
 	         }
         });
     }

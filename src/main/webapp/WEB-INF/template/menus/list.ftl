@@ -91,22 +91,6 @@ $(function () {
 		
 } );
 
-
-$(".delete1").live('click', function() {
-  var id = $(this).attr('tag');
-  alert(id);
-  $.ajax({    
-        type:'post',        
-        url:'/lexicon/del',    
-        data:'id='+id,    
-        cache:false,    
-        dataType:'json',    
-        success:function(data){   
-        	location.reload();
-        }    
-    });    
-});
-
 </script>
 </body>
 </html>

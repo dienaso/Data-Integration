@@ -164,6 +164,7 @@
      * 添加数据
      **/
     function add() {
+    	clear();
         var addJson = {
         	"id": $("#id").val(),
             "word": $("#word").val(),

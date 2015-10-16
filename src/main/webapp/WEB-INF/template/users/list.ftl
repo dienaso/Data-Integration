@@ -100,186 +100,170 @@
 	    {{/each}}
 	</script>
 	<script type="text/javascript">
-	var tpl = $("#tpl").html();
-    //预编译模板
-    var template = Handlebars.compile(tpl);
-    var editFlag = false;
-	var table;
-
-    table = $("#list").DataTable({
-		"bServerSide" : true,
-		"bDestroy": true,
-		"bStateSave": true,
-		"bFilter": false,
-        "sAjaxSource": '/users/get', 
-        "aoColumns":
-           [  
-	        	{ "mData": "userName"},
-	        	{ "mData": "tel"},
-	        	{ "mData": "email"},
-	        	{ "mData": "enabled",
-	        	  "mRender": function (data, type) {
-            		 if(data == 1){
-                         return "正常" 
-                      }else{
-                         return "禁用"
-                      }
-                  }
-	        	},
-	        	{ "mData": "onTime",
-	        	  "mRender": function (data, type) {
-	        	  	if(data == null)
-	        	  		return null;
-        		  	return formatDateTime(data.time);
-                  }
-	        	},
-        	],
-        "columnDefs": [
-	                {
-	                    targets: 5,
-	                    render: function (a, b, c, d) {
-	                        var context =
-	                        {
-	                            func: [
-	                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\',\'" + c.email + "\',\'" + c.tel + "\')", "type": "primary"},
-	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
-	                            ]
-	                        };
-	                        var html = template(context);
-	                        return html;
-	                    }
-	                }
-	 
-	            ],
-        initComplete: function () {
-            $("#mytool").append('<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">添加</button>');
-			$("#mytool").on("click", clear);
-			$("#save").click(add);
-		},
-        "fnServerData" : function(sSource, aoData, fnCallback) {
-			$.ajax({
-				"type" : "post",
-				"url" : sSource,
-				"dataType" : "json",
-				"data" : {
-					aoData : JSON.stringify(aoData)
-				},
-				"success" : function(resp) {
-					fnCallback(resp);
-				}
-			});
-		}
-	});
-
-	 /**
-     * 清除
-     */
-    function clear() {
-    	editFlag = false;
-    	$("#myModalLabel").text("添加");
-    	$("#id").val("");
-        $("#username").val("");
-        $("#password").val("");
-        $("#email").val("");
-        $("#tel").val("");
-        $(".checked").removeClass("checked");
-    }
- 
-    /**
-     * 添加数据
-     **/
-    function add() {
-    	var enabled;
-        //遍历选中单选框
-        $(".checked").each(function(){
-        	if($(this).children().attr("name") == "enabled") {
-        		enabled = $(this).children().val();
-        	} 
+		var tpl = $("#tpl").html();
+	    //预编译模板
+	    var template = Handlebars.compile(tpl);
+	    var editFlag = false;
+		var table;
+	
+	    table = $("#list").DataTable({
+			"bServerSide" : true,
+			"bDestroy": true,
+			"bStateSave": true,
+			"bFilter": false,
+	        "sAjaxSource": '/users/get', 
+	        "aoColumns":
+	           [  
+		        	{ "mData": "userName"},
+		        	{ "mData": "tel"},
+		        	{ "mData": "email"},
+		        	{ "mData": "enabled",
+		        	  "mRender": function (data, type) {
+	            		 if(data == 1){
+	                         return "正常" 
+	                      }else{
+	                         return "禁用"
+	                      }
+	                  }
+		        	},
+		        	{ "mData": "onTime",
+		        	  "mRender": function (data, type) {
+		        	  	if(data == null)
+		        	  		return null;
+	        		  	return formatDateTime(data.time);
+	                  }
+		        	},
+	        	],
+	        "columnDefs": [
+		                {
+		                    targets: 5,
+		                    render: function (a, b, c, d) {
+		                        var context =
+		                        {
+		                            func: [
+		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\',\'" + c.email + "\',\'" + c.tel + "\')", "type": "primary"},
+		                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
+		                            ]
+		                        };
+		                        var html = template(context);
+		                        return html;
+		                    }
+		                }
+		 
+		            ],
+	        initComplete: function () {
+	            $("#mytool").append('<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">添加</button>');
+				$("#mytool").on("click", clear);
+				$("#save").click(add);
+			},
+	        "fnServerData" : function(sSource, aoData, fnCallback) {
+				$.ajax({
+					"type" : "post",
+					"url" : sSource,
+					"dataType" : "json",
+					"data" : {
+						aoData : JSON.stringify(aoData)
+					},
+					"success" : function(resp) {
+						fnCallback(resp);
+					}
+				});
+			}
 		});
-        var addJson = {
-        	"id": $("#id").val(),
-            "username": $("#username").val(),
-            "password": $("#password").val(),
-            "email": $("#email").val(),
-            "tel": $("#tel").val(),
-            "enabled": enabled
-        };
- 		console.log(addJson);
-        ajax(addJson);
-    }
-    
-    /**
-     *编辑方法
-     **/
-    function edit(id,username,enabled,email,tel) {
-    	//修改type属性为密码框，防止火狐自动填充用户名故采用js
-		document.getElementById("password").type="password"; 
-        clear();
-        editFlag = true;
-        $("#myModalLabel").text("修改");
-        $("#id").val(id);
-        $("#username").val(username);
-        $("#password").val();
-        $("#email").val(email);
-        $("#tel").val(tel);
-        $("input:radio[name=enabled][value="+enabled+"]").parent("span").attr("class","checked");
-        $("#myModal").modal("show");
-        
-    }
- 
- 	/**
-     *ajax提交
-     **/
-    function ajax(obj) {
-        var url ="/users/add" ;
-        if(editFlag){
-            url = "/users/update";
-        }
-        $.ajax({
-            "url":url ,
-            "type": "post",
-            "data": {
-                "id": obj.id,
-                "username": obj.username,
-                "password": obj.password,
-                "email": obj.email,
-                "tel": obj.tel,
-                "enabled": obj.enabled
-            }, success: function (data) {
-                table.ajax.reload();
-                $("#myModal").modal("hide");
-                $("#myModalLabel").text("添加");
-                clear();
-                $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
-            }
-        });
-    }
- 
- 
-    /**
-     * 删除数据
-     * @param id
-     */
-    function del(id) {
-        $.ajax({
-            "url": "/users/del",
-            "type": "get",
-            "data": {
-	            "id": id
-	         }, success: function (data) {
-	            table.ajax.reload();
-	            $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
-	         }
-        });
-    }
-</script>
+	
+		 /**
+	     * 清除
+	     */
+	    function clear() {
+	    	editFlag = false;
+	    	$("#myModalLabel").text("添加");
+	    	$("#id").val("");
+	        $("#username").val("");
+	        $("#password").val("");
+	        $("#email").val("");
+	        $("#tel").val("");
+	        $(".checked").removeClass("checked");
+	    }
+	 
+	    /**
+	     * 添加数据
+	     **/
+	    function add() {
+	    	clear();
+	    	var enabled;
+	        //遍历选中单选框
+	        $(".checked").each(function(){
+	        	if($(this).children().attr("name") == "enabled") {
+	        		enabled = $(this).children().val();
+	        	} 
+			});
+	        var addJson = {
+	        	"id": $("#id").val(),
+	            "username": $("#username").val(),
+	            "password": $("#password").val(),
+	            "email": $("#email").val(),
+	            "tel": $("#tel").val(),
+	            "enabled": enabled
+	        };
+	 		console.log(addJson);
+	        ajax(addJson);
+	    }
+	    
+	    /**
+	     *编辑方法
+	     **/
+	    function edit(id,username,enabled,email,tel) {
+	    	//修改type属性为密码框，防止火狐自动填充用户名故采用js
+			document.getElementById("password").type="password"; 
+	        clear();
+	        editFlag = true;
+	        $("#myModalLabel").text("修改");
+	        $("#id").val(id);
+	        $("#username").val(username);
+	        $("#password").val();
+	        $("#email").val(email);
+	        $("#tel").val(tel);
+	        $("input:radio[name=enabled][value="+enabled+"]").parent("span").attr("class","checked");
+	        $("#myModal").modal("show");
+	        
+	    }
+	 
+	 	/**
+	     *ajax提交
+	     **/
+	    function ajax(obj) {
+	        var url ="/users/add" ;
+	        if(editFlag){
+	            url = "/users/update";
+	        }
+	        $.ajax({
+	            "url":url ,
+	            "type": "post",
+	            "data": {
+	                "id": obj.id,
+	                "username": obj.username,
+	                "password": obj.password,
+	                "email": obj.email,
+	                "tel": obj.tel,
+	                "enabled": obj.enabled
+	            }
+	        });
+	    }
+	 
+	 
+	    /**
+	     * 删除数据
+	     * @param id
+	     */
+	    function del(id) {
+	        $.ajax({
+	            "url": "/users/del",
+	            "type": "get",
+	            "data": {
+		            "id": id
+		         }
+	        });
+	    }
+	</script>
 </body>
 </html>
