@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,22 +38,22 @@ public class SysconfigController extends BaseController {
 	private SysconfigService sysconfigService;
 
 	public List<Sysconfig> sysconfigList;
-	
+
 	/**
 	 * @Description:清空系统参数
 	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月11日 上午9:32:13
 	 */
-	 @RequestMapping(value = "clear", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	 public @ResponseBody RetModel clear(HttpServletRequest  request) throws IOException {
+	@RequestMapping(value = "clear", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel clear(HttpServletRequest request)
+			throws IOException {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		SysconfigUtils.sysconfigMap = null;
 		retModel.setMsg("刷新成功！");
 		return retModel;
 	}
-
 
 	@RequestMapping(value = { "list" })
 	public String list(Model model) {
@@ -96,6 +97,10 @@ public class SysconfigController extends BaseController {
 			// 添加到数据库
 			sysconfigService.insert(sysconfig);
 			retModel.setInsertFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setInsertFail(e);
@@ -119,6 +124,10 @@ public class SysconfigController extends BaseController {
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
 			retModel.setDelFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			retModel.setDelFail(e);
 			e.printStackTrace();
@@ -167,6 +176,10 @@ public class SysconfigController extends BaseController {
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
 			retModel.setUpdateFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setUpdateFail(e);

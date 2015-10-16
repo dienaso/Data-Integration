@@ -30,6 +30,10 @@
        http://www.springframework.org/schema/mvc
 	   http://www.springframework.org/schema/mvc/spring-mvc.xsd
        ">
+    <!-- 开启注解扫描 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.epweike.security"/>
+    <context:component-scan base-package="com.epweike.service"/>
 	
 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -101,8 +105,6 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 
-	<aop:aspectj-autoproxy />
-
 	<aop:config>
 		<aop:pointcut id="appService"
 			expression="execution(* com.epweike.service..*Service*.*(..))" />
@@ -111,9 +113,9 @@
 
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="add*" read-only="true" />
-			<tx:method name="del*" read-only="true" />
-			<tx:method name="update*" read-only="true" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
@@ -137,12 +139,9 @@
 			</list>
 		</property>
 	</bean>
-
 	<aop:config>
 		<aop:advisor advice-ref="druid-stat-interceptor"
 			pointcut-ref="druid-stat-pointcut" />
 	</aop:config>
-	<context:annotation-config />
-	<context:component-scan base-package="com.epweike.service"/>
-	<context:component-scan base-package="com.epweike.security"/>
+	
 </beans>

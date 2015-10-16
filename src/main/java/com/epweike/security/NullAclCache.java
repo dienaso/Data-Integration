@@ -1,8 +1,4 @@
 /**
- * Copyright 2010-2015 epweike.com.
- * @Description: TODO
- * @author 吴小平
- * @date Oct 13, 2015 7:30:45 PM 
  * 
  */
 package com.epweike.security;
@@ -14,34 +10,54 @@ import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.ObjectIdentity;
 
 /**
+ * Implement a null ACL cache.
+ * 
  * @author wuxp
- *
  */
-// imports omitted
 public class NullAclCache implements AclCache {
+
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#clearCache()
+	 */
 	@Override
 	public void clearCache() {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#evictFromCache(java.io.Serializable)
+	 */
 	@Override
 	public void evictFromCache(Serializable arg0) {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#evictFromCache(org.springframework.security.acls.model.ObjectIdentity)
+	 */
 	@Override
 	public void evictFromCache(ObjectIdentity arg0) {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#getFromCache(org.springframework.security.acls.model.ObjectIdentity)
+	 */
 	@Override
 	public MutableAcl getFromCache(ObjectIdentity arg0) {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#getFromCache(java.io.Serializable)
+	 */
 	@Override
 	public MutableAcl getFromCache(Serializable arg0) {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.security.acls.jdbc.AclCache#putInCache(org.springframework.security.acls.model.MutableAcl)
+	 */
 	@Override
 	public void putInCache(MutableAcl arg0) {
 	}
+
 }

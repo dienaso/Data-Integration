@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:s="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+
+	<bean id="authenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="hideUserNotFoundExceptions" value="false" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="passwordEncoder" ref="passwordEncode" />
+		<property name="saltSource" ref="saltSource" />
+	</bean>
+	<!--国际化 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:/messages/messages_zh_CN" />
+	</bean>
+	<bean id="userDetailsService"
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="enableGroups" value="true" />
+		<property name="enableAuthorities" value="true" />
+	</bean>
+	<!-- 配置密码加密 -->
+	<bean id="passwordEncode"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	<bean id="saltSource"
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="username" />
+	</bean>
+
+	<!-- Start ACL Configuration -->
+
+	<!-- ACL Voter -->
+	<bean class="org.springframework.security.access.vote.AffirmativeBased"
+		id="aclDecisionManager">
+		<constructor-arg name="decisionVoters">
+			<list>
+				<ref bean="categoryReadVoter" />
+				<!-- Custom permission scenario -->
+				<ref bean="adminResourceReadVoter" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean class="org.springframework.security.acls.AclEntryVoter" id="categoryReadVoter">
+		<!-- public AclEntryVoter(AclService aclService, String processConfigAttribute, 
+			Permission[] requirePermission) { -->
+		<!-- <constructor-arg ref="aclService"/> -->
+		<constructor-arg ref="mutableAclService" />
+		<constructor-arg value="VOTE_CATEGORY_READ" />
+		<constructor-arg>
+			<array>
+				<util:constant
+					static-field="org.springframework.security.acls.domain.BasePermission.READ" />
+			</array>
+		</constructor-arg>
+		<property name="processDomainObjectClass" value="com.epweike.model.Menus" />
+	</bean>
+
+	<bean class="org.springframework.security.acls.AclEntryVoter" id="adminResourceReadVoter">
+		<!-- <constructor-arg ref="aclService"/> -->
+		<constructor-arg ref="mutableAclService" />
+		<constructor-arg value="VOTE_ADMIN_READ" />
+		<constructor-arg>
+			<array>
+				<util:constant static-field="com.epweike.security.CustomPermission.ADMIN_READ" />
+			</array>
+		</constructor-arg>
+		<property name="processDomainObjectClass" value="com.epweike.model.Menus" />
+	</bean>
+
+	<bean class="org.springframework.security.acls.jdbc.JdbcMutableAclService"
+		id="mutableAclService">
+		<!-- public JdbcMutableAclService(DataSource dataSource, LookupStrategy 
+			lookupStrategy, AclCache aclCache) { -->
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="lookupStrategy" />
+		<constructor-arg ref="aclCache" />
+	</bean>
+	<bean class="org.springframework.security.acls.jdbc.BasicLookupStrategy"
+		id="lookupStrategy">
+		<!-- public BasicLookupStrategy(DataSource dataSource, AclCache aclCache, 
+			AclAuthorizationStrategy aclAuthorizationStrategy, AuditLogger auditLogger) 
+			{ -->
+		<constructor-arg ref="dataSource" />
+		<!-- Null Cache -->
+		<!-- <constructor-arg ref="aclCache"/> -->
+		<!-- Ehcache -->
+		<constructor-arg ref="ehCacheAclCache" />
+		<constructor-arg ref="aclAuthzStrategy" />
+		<constructor-arg ref="aclAuditLogger" />
+		<!-- custom permisison factory -->
+		<property name="permissionFactory" ref="customPermissionFactory" />
+	</bean>
+
+	<bean class="com.epweike.security.CustomPermissionFactory" id="customPermissionFactory" />
+
+	<bean class="com.epweike.security.NullAclCache" id="aclCache" />
+
+	<!-- Mutable ACL Service -->
+	<bean class="org.springframework.security.acls.jdbc.JdbcAclService"
+		id="aclService">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="lookupStrategy" />
+	</bean>
+
+	<!-- ACL Caching -->
+	<bean id="ehCacheAclCache"
+		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
+		<constructor-arg name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+				<property name="overflowToDisk" value="true" />
+				<property name="maxElementsInMemory" value="1024" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="permissionGrantingStrategy"
+			ref="permissionGrantingStrategy" />
+		<constructor-arg name="aclAuthorizationStrategy" ref="aclAuthzStrategy" />
+	</bean>
+	<bean id="permissionGrantingStrategy"
+		class="org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy">
+		<constructor-arg name="auditLogger">
+			<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
+		</constructor-arg>
+	</bean>
+	<bean
+		class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl"
+		id="aclAuthzStrategy">
+		<!-- public AclAuthorizationStrategyImpl(GrantedAuthority[] auths) { Assert.isTrue(auths 
+			!= null && auths.length == 3, "GrantedAuthority[] with three elements required"); 
+			this.gaTakeOwnership = auths[0]; this.gaModifyAuditing = auths[1]; this.gaGeneralChanges 
+			= auths[2]; } -->
+		<constructor-arg>
+			<array>
+				<ref bean="aclAdminAuthority" />
+				<ref bean="aclAdminAuthority" />
+				<ref bean="aclAdminAuthority" />
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger"
+		id="aclAuditLogger" />
+	<bean
+		class="org.springframework.security.core.authority.SimpleGrantedAuthority"
+		id="aclAdminAuthority">
+		<constructor-arg value="ROLE_ADMIN" />
+	</bean>
+	<!-- <bean class="com.epweike.security.AclBootstrapBean" init-method="aclBootstrap"/> 
+		<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource"/> </bean> -->
+
+	<!-- ************************************************** -->
+	<!-- Method Authorization -->
+	<!-- ************************************************** -->
+	<!-- START Explicit ACL-Enabled Method Security -->
+	<bean
+		class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor"
+		id="methodSecurityInterceptor">
+		<property name="accessDecisionManager" ref="methodAccessDecisionManager" />
+		<property name="securityMetadataSource" ref="delegatingMetadataSource" />
+		<property name="afterInvocationManager" ref="afterInvocationManager" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor"
+		id="methodSecurityMetadataSourceAdvisor">
+		<constructor-arg value="methodSecurityInterceptor" />
+		<constructor-arg ref="delegatingMetadataSource" />
+		<constructor-arg value="delegatingMetadataSourceName" />
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		id="defaultAdvisorAutoProxyCreator">
+		<property name="beanName" value="methodSecurityMetadataSourceAdvisor" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.intercept.AfterInvocationProviderManager"
+		id="afterInvocationManager">
+		<property name="providers">
+			<list>
+				<ref bean="postAdviceProvider" />
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.security.access.vote.AffirmativeBased"
+		id="methodAccessDecisionManager">
+		<constructor-arg name="decisionVoters">
+			<list>
+				<ref bean="preAdviceVoter" />
+				<ref bean="roleVoter" />
+				<ref bean="authenticatedVoter" />
+				<ref bean="jsr250Voter" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean
+		class="org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource"
+		id="delegatingMetadataSource">
+		<constructor-arg name="methodSecurityMetadataSources">
+			<list>
+				<ref bean="prePostMetadataSource" />
+				<ref bean="securedMetadataSource" />
+				<ref bean="jsr250MetadataSource" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean
+		class="org.springframework.security.access.annotation.Jsr250MethodSecurityMetadataSource"
+		id="jsr250MetadataSource" />
+	<bean class="org.springframework.security.access.annotation.Jsr250Voter"
+		id="jsr250Voter" />
+	<bean
+		class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource"
+		id="securedMetadataSource" />
+	<bean
+		class="org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter"
+		id="preAdviceVoter">
+		<constructor-arg ref="exprPreInvocationAdvice" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.prepost.PostInvocationAdviceProvider"
+		id="postAdviceProvider">
+		<constructor-arg ref="exprPostInvocationAdvice" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource"
+		id="prePostMetadataSource">
+		<constructor-arg ref="exprAnnotationAttrFactory" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice"
+		id="exprPreInvocationAdvice">
+		<property name="expressionHandler" ref="methodExprHandler" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.expression.method.ExpressionBasedPostInvocationAdvice"
+		id="exprPostInvocationAdvice">
+		<constructor-arg ref="methodExprHandler" />
+	</bean>
+	<bean
+		class="org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory"
+		id="exprAnnotationAttrFactory">
+		<constructor-arg ref="methodExprHandler" />
+	</bean>
+	<!-- Updated for ACL support! -->
+	<bean
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"
+		id="methodExprHandler">
+		<property name="permissionEvaluator" ref="aclPermissionEvaluator" />
+	</bean>
+	<bean class="org.springframework.security.acls.AclPermissionEvaluator"
+		id="aclPermissionEvaluator">
+		<constructor-arg ref="aclService" />
+		<property name="permissionFactory" ref="customPermissionFactory" />
+	</bean>
+	<!-- END Explicit ACL-Enabled Method Security -->
+	<!-- End ACL Configuration -->
+	<bean class="org.springframework.security.access.vote.RoleVoter"
+		id="roleVoter" />
+	<bean class="org.springframework.security.access.vote.AuthenticatedVoter"
+		id="authenticatedVoter" />
+	
+</beans>

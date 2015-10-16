@@ -281,12 +281,19 @@
 	  * 主要设置了AJAX请求遇到Session过期的情况
 	  */
 	$.ajaxSetup({
-		type: 'POST',
 	    complete: function(xhr,status) {
 	        if(status == "parsererror") {
 	        	window.location.href="/"; 
 	        }
-	  	}
+	  	},success: function (data) {
+            table.ajax.reload();
+            $("#myModal").modal("hide");
+            $.gritter.add({
+				title:	'操作提示！',
+				text:	data.msg,
+				sticky: false
+			});	
+         }
 	});
 	$(function () {
 		$("#showChangePassword").on("click", showChangePassword);

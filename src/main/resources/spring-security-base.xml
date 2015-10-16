@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:s="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+
+	<bean id="authenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="hideUserNotFoundExceptions" value="false" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="passwordEncoder" ref="passwordEncode" />
+		<property name="saltSource" ref="saltSource" />
+	</bean>
+	<!--国际化 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:/messages/messages_zh_CN" />
+	</bean>
+	<bean id="userDetailsService"
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="enableGroups" value="true" />
+		<property name="enableAuthorities" value="true" />
+	</bean>
+	<!-- 配置密码加密 -->
+	<bean id="passwordEncode"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	<bean id="saltSource"
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="username" />
+	</bean>
+
+	<!-- Start ACL Configuration -->
+
+	<!-- ACL Voter -->
+	<bean class="org.springframework.security.access.vote.AffirmativeBased"
+		id="aclDecisionManager">
+		<constructor-arg name="decisionVoters">
+			<list>
+				<ref bean="categoryReadVoter" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean class="org.springframework.security.acls.AclEntryVoter" id="categoryReadVoter">
+		<!-- public AclEntryVoter(AclService aclService, String processConfigAttribute, 
+			Permission[] requirePermission) { -->
+		<!-- <constructor-arg ref="aclService"/> -->
+		<constructor-arg ref="aclService" />
+		<constructor-arg value="VOTE_CATEGORY_READ" />
+		<constructor-arg>
+			<array>
+				<util:constant
+					static-field="org.springframework.security.acls.domain.BasePermission.READ" />
+			</array>
+		</constructor-arg>
+		<property name="processDomainObjectClass" value="com.epweike.model.Menus" />
+	</bean>
+
+	<!-- ACL Service -->
+	<bean class="org.springframework.security.acls.jdbc.JdbcAclService"
+		id="aclService">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="lookupStrategy" />
+	</bean>
+	
+	<bean class="org.springframework.security.acls.jdbc.BasicLookupStrategy"
+		id="lookupStrategy">
+		<!-- public BasicLookupStrategy(DataSource dataSource, AclCache aclCache, 
+			AclAuthorizationStrategy aclAuthorizationStrategy, AuditLogger auditLogger) 
+			{ -->
+		<constructor-arg ref="dataSource" />
+		<!-- Null Cache -->
+		<!-- <constructor-arg ref="aclCache"/> -->
+		<!-- Ehcache -->
+		<constructor-arg ref="ehCacheAclCache" />
+		<constructor-arg ref="aclAuditLogger" />
+		<constructor-arg ref="aclAuthzStrategy" />
+	</bean>
+	<bean class="com.epweike.security.NullAclCache" id="aclCache" />
+	<!-- ACL Caching -->
+	<bean id="ehCacheAclCache"
+		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
+		<constructor-arg name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+				<property name="overflowToDisk" value="true" />
+				<property name="maxElementsInMemory" value="1024" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="permissionGrantingStrategy"
+			ref="permissionGrantingStrategy" />
+		<constructor-arg name="aclAuthorizationStrategy" ref="aclAuthzStrategy" />
+	</bean>
+	<bean id="permissionGrantingStrategy"
+		class="org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy">
+		<constructor-arg name="auditLogger">
+			<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
+		</constructor-arg>
+	</bean>
+	<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" id="aclAuditLogger" />
+	<bean
+		class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl"
+		id="aclAuthzStrategy">
+		<!-- public AclAuthorizationStrategyImpl(GrantedAuthority[] auths) { Assert.isTrue(auths 
+			!= null && auths.length == 3, "GrantedAuthority[] with three elements required"); 
+			this.gaTakeOwnership = auths[0]; this.gaModifyAuditing = auths[1]; this.gaGeneralChanges 
+			= auths[2]; } -->
+		<constructor-arg>
+			<array>
+				<ref bean="aclAdminAuthority" />
+				<ref bean="aclAdminAuthority" />
+				<ref bean="aclAdminAuthority" />
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean
+		class="org.springframework.security.core.authority.SimpleGrantedAuthority"
+		id="aclAdminAuthority">
+		<constructor-arg value="ROLE_ADMIN" />
+	</bean>
+	
+	<!-- END Explicit ACL-Enabled Method Security -->
+	<!-- End ACL Configuration -->
+	
+</beans>

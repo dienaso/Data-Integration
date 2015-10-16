@@ -7,6 +7,8 @@
  */
 package com.epweike.model;
 
+import org.springframework.security.access.AccessDeniedException;
+
 /**
  * @author wuxp
  *
@@ -15,6 +17,12 @@ public class RetModel {
 	private boolean flag = true;
 	private String msg;
 	private Object obj;
+	
+	public void setAccessDenied(AccessDeniedException ade) {
+		this.obj = ade;
+		this.msg = ade.getMessage();
+		this.setFlag(false);
+	}
 	
 	public void setInsertFail(Object obj) {
 		this.obj = obj;

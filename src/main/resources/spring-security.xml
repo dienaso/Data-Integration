@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:s="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+
+	<!-- ACL access-decision-manager-ref="aclDecisionManager"-->
+	<s:global-method-security secured-annotations="enabled">
+		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.insert*(..))"/>
+		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.delete*(..))"/>
+		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.update*(..))"/> 
+		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.QuartzService.*(..))"/> 
+	</s:global-method-security>
+	
+	<s:http auto-config="true" disable-url-rewriting="false" use-expressions="true">
+		<s:csrf disabled="true"/>
+		<!-- Basic Access Denied 
+		<s:access-denied-handler error-page="/accessDenied.do"/>-->
+		
+		<s:intercept-url pattern="/login*" access="permitAll" />
+		<s:intercept-url pattern="/common/**" access="permitAll" />
+		<s:intercept-url pattern="/favicon.ico" access="permitAll" />
+		<s:intercept-url pattern="/**" access="hasAnyRole('USER,ADMIN')" />
+		
+		<s:form-login login-page="/login" username-parameter="j_username"
+			password-parameter="j_password" login-processing-url="/j_spring_security_check"
+			authentication-failure-url="/login?login_error=1" />
+		<s:logout logout-url="/j_spring_security_logout" />
+		
+		<s:session-management>
+			<s:concurrency-control max-sessions="10" />
+		</s:session-management>
+	</s:http>
+
+	<s:authentication-manager>
+		<s:authentication-provider ref="authenticationProvider" />
+	</s:authentication-manager>
+
+</beans>

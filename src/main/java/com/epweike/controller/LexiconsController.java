@@ -10,7 +10,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +41,12 @@ public class LexiconsController extends BaseController {
 	public String list(Model model) {
 		return "lexicon/list";
 	}
-	
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel add(HttpServletRequest request)
 			throws IOException {
-		//返回结果对象
-        RetModel retModel = new RetModel();
+		// 返回结果对象
+		RetModel retModel = new RetModel();
 		// 获取请求参数
 		String word = request.getParameter("word");
 		String pinyin = request.getParameter("pinyin");
@@ -77,26 +76,34 @@ public class LexiconsController extends BaseController {
 			// 更新数据库
 			lexiconService.insert(lexicons);
 			retModel.setInsertFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setInsertFail(e);
 			return retModel;
 		}
+
 		return retModel;
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel RetModel(HttpServletRequest request)
 			throws IOException {
-		//返回结果对象
-        RetModel retModel = new RetModel();
+		// 返回结果对象
+		RetModel retModel = new RetModel();
 		// 获取主键
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
 			this.lexiconService.delete(id);
 			retModel.setDelFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			retModel.setDelFail(e);
 			e.printStackTrace();
@@ -105,12 +112,11 @@ public class LexiconsController extends BaseController {
 		return retModel;
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel update(HttpServletRequest request)
 			throws IOException {
-		//返回结果对象
-        RetModel retModel = new RetModel();
+		// 返回结果对象
+		RetModel retModel = new RetModel();
 		// 获取请求参数
 		int id = Integer.parseInt(request.getParameter("id"));
 		String word = request.getParameter("word");
@@ -142,6 +148,10 @@ public class LexiconsController extends BaseController {
 			// 更新数据库
 			lexiconService.update(lexicons);
 			retModel.setUpdateFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setUpdateFail(e);

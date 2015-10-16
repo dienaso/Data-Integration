@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,7 @@ public class UsersController extends BaseController {
 
 		return "users/list";
 	}
-	
+
 	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel add(HttpServletRequest request)
 			throws IOException {
@@ -67,7 +68,7 @@ public class UsersController extends BaseController {
 			retModel.setFlag(false);
 			retModel.setMsg("用户名不能为空！");
 			return retModel;
-		}else if ("".equals(password) || password == null) {
+		} else if ("".equals(password) || password == null) {
 			retModel.setFlag(false);
 			retModel.setMsg("密码不能为空！");
 			return retModel;
@@ -80,13 +81,14 @@ public class UsersController extends BaseController {
 				return retModel;
 			}
 		}
-		
-		//md5加密
+
+		// md5加密
 		password = MD5Utils.getMD5(password, username);
 
 		Users users = new Users();
 		users.setUserName(username);
-		users.setPassword(password);;
+		users.setPassword(password);
+		;
 		users.setEmail(email);
 		users.setTel(tel);
 		users.setEnabled(Integer.parseInt(enabled));
@@ -97,6 +99,10 @@ public class UsersController extends BaseController {
 				// 新增到数据库和计划任务
 				usersService.insert(users);
 				retModel.setInsertFucceed();
+			} catch (AccessDeniedException e) {
+				e.printStackTrace();
+				retModel.setAccessDenied(e);
+				return retModel;
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setInsertFail(e);
@@ -109,16 +115,21 @@ public class UsersController extends BaseController {
 	}
 
 	@RequestMapping(value = "del", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public @ResponseBody RetModel del(HttpServletRequest request) throws IOException {
+	public @ResponseBody RetModel del(HttpServletRequest request)
+			throws IOException {
 
-		//返回结果对象
-        RetModel retModel = new RetModel();
+		// 返回结果对象
+		RetModel retModel = new RetModel();
 		// 获取主键
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
 			this.usersService.delete(id);
 			retModel.setDelFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			retModel.setDelFail(e);
 			e.printStackTrace();
@@ -196,19 +207,20 @@ public class UsersController extends BaseController {
 			retModel.setFlag(false);
 			retModel.setMsg("用户名不能为空！");
 			return retModel;
-		}else if ("".equals(password) || password == null) {
+		} else if ("".equals(password) || password == null) {
 			retModel.setFlag(false);
 			retModel.setMsg("密码不能为空！");
 			return retModel;
-		} 
-		
-		//md5加密
+		}
+
+		// md5加密
 		password = MD5Utils.getMD5(password, username);
 
 		Users users = new Users();
 		users.setId(id);
 		users.setUserName(username);
-		users.setPassword(password);;
+		users.setPassword(password);
+		;
 		users.setEmail(email);
 		users.setTel(tel);
 		users.setEnabled(Integer.parseInt(enabled));
@@ -218,6 +230,10 @@ public class UsersController extends BaseController {
 				// 更新数据库和计划任务
 				usersService.update(users);
 				retModel.setUpdateFucceed();
+			} catch (AccessDeniedException e) {
+				e.printStackTrace();
+				retModel.setAccessDenied(e);
+				return retModel;
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setUpdateFail(e);

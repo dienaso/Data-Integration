@@ -15,6 +15,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,32 +35,32 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/schedulejob")
 public class ScheduleJobController extends BaseController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ScheduleJobController.class);
-	
-    @Autowired
-    private ScheduleJobService scheduleJobService;
-    
-    @Autowired
-    private QuartzService quartzService;
-    
-    public List<ScheduleJob> scheduleJobList;
-    
-    @RequestMapping(value = {"list"})
-    public String list(Model model) {
-        return "schedulejob/list";
-    }
-    
-    
-    /**  
-    * @Description:校验计划任务合法性
-    *  
-    * @author  吴小平
-    * @version 创建时间：Sep 22, 2015 10:49:07 AM
-    */  
-    private RetModel checkJob(ScheduleJob job, RetModel retModel) {
-    	//返回响应结果
-    	retModel.setFlag(false);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(ScheduleJobController.class);
+
+	@Autowired
+	private ScheduleJobService scheduleJobService;
+
+	@Autowired
+	private QuartzService quartzService;
+
+	public List<ScheduleJob> scheduleJobList;
+
+	@RequestMapping(value = { "list" })
+	public String list(Model model) {
+		return "schedulejob/list";
+	}
+
+	/**
+	 * @Description:校验计划任务合法性
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：Sep 22, 2015 10:49:07 AM
+	 */
+	private RetModel checkJob(ScheduleJob job, RetModel retModel) {
+		// 返回响应结果
+		retModel.setFlag(false);
 		try {
 			CronScheduleBuilder.cronSchedule(job.getCronExpression());
 		} catch (Exception e) {
@@ -94,138 +95,158 @@ public class ScheduleJobController extends BaseController {
 			}
 		}
 		retModel.setFlag(true);
-    	return retModel;
-    }
-    
-    @RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody RetModel add(HttpServletRequest  request) throws IOException {
-    	//返回结果对象
-        RetModel retModel = new RetModel();
-    	//获取请求参数
-    	String jobName = request.getParameter("jobName"); 
-    	String jobGroup = request.getParameter("jobGroup"); 
-    	String jobStatus = request.getParameter("jobStatus"); 
-    	String cronExpression = request.getParameter("cronExpression"); 
-    	String springId = request.getParameter("springId"); 
-    	String beanClass = request.getParameter("beanClass"); 
-    	String methodName = request.getParameter("methodName"); 
-    	String isConcurrent = request.getParameter("isConcurrent"); 
-    	String description = request.getParameter("description"); 
+		return retModel;
+	}
+
+	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel add(HttpServletRequest request)
+			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取请求参数
+		String jobName = request.getParameter("jobName");
+		String jobGroup = request.getParameter("jobGroup");
+		String jobStatus = request.getParameter("jobStatus");
+		String cronExpression = request.getParameter("cronExpression");
+		String springId = request.getParameter("springId");
+		String beanClass = request.getParameter("beanClass");
+		String methodName = request.getParameter("methodName");
+		String isConcurrent = request.getParameter("isConcurrent");
+		String description = request.getParameter("description");
 		ScheduleJob job = new ScheduleJob();
-    	job.setJobName(jobName);
-    	job.setJobGroup(jobGroup);
-    	job.setJobStatus(jobStatus);
-    	job.setCronExpression(cronExpression);
-    	job.setSpringId(springId);
-    	job.setBeanClass(beanClass);
-    	job.setMethodName(methodName);
-    	job.setIsConcurrent(isConcurrent);
-    	job.setDescription(description);
-    	job.setOnTime(new Date());
+		job.setJobName(jobName);
+		job.setJobGroup(jobGroup);
+		job.setJobStatus(jobStatus);
+		job.setCronExpression(cronExpression);
+		job.setSpringId(springId);
+		job.setBeanClass(beanClass);
+		job.setMethodName(methodName);
+		job.setIsConcurrent(isConcurrent);
+		job.setDescription(description);
+		job.setOnTime(new Date());
 		job.setUpdateTime(new Date());
-    	//校验计划任务
-    	retModel = checkJob(job, retModel);
-    	
+		// 校验计划任务
+		retModel = checkJob(job, retModel);
+
 		try {
-			//添加到数据库和计划任务
+			// 添加到数据库和计划任务
 			quartzService.addTaskJob(job);
 			retModel.setInsertFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setFlag(false);
 			retModel.setObj(e);
-			retModel.setMsg("添加失败，检查 name group 组合是否有重复！");
+			retModel.setMsg("添加失败！");
 			return retModel;
 		}
 
 		return retModel;
-    	
-    }
-    
-    @RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public @ResponseBody RetModel del(HttpServletRequest  request) throws IOException {
-    	//返回结果对象
-        RetModel retModel = new RetModel();
-    	//获取主键
-    	int id = Integer.parseInt(request.getParameter("id")); 
-    	
+
+	}
+
+	@RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel del(HttpServletRequest request)
+			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取主键
+		int id = Integer.parseInt(request.getParameter("id"));
+
 		try {
 			quartzService.deleteTaskJob(id);
 			retModel.setDelFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			retModel.setDelFail(e);
 			e.printStackTrace();
 		}
-	
+
 		return retModel;
-    }
-    
-    @RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public @ResponseBody RetModel update(HttpServletRequest  request) throws IOException {
-    	//返回结果对象
-        RetModel retModel = new RetModel();
-    	//获取请求参数
-    	String id = request.getParameter("id"); 
-    	String jobName = request.getParameter("jobName"); 
-    	String jobGroup = request.getParameter("jobGroup"); 
-    	String jobStatus = request.getParameter("jobStatus"); 
-    	String cronExpression = request.getParameter("cronExpression"); 
-    	String springId = request.getParameter("springId"); 
-    	String beanClass = request.getParameter("beanClass"); 
-    	String methodName = request.getParameter("methodName"); 
-    	String isConcurrent = request.getParameter("isConcurrent"); 
-    	String description = request.getParameter("description"); 
+	}
+
+	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel update(HttpServletRequest request)
+			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取请求参数
+		String id = request.getParameter("id");
+		String jobName = request.getParameter("jobName");
+		String jobGroup = request.getParameter("jobGroup");
+		String jobStatus = request.getParameter("jobStatus");
+		String cronExpression = request.getParameter("cronExpression");
+		String springId = request.getParameter("springId");
+		String beanClass = request.getParameter("beanClass");
+		String methodName = request.getParameter("methodName");
+		String isConcurrent = request.getParameter("isConcurrent");
+		String description = request.getParameter("description");
 		ScheduleJob job = new ScheduleJob();
-    	job.setId(Integer.parseInt(id));
-    	job.setJobName(jobName);
-    	job.setJobGroup(jobGroup);
-    	job.setJobStatus(jobStatus);
-    	job.setCronExpression(cronExpression);
-    	job.setSpringId(springId);
-    	job.setBeanClass(beanClass);
-    	job.setMethodName(methodName);
-    	job.setIsConcurrent(isConcurrent);
-    	job.setDescription(description);
-    	job.setUpdateTime(new Date());
-    	
-    	//校验计划任务
-    	retModel = checkJob(job, retModel);
-    	
+		job.setId(Integer.parseInt(id));
+		job.setJobName(jobName);
+		job.setJobGroup(jobGroup);
+		job.setJobStatus(jobStatus);
+		job.setCronExpression(cronExpression);
+		job.setSpringId(springId);
+		job.setBeanClass(beanClass);
+		job.setMethodName(methodName);
+		job.setIsConcurrent(isConcurrent);
+		job.setDescription(description);
+		job.setUpdateTime(new Date());
+
+		// 校验计划任务
+		retModel = checkJob(job, retModel);
+
 		try {
-			//更新数据库和计划任务
+			// 更新数据库和计划任务
 			quartzService.updateTaskJob(job);
 			retModel.setUpdateFucceed();
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			e.printStackTrace();
 			retModel.setFlag(false);
-			retModel.setMsg("保存失败，检查 name group 组合是否有重复！");
+			retModel.setMsg("保存失败！");
 			return retModel;
 		}
 
-    	return retModel;
-    	
-    }
-    
-    @RequestMapping(value = "run", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public @ResponseBody RetModel run(HttpServletRequest  request) throws IOException {
-    	//返回结果对象
-        RetModel retModel = new RetModel();
-    	//获取主键
-    	int id = Integer.parseInt(request.getParameter("id")); 
-    	ScheduleJob scheduleJob = this.scheduleJobService.get(id);
+		return retModel;
+
+	}
+
+	@RequestMapping(value = "run", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody RetModel run(HttpServletRequest request)
+			throws IOException {
+		// 返回结果对象
+		RetModel retModel = new RetModel();
+		// 获取主键
+		int id = Integer.parseInt(request.getParameter("id"));
+		ScheduleJob scheduleJob = this.scheduleJobService.get(id);
 		try {
 			quartzService.runAJobNow(scheduleJob);
 			retModel.setMsg("执行成功！");
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+			retModel.setAccessDenied(e);
+			return retModel;
 		} catch (Exception e) {
 			retModel.setFlag(false);
 			retModel.setMsg("执行失败,或许该任务被禁用！");
 			retModel.setObj(e);
 			e.printStackTrace();
 		}
-	
+
 		return retModel;
-    }
-    
+	}
+
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String get(HttpServletRequest request)
 			throws IOException {
@@ -240,8 +261,8 @@ public class ScheduleJobController extends BaseController {
 		int total = this.scheduleJobService.count(new ScheduleJob());
 
 		// 搜索结果集
-		scheduleJobList = this.scheduleJobService.selectPage(new ScheduleJob(sSearch),
-				pageModel);
+		scheduleJobList = this.scheduleJobService.selectPage(new ScheduleJob(
+				sSearch), pageModel);
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(total);
 		pageModel.setiTotalRecords(total);
@@ -252,5 +273,5 @@ public class ScheduleJobController extends BaseController {
 
 		return json.toString();
 	}
-    
+
 }

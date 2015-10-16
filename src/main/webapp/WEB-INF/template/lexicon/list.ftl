@@ -207,15 +207,6 @@
                 "pinyin": obj.pinyin,
                 "pos": obj.pos,
                 "synonym": obj.synonym
-            }, success: function (data) {
-                table.ajax.reload();
-                $("#myModal").modal("hide");
-                clear();
-                $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
             }
         });
     }
@@ -230,13 +221,6 @@
             "type": "get",
             "data": {
 	            "id": id
-	         }, success: function (data) {
-	            table.ajax.reload();
-	            $.gritter.add({
-					title:	'操作提示！',
-					text:	data.msg,
-					sticky: false
-				});	
 	         }
         });
     }
