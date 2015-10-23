@@ -98,7 +98,7 @@ public class LexiconsController extends BaseController {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
-			this.lexiconService.delete(id);
+			this.lexiconService.deleteByPrimaryKey(id);
 			retModel.setDelFucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();

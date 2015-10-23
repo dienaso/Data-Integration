@@ -124,7 +124,7 @@ public class UsersController extends BaseController {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
-			this.usersService.delete(id);
+			this.usersService.deleteByPrimaryKey(id);
 			retModel.setDelFucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
@@ -169,6 +169,7 @@ public class UsersController extends BaseController {
 		// 修改密码
 		if (retModel.isFlag()) {
 			try {
+				users.setId(existUsers.getId());
 				users.setPassword(MD5Utils.getMD5(newPassword, userName));
 				int result = usersService.updateBySelective(users);
 				if (result > 0) {
@@ -181,7 +182,7 @@ public class UsersController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				retModel.setFlag(false);
-				retModel.setMsg("添加失败！");
+				retModel.setMsg("密码修改失败！");
 				return retModel;
 			}
 		}

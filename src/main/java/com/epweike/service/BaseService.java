@@ -23,8 +23,12 @@ public abstract class BaseService<T> {
 		return mapper.insert(record);
 	}
 
-	public int delete(Object key) {
+	public int deleteByPrimaryKey(Object key) {
 		return mapper.deleteByPrimaryKey(key);
+	}
+	
+	public int delete(T record) {
+		return mapper.delete(record);
 	}
 
 	public int update(T record) {

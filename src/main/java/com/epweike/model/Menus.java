@@ -16,8 +16,6 @@ public class Menus extends BaseModel<Menus> {
 
     private Integer pid;
 
-    private Byte level;
-
     private String name;
 
     private String url;
@@ -31,8 +29,28 @@ public class Menus extends BaseModel<Menus> {
 
     @Column(name = "on_time")
     private Date onTime;
+    
+    /**
+     * 1:还有子节点 0:没有
+     */
+    @Column(name = "has_child")
+    private Integer hasChild;
 
     /**
+	 * @return the hasChild
+	 */
+	public Integer getHasChild() {
+		return hasChild;
+	}
+
+	/**
+	 * @param hasChild the hasChild to set
+	 */
+	public void setHasChild(Integer hasChild) {
+		this.hasChild = hasChild;
+	}
+
+	/**
      * 排序，数值越小越靠前
      */
     private Byte sort;
@@ -45,13 +63,6 @@ public class Menus extends BaseModel<Menus> {
   	 */
   	public Menus(int pid) {
   		this.pid = pid;
-  	}
-  	
-  	/**
-  	 * @param level
-  	 */
-  	public Menus(Byte level) {
-  		this.level = level;
   	}
 
       /**
@@ -88,20 +99,6 @@ public class Menus extends BaseModel<Menus> {
      */
     public void setPid(Integer pid) {
         this.pid = pid;
-    }
-
-    /**
-     * @return level
-     */
-    public Byte getLevel() {
-        return level;
-    }
-
-    /**
-     * @param level
-     */
-    public void setLevel(Byte level) {
-        this.level = level;
     }
 
     /**

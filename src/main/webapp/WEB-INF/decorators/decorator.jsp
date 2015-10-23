@@ -25,7 +25,7 @@
 	System.out.println("id:" + id + " pid:" + pid);
 
 	//一级菜单
-	List<Menus> menus = menusService.select(new Menus(new Byte("1")));
+	List<Menus> menus = menusService.select(new Menus(0));
 
 	//拼接一二级菜单作为网页标题
 	String title = "";
@@ -56,7 +56,8 @@
 <link rel="stylesheet"
 	href="/common/matrix/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/common/matrix/css/uniform.css" />
-<link rel="stylesheet" href="/common/matrix/css/select2.css" />
+<link rel="stylesheet" href="/common/select2/select2.css" />
+<link rel="stylesheet" href="/common/select2/select2-bootstrap.css" />
 <link rel="stylesheet" href="/common/matrix/css/matrix-style.css" />
 <link rel="stylesheet" href="/common/matrix/css/matrix-media.css" />
 <link rel="stylesheet"
@@ -72,13 +73,14 @@
 	href="/common/matrix/css/jquery.gritter.css" />
 
 <script src="/common/matrix/js/jquery.min.js"></script>
+<script src="/common/matrix/js/browser.js"></script>
 <script src="/common/matrix/js/bootstrap.min.js"></script>
 <script src="/common/matrix/js/matrix.js"></script>
 <script src="/common/matrix/js/jquery.dataTables.js"></script>
 <script src="/common/matrix/js/jquery.ui.custom.js"></script>
 <script src="/common/matrix/js/jquery.uniform.js"></script>
 <script src="/common/matrix/js/jquery.gritter.min.js"></script>
-<script src="/common/matrix/js/select2.min.js"></script>
+<script src="/common/select2/select2.min.js"></script>
 <script type="text/javascript"
 	src="/common/matrix/js/dataTables.tableTools.js" charset="utf-8"></script>
 <script src="/common/matrix/js/bootstrap-datepicker.js"></script>
@@ -276,25 +278,6 @@
 	<!--end-Footer-part-->
 	<script src="/common/matrix/js/matrix.tables.js"></script>
 	<script type="text/javascript">
-	/**
-	  * 设置全局AJAX请求默认选项
-	  * 主要设置了AJAX请求遇到Session过期的情况
-	  */
-	$.ajaxSetup({
-	    complete: function(xhr,status) {
-	        if(status == "parsererror") {
-	        	window.location.href="/"; 
-	        }
-	  	},success: function (data) {
-            table.ajax.reload();
-            $("#myModal").modal("hide");
-            $.gritter.add({
-				title:	'操作提示！',
-				text:	data.msg,
-				sticky: false
-			});	
-         }
-	});
 	$(function () {
 		$("#showChangePassword").on("click", showChangePassword);
 		$("#changePassword").click(changePassword);
@@ -346,7 +329,6 @@
             "newPassword": $("#newPassword").val(),
             "confirmPassword": $("#confirmPassword").val()
         };
- 		console.log(addJson);
  		ajaxPassword(addJson);
     }
 	

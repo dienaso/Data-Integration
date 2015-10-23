@@ -82,6 +82,7 @@
 	    </div>
 	</div>
 	
+	<script src="/common/matrix/js/ajaxsetup.js"></script>
 	<!--定义操作列按钮模板-->
 	<script id="tpl" type="text/x-handlebars-template">
 	    {{#each func}}
@@ -133,7 +134,7 @@
 	 
 	            ],
             initComplete: function () {
-                $("#mytool").append('<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">添加</button>');
+                $("#mytool").append('<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">添加</button>');
 				$("#mytool").on("click", clear);
 				$("#save").click(add);
 			},

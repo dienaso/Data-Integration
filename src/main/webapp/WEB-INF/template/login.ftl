@@ -82,6 +82,7 @@
 </div>
 
 <script src="/common/matrix/js/jquery.min.js"></script>
+<script src="/common/matrix/js/browser.js"></script>
 <script src="/common/matrix/js/matrix.login.js"></script>
 </body>
 

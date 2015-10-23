@@ -15,6 +15,7 @@
 		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.insert*(..))"/>
 		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.delete*(..))"/>
 		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.BaseService.update*(..))"/> 
+		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.MenusService.insert*(..))"/> 
 		<s:protect-pointcut access="ROLE_ADMIN" expression="execution(* com.epweike.service.QuartzService.*(..))"/> 
 	</s:global-method-security>
 	

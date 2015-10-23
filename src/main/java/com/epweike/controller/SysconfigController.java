@@ -120,7 +120,7 @@ public class SysconfigController extends BaseController {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
-			sysconfigService.delete(id);
+			sysconfigService.deleteByPrimaryKey(id);
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
 			retModel.setDelFucceed();

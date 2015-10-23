@@ -447,6 +447,8 @@ public class TalentController extends BaseController {
 							map.put("employer", 0);
 						if (map.get("both") == null)
 							map.put("both", 0);
+						if (map.get("uncertain") == null)
+							map.put("uncertain", 0);
 						if (map.get("TOTAL") == null)
 							map.put("TOTAL", 0);
 
