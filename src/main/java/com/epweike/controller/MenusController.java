@@ -48,7 +48,7 @@ public class MenusController extends BaseController {
 	 */
 	private String getJson(int pid) {
 		StringBuffer str = new StringBuffer();
-		str.append("[{\"id\":\"0\",\"text\":\"菜单\",\"icon\":\"icon-list\", \"state\" : { \"opened\" : \"true\", \"selected\":\"true\"}, \"children\":[");// 起始
+		str.append("[{\"id\":\"0\",\"text\":\"菜单\", \"state\" : { \"opened\" : \"true\", \"selected\":\"true\"}, \"children\":[");// 起始
 		// 一级菜单
 		List<Menus> menusList1 = menusService.select(new Menus(pid));
 		if (menusList1 != null) {
