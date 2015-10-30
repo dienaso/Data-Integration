@@ -161,6 +161,7 @@ public class MenusController extends BaseController {
 				menus.setName(name);
 				menus.setUrl("javascript:void(0)");
 				menus.setOnTime(new Date());
+				menus.setTarget("_self");
 				this.menusService.insertUseGeneratedKeys(menus);
 				retModel.setObj(menus);
 				// 更新父级has_child字段

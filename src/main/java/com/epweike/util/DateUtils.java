@@ -9,13 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * 严格的日期转换setLenient(false);
- * setLenient
- * public void setLenient(boolean lenient)指定日期/时间解析是否不严格。进行不严格解析时，解析程序可以使用启发式的方法来解释与此对象的格式不精确匹配的输入。进行严格解析时，输入必须匹配此对象的格式。 
- * 参数：
- * lenient - 为 true 时，解析过程是不严格的
- * 不会自动将错误日期转换为正确的日期
+ * 严格的日期转换setLenient(false); setLenient public void setLenient(boolean
+ * lenient)指定日期
+ * /时间解析是否不严格。进行不严格解析时，解析程序可以使用启发式的方法来解释与此对象的格式不精确匹配的输入。进行严格解析时，输入必须匹配此对象的格式。
+ * 参数： lenient - 为 true 时，解析过程是不严格的 不会自动将错误日期转换为正确的日期
  * 例如:19450000,使用原DateUtil会转换为19441130
+ * 
  * @author wuxp
  */
 public class DateUtils {
@@ -25,6 +24,7 @@ public class DateUtils {
 	public static final String NORMAL_DATE_FORMAT_NEW = "yyyy-mm-dd hh24:mi:ss";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String SOLR_DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 	public static final String DATE_ALL = "yyyyMMddHHmmssS";
 
 	public static Long strDateToNum(String paramString) throws Exception {
@@ -58,7 +58,7 @@ public class DateUtils {
 		return strDateToNum(localSimpleDateFormat.format(new Date()));
 	}
 
-	public static java.util.Date stringToDate(String paramString1,
+	public static Date stringToDate(String paramString1,
 			String paramString2) throws Exception {
 		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
 				paramString2);
@@ -70,7 +70,7 @@ public class DateUtils {
 		}
 	}
 
-	public static String dateToString(java.util.Date paramDate,
+	public static String dateToString(Date paramDate,
 			String paramString) {
 		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
 				paramString);
@@ -78,16 +78,16 @@ public class DateUtils {
 		return localSimpleDateFormat.format(paramDate);
 	}
 
-	public static java.util.Date compactStringToDate(String paramString)
+	public static Date compactStringToDate(String paramString)
 			throws Exception {
 		return stringToDate(paramString, COMPACT_DATE_FORMAT);
 	}
 
-	public static String dateToCompactString(java.util.Date paramDate) {
+	public static String dateToCompactString(Date paramDate) {
 		return dateToString(paramDate, COMPACT_DATE_FORMAT);
 	}
 
-	public static String dateToNormalString(java.util.Date paramDate) {
+	public static String dateToNormalString(Date paramDate) {
 		return dateToString(paramDate, NORMAL_DATE_FORMAT);
 	}
 
@@ -96,8 +96,8 @@ public class DateUtils {
 		return dateToNormalString(compactStringToDate(paramString));
 	}
 
-	public static int getDaysBetween(java.util.Date paramDate1,
-			java.util.Date paramDate2) throws Exception {
+	public static int getDaysBetween(Date paramDate1,
+			Date paramDate2) throws Exception {
 		Calendar localCalendar1 = Calendar.getInstance();
 		Calendar localCalendar2 = Calendar.getInstance();
 		localCalendar1.setTime(paramDate1);
@@ -116,7 +116,7 @@ public class DateUtils {
 		return i;
 	}
 
-	public static java.util.Date addDays(java.util.Date paramDate, int paramInt)
+	public static Date addDays(Date paramDate, int paramInt)
 			throws Exception {
 		Calendar localCalendar = Calendar.getInstance();
 		localCalendar.setTime(paramDate);
@@ -125,43 +125,48 @@ public class DateUtils {
 		return localCalendar.getTime();
 	}
 
-	public static java.util.Date addDays(String paramString1,
+	public static Date addDays(String paramString1,
 			String paramString2, int paramInt) throws Exception {
 		Calendar localCalendar = Calendar.getInstance();
-		java.util.Date localDate = stringToDate(paramString1, paramString2);
+		Date localDate = stringToDate(paramString1, paramString2);
 		localCalendar.setTime(localDate);
 		int i = localCalendar.get(6);
 		localCalendar.set(6, i + paramInt);
 		return localCalendar.getTime();
 	}
 
-	public static java.sql.Date getSqlDate(java.util.Date paramDate)
-			throws Exception {
-		java.sql.Date localDate = new java.sql.Date(paramDate.getTime());
-		return localDate;
-	}
-
-	public static String formatDate(java.util.Date paramDate) {
+	public static String formatDate(Date paramDate) {
 		if (paramDate == null)
 			return null;
-		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(NORMAL_DATE_FORMAT);
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				NORMAL_DATE_FORMAT);
 		localSimpleDateFormat.setLenient(false);
 		return localSimpleDateFormat.format(paramDate);
 	}
 
-	public static String formatDateTime(java.util.Date paramDate) {
+	public static String formatDateTime(Date paramDate) {
 		if (paramDate == null)
 			return null;
-		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(DATETIME_FORMAT);
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				DATETIME_FORMAT);
 		localSimpleDateFormat.setLenient(false);
 		return localSimpleDateFormat.format(paramDate);
 	}
 
-	public static java.util.Date parseDate(String paramString)
-			throws Exception {
+	public static String formatSolrDateTime(Date paramDate) {
+		if (paramDate == null)
+			return null;
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				SOLR_DATETIME_FORMAT);
+		localSimpleDateFormat.setLenient(false);
+		return localSimpleDateFormat.format(paramDate);
+	}
+
+	public static Date parseDate(String paramString) throws Exception {
 		if ((paramString == null) || (paramString.trim().equals("")))
 			return null;
-		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(NORMAL_DATE_FORMAT);
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				NORMAL_DATE_FORMAT);
 		localSimpleDateFormat.setLenient(false);
 		try {
 			return localSimpleDateFormat.parse(paramString);
@@ -170,11 +175,11 @@ public class DateUtils {
 		}
 	}
 
-	public static java.util.Date parseDateTime(String paramString)
-			throws Exception {
+	public static Date parseDateTime(String paramString) throws Exception {
 		if ((paramString == null) || (paramString.trim().equals("")))
 			return null;
-		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(DATETIME_FORMAT);
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				DATETIME_FORMAT);
 		localSimpleDateFormat.setLenient(false);
 		try {
 			return localSimpleDateFormat.parse(paramString);
@@ -186,9 +191,10 @@ public class DateUtils {
 	public static Integer getYM(String paramString) throws Exception {
 		if (paramString == null)
 			return null;
-		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(NORMAL_DATE_FORMAT);
+		SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
+				NORMAL_DATE_FORMAT);
 		localSimpleDateFormat.setLenient(false);
-		java.util.Date localDate;
+		Date localDate;
 		try {
 			localDate = localSimpleDateFormat.parse(paramString);
 		} catch (ParseException localParseException) {
@@ -197,7 +203,7 @@ public class DateUtils {
 		return getYM(localDate);
 	}
 
-	public static Integer getYM(java.util.Date paramDate) {
+	public static Integer getYM(Date paramDate) {
 		if (paramDate == null)
 			return null;
 		Calendar localCalendar = Calendar.getInstance();
@@ -216,8 +222,7 @@ public class DateUtils {
 		return getYM(localCalendar.getTime()).intValue();
 	}
 
-	public static java.util.Date addMonths(java.util.Date paramDate,
-			int paramInt) {
+	public static Date addMonths(Date paramDate, int paramInt) {
 		Calendar localCalendar = Calendar.getInstance();
 		localCalendar.setTime(paramDate);
 		localCalendar.add(2, paramInt);
@@ -230,9 +235,9 @@ public class DateUtils {
 		return i;
 	}
 
-	public static int monthsBetween(java.util.Date paramDate1,
-			java.util.Date paramDate2) {
-		return monthsBetween(getYM(paramDate1).intValue(), getYM(paramDate2).intValue());
+	public static int monthsBetween(Date paramDate1, Date paramDate2) {
+		return monthsBetween(getYM(paramDate1).intValue(), getYM(paramDate2)
+				.intValue());
 	}
 
 	public static String getChineseDate(Calendar paramCalendar) {
@@ -271,7 +276,8 @@ public class DateUtils {
 
 	public static void main(String[] paramArrayOfString) {
 		try {
-			System.out.println(formatDate(addMonths(parseDate("2013-01-06"), 12)));
+			System.out
+					.println(formatDate(addMonths(parseDate("2013-01-06"), 12)));
 		} catch (Exception localException) {
 			System.out.println(localException);
 		}

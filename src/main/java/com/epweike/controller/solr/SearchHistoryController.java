@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author wuxp
  */
 @Controller
+@RequestMapping("/searchHistory")
 public class SearchHistoryController extends BaseController {
 
 	private static final Logger logger = LoggerFactory
@@ -40,7 +41,7 @@ public class SearchHistoryController extends BaseController {
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月17日 上午8:47:31
 	 */
-	@RequestMapping(value = "/search/history/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getSearchHistory(HttpServletRequest request)
 			throws Exception {
 
@@ -86,10 +87,10 @@ public class SearchHistoryController extends BaseController {
 		return json.toString();
 	}
 
-	@RequestMapping(value = { "/stat/search_history" })
+	@RequestMapping(value = { "list" })
 	public ModelAndView searchHistoryStat() throws SolrServerException, IOException {
 		// 返回视图
-		ModelAndView mv = new ModelAndView("stat/search/search_history");
+		ModelAndView mv = new ModelAndView("solr/search/list");
 		logger.info("进入搜索历史统计！！！");
 		return mv;
 	}

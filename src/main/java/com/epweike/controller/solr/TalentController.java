@@ -362,8 +362,6 @@ public class TalentController extends BaseController {
 		reg_start = (!"".equals(reg_start)) ? reg_start + "T00:00:00Z" : "*";
 		String reg_end = getParamFromAodata(aoData, "reg_end");
 		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
-		// 注册渠道
-		// String come = getParamFromAodata(aoData, "come");
 
 		SolrQuery params = new SolrQuery("*:*");
 		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end
@@ -371,15 +369,25 @@ public class TalentController extends BaseController {
 		params.setFacet(true);
 		params.addFacetPivotField("reg_date,user_role,come").setFacetLimit(
 				Integer.MAX_VALUE);
-		// if (!come.equals("全部"))
-		// params.addFilterQuery("come:" + come);
-		// params.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
 
 		QueryResponse response = SolrUtils.getSolrServer("talent")
 				.query(params);
 		NamedList<List<PivotField>> namedList = response.getFacetPivot();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
+
+		int allTotal = 0;
+		int allUncertain = 0;
+		int allWitkey = 0;
+		int allEmployer = 0;
+		int allBoth = 0;
+		int allWeb = 0;
+		int allCpm = 0;
+		int allApp = 0;
+		int allWap = 0;
+		int allMall = 0;
+		int allBack = 0;
+		int allYun = 0;
 
 		if (namedList != null) {
 			List<PivotField> pivotList = null;
@@ -390,8 +398,8 @@ public class TalentController extends BaseController {
 						int total = 0;
 						map = new HashMap<String, Object>();
 						map.put("label", pivot.getValue());
+						// 处理身份类型
 						List<PivotField> fieldList = pivot.getPivot();
-						System.out.println("fieldList=" + fieldList.toString());
 						if (fieldList != null) {
 							for (PivotField field : fieldList) {
 								int count = field.getCount();
@@ -400,14 +408,17 @@ public class TalentController extends BaseController {
 								String tmp = "";
 								if ("0".equals(value)) {// 未确定
 									tmp = "uncertain";
-								}
-								else if ("1".equals(value)) {// 威客
+									allUncertain += count;
+								} else if ("1".equals(value)) {// 威客
 									tmp = "witkey";
+									allWitkey += count;
 								} else if ("2".equals(value)) {// 雇主
 									tmp = "employer";
+									allEmployer += count;
 								} else if ("3".equals(value)) {
 									tmp = "both";
-								} 
+									allBoth += count;
+								}
 								map.put(tmp, count);
 								total += count;
 								// 处理注册渠道
@@ -421,9 +432,36 @@ public class TalentController extends BaseController {
 										tmp2 = Integer.parseInt(map.get(value2)
 												.toString());
 									map.put(value2, tmp2 + count2);
+
+									switch (value2) {
+									case "WEB":
+										allWeb += count2;
+										break;
+									case "cpm":
+										allCpm += count2;
+										break;
+									case "APP":
+										allApp += count2;
+										break;
+									case "WAP":
+										allWap += count2;
+										break;
+									case "mall":
+										allMall += count2;
+										break;
+									case "background":
+										allBack += count2;
+										break;
+									case "yun":
+										allYun += count2;
+										break;
+									default:
+										break;
+									}
 								}
 							}
 						}
+						allTotal += total;
 						System.out.println("map" + map.toString());
 						map.put("TOTAL", total);
 						// 不存在赋值0
@@ -480,6 +518,23 @@ public class TalentController extends BaseController {
 				return -(timeStemp1.compareTo(timeStemp2));
 			}
 		});
+
+		// 汇总
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("label", "汇总");
+		map2.put("TOTAL", allTotal);
+		map2.put("witkey", allWitkey);
+		map2.put("employer", allEmployer);
+		map2.put("uncertain", allUncertain);
+		map2.put("both", allBoth);
+		map2.put("WEB", allWeb);
+		map2.put("cpm", allCpm);
+		map2.put("APP", allApp);
+		map2.put("WAP", allWap);
+		map2.put("mall", allMall);
+		map2.put("background", allBack);
+		map2.put("yun", allYun);
+		list.add(0, map2);
 
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());

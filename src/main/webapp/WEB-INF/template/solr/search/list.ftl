@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>数据统计</title>
+	<title>索引管理</title>
 </head>
 
 <body>
@@ -12,12 +12,12 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
-				数据统计
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-cloud"></i>
+				索引管理
 			</a>
-			<a href="#" class="current">搜索历史</a>
+			<a href="#" class="current">搜索列表</a>
 		</div>
-		<h1>搜索历史</h1>
+		<h1>搜索列表</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -36,9 +36,9 @@
 					<label class="control-label">时间区间 :</label>
 					<div class="controls">
 						<div class="input-daterange" id="datepicker">
-							<input type="text" class="input-small" name="start" placeholder="开始时间" readonly>
+							<input type="text" class="input-sm form-control" name="start" placeholder="开始时间" readonly>
 							<span class="input-group-addon">to</span>
-							<input type="text" class="input-small" name="end" placeholder="结束时间" readonly></div>
+							<input type="text" class="input-sm form-control" name="end" placeholder="结束时间" readonly></div>
 					</div>
 
 					<label class="control-label">搜索类型:</label>
@@ -87,27 +87,6 @@
     		autoclose: true
 		});
 		
-		// 对Date的扩展，将 Date 转化为指定格式的String
-		// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
-		// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-		// 例子： 
-		// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-		// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
-		Date.prototype.Format = function (fmt) { //author: meizz 
-		    var o = {
-		        "M+": this.getMonth() + 1, //月份 
-		        "d+": this.getDate(), //日 
-		        "h+": this.getHours(), //小时 
-		        "m+": this.getMinutes(), //分 
-		        "s+": this.getSeconds(), //秒 
-		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-		        "S": this.getMilliseconds() //毫秒 
-		    };
-		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-		    for (var k in o)
-		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-		    return fmt;
-		}
 		//获取当前时间
 		var date = new Date().Format("yyyy-MM-dd");
 		$("input[name='start']").val(date);
@@ -120,7 +99,7 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/search/history/get', 
+	        "sAjaxSource": '/searchHistory/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "name"},
