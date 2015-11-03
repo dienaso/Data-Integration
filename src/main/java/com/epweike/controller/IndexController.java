@@ -30,8 +30,9 @@ public class IndexController extends BaseController {
 			.getLogger(IndexController.class);
 
 	public Map<String, Object> getIndexDataModel() throws Exception {
-
-		Date end = new Date();// 结束时间
+		
+		String now = DateUtils.formatDate(new Date());
+		Date end = DateUtils.parseDate(now);// 结束时间
 		Date start = DateUtils.addDays(end, -31);// 开始时间(31天前)
 		// 统计类型(日、月、年)
 		String statType = "+1DAY";
