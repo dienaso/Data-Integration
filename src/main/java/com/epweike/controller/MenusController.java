@@ -80,8 +80,7 @@ public class MenusController extends BaseController {
 							}
 						}
 					}
-					str.append("]");
-					str.append("}");
+					str.append("]}");
 				} else {
 					str.append("{\"id\":\"" + menus.getId() + "\", \"text\":\""
 							+ menus.getName() + "\", \"icon\":\""

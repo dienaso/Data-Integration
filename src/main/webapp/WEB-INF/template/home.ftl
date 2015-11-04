@@ -378,31 +378,31 @@
 				label: "TOTAL",
 				data: total
 			},  
-			"WEB": {
+			"WEB2": {
 				label: "WEB",
 				data: web
 			},  
-			"APP": {
+			"APP2": {
 				label: "APP",
 				data: app
 			},
-			"WAP": {
+			"WAP2": {
 				label: "WAP",
 				data: wap
 			},        
-			"QQ": {
+			"QQ2": {
 				label: "QQ",
 				data: webqq
 			},
-			"QQ空间": {
+			"QQ空间2": {
 				label: "QQ空间",
 				data: appqzone
 			},
-			"新浪": {
+			"新浪2": {
 				label: "新浪",
 				data: websina
 			},
-			"其它": {
+			"其它2": {
 				label: "其它",
 				data: other
 			}
@@ -489,31 +489,31 @@
 				label: "TOTAL",
 				data: total
 			},  
-			"danshang": {
+			"danshang1": {
 				label: "单赏",
 				data: danshang
 			},  
-			"duoshang": {
+			"duoshang1": {
 				label: "多赏",
 				data: duoshang
 			},
-			"jijian": {
+			"jijian1": {
 				label: "计件",
 				data: jijian
 			},        
-			"zhaobiao": {
+			"zhaobiao1": {
 				label: "招标",
 				data: zhaobiao
 			},
-			"guyong": {
+			"guyong1": {
 				label: "雇佣",
 				data: guyong
 			},
-			"fuwu": {
+			"fuwu1": {
 				label: "服务",
 				data: fuwu
 			},
-			"zhijieguyong": {
+			"zhijieguyong1": {
 				label: "直接雇佣",
 				data: zhijieguyong
 			}
@@ -600,31 +600,31 @@
 				label: "TOTAL",
 				data: total
 			},  
-			"danshang": {
+			"danshang2": {
 				label: "单赏",
 				data: danshang
 			},  
-			"duoshang": {
+			"duoshang2": {
 				label: "多赏",
 				data: duoshang
 			},
-			"jijian": {
+			"jijian2": {
 				label: "计件",
 				data: jijian
 			},        
-			"zhaobiao": {
+			"zhaobiao2": {
 				label: "招标",
 				data: zhaobiao
 			},
-			"guyong": {
+			"guyong2": {
 				label: "雇佣",
 				data: guyong
 			},
-			"fuwu": {
+			"fuwu2": {
 				label: "服务",
 				data: fuwu
 			},
-			"zhijieguyong": {
+			"zhijieguyong2": {
 				label: "直接雇佣",
 				data: zhijieguyong
 			}

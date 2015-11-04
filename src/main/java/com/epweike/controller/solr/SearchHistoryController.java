@@ -17,6 +17,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.GroupParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -66,6 +67,9 @@ public class SearchHistoryController extends BaseController {
 								+ endString + "T23:59:59Z]").setFacet(true)
 				.addFacetField("keyword").setFacetMinCount(1)
 				.setFacetLimit(Integer.MAX_VALUE);
+		params.setParam(GroupParams.GROUP, true);  
+		params.setParam(GroupParams.GROUP_FACET, true);  
+		params.setParam(GroupParams.GROUP_FIELD, "ip"); 
 		if (!searchType.equals("all"))// 搜索类型过滤
 			params.addFilterQuery("search_type:" + searchType);
 
