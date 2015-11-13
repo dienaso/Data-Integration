@@ -119,7 +119,11 @@ $(function () {
 					{ "mData": "title"}, 
 		        	{ "mData": "messagetype"}, 
 		        	{ "mData": "targetno"},
-		        	{ "mData": "returncode"},
+		        	{ "mData": "returncode",
+		        	  "mRender": function (data, type) {
+		        	  	if (data == null)
+	        		  		return null;
+		        	},
 		        	{ "mData": "intime",
 		        	  "mRender": function (data, type) {
 		        	  	if (data == null)

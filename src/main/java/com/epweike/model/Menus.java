@@ -53,6 +53,7 @@ public class Menus extends BaseModel<Menus> {
 	/**
      * 排序，数值越小越靠前
      */
+	@OrderBy(value = "asc")
     private Byte sort;
     
   	public Menus() {

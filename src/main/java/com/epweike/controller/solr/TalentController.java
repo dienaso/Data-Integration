@@ -284,63 +284,6 @@ public class TalentController extends BaseController {
 		return mv;
 	}
 
-	// /**
-	// * @Description:获取注册用户
-	// *
-	// * @author 吴小平
-	// * @version 创建时间：2015年6月10日 下午3:28:27
-	// */
-	// @RequestMapping(value = "/users/register/get", method =
-	// RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	// public @ResponseBody String getRegister(HttpServletRequest request)
-	// throws Exception {
-	//
-	// // 获取查询关键参数
-	// String aoData = request.getParameter("aoData");
-	// logger.info(aoData);
-	// // 解析查询关键参数
-	// PageModel<Map<String, Object>> pageModel =
-	// parsePageParamFromJson(aoData);
-	//
-	// // 开始时间
-	// String startString = getParamFromAodata(aoData, "start");
-	// Date start = DateUtils.parseDate(startString);
-	// // 结束时间
-	// String endString = getParamFromAodata(aoData, "end");
-	// Date end = DateUtils.parseDateTime(endString + " 23:59:59");
-	// // 统计类型(日、月、年)
-	// String statType = getParamFromAodata(aoData, "statType");
-	//
-	// SolrQuery params = new SolrQuery("*:*").setFacet(true)
-	// .addDateRangeFacet("reg_time_date", start, end, statType)
-	// .setFacetLimit(1000);
-	//
-	// QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
-	//
-	// // 日期根据统计类型截取
-	// int endIndex = 10;
-	// if (statType.contains("YEAR")) {
-	// endIndex = 4;
-	// } else if (statType.contains("MONTH")) {
-	// endIndex = 7;
-	// }
-	//
-	// // 获取区间统计列表
-	// @SuppressWarnings("rawtypes")
-	// List<RangeFacet> listFacet = response.getFacetRanges();
-	// List<Map<String, Object>> list = StatUtils.getFacetRangeList(listFacet,
-	// endIndex);
-	//
-	// // 搜索结果数
-	// pageModel.setiTotalDisplayRecords(list.size());
-	// pageModel.setiTotalRecords(list.size());
-	// pageModel.setAaData(list);
-	// JSONObject json = JSONObject.fromObject(pageModel);
-	// logger.info("获取用户注册统计列表！！！" + json);
-	//
-	// return json.toString();
-	// }
-
 	/**
 	 * @Description:获取注册用户
 	 * 
@@ -545,4 +488,5 @@ public class TalentController extends BaseController {
 
 		return json.toString();
 	}
+	
 }

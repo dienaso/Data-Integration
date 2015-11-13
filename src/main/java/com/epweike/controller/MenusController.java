@@ -46,7 +46,7 @@ public class MenusController extends BaseController {
 	 * 
 	 * @return
 	 */
-	private String getJson(int pid) {
+	private String getJsonTree(int pid) {
 		StringBuffer str = new StringBuffer();
 		str.append("[{\"id\":\"0\",\"text\":\"菜单\", \"state\" : { \"opened\" : \"true\", \"selected\":\"true\"}, \"children\":[");// 起始
 		// 一级菜单
@@ -68,7 +68,7 @@ public class MenusController extends BaseController {
 						Menus menus2 = menusList2.get(j);
 						// 还有子节点(递归调用)
 						if (menus2.getHasChild() == 1) {
-							this.getJson(menus2.getPid());
+							this.getJsonTree(menus2.getPid());
 						} else {
 
 							str.append("{\"id\":\"" + menus2.getId()
@@ -102,7 +102,7 @@ public class MenusController extends BaseController {
 	public @ResponseBody String paginationDataTables(HttpServletRequest request)
 			throws IOException {
 
-		return getJson(0);
+		return getJsonTree(0);
 
 	}
 
@@ -129,6 +129,9 @@ public class MenusController extends BaseController {
 		int id = 0;
 		if (request.getParameter("id") != null)
 			id = Integer.parseInt(request.getParameter("id"));
+		Byte position = 0;
+		if (request.getParameter("position") != null)
+			position = Byte.parseByte(request.getParameter("position"));
 		int parent = 0;
 		if (request.getParameter("parent") != null)
 			parent = Integer.parseInt(request.getParameter("parent"));
@@ -179,6 +182,7 @@ public class MenusController extends BaseController {
 				int oPid = menus.getPid();// 获取原父级id
 				menus.setId(id);
 				menus.setPid(parent);
+				menus.setSort(position);
 				this.menusService.updateBySelective(menus);
 				// 判断原父级是否还有子级
 				hasChild = hasChild(oPid);

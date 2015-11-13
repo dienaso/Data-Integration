@@ -59,7 +59,7 @@ public class StatUtils extends BaseController {
 			List<FacetField> facetFields, String chartType) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
-		if (chartType.equals("pie")) {// 饼图
+		if ("pie".equals(chartType)) {// 饼图
 			for (FacetField ff : facetFields) {
 				System.out.println("--------------------");
 				System.out.println("name=" + ff.getName() + "\tcount="
@@ -130,6 +130,14 @@ public class StatUtils extends BaseController {
 					}
 					break;
 				case "indus_name":// 按分类统计（任务、稿件）
+					for (Count count : ff.getValues()) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", count.getName());
+						map.put("count", count.getCount());
+						list.add(map);
+					}
+					break;
+				case "indus_names":// 按分类统计（人才）
 					for (Count count : ff.getValues()) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", count.getName());
