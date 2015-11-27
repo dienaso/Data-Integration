@@ -2,7 +2,9 @@ package com.epweike.controller;
 
 import com.epweike.model.PageModel;
 import com.epweike.model.RetModel;
+import com.epweike.model.Roles;
 import com.epweike.model.Users;
+import com.epweike.service.RolesService;
 import com.epweike.service.UsersService;
 import com.epweike.util.MD5Utils;
 
@@ -12,8 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +47,13 @@ public class UsersController extends BaseController {
 	private UsersService usersService;
 	
 	@Autowired
+	private RolesService rolesService;
+	
+	@Autowired
 	JdbcUserDetailsManager jdbcUserDetailsManager;
+	
+	@Autowired
+	UserDetailsManager userDetailsManager;
 
 	public List<Users> usersList;
 
@@ -51,10 +64,21 @@ public class UsersController extends BaseController {
 //		user = (User) SecurityContextHolder.getContext().getAuthentication()
 //				.getPrincipal();
 
-		System.out.println("groups:"+jdbcUserDetailsManager.findAllGroups());
-		model.addAttribute("groups", jdbcUserDetailsManager.findAllGroups());
+		//获取所有角色
+		List<Roles> roles = this.rolesService.selectAll();
+		model.addAttribute("roles", roles);
 		
 		return "users/list";
+	}
+	
+	@RequestMapping(value = "getAuthorities", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody Collection<? extends GrantedAuthority> getAuthorities(HttpServletRequest request)
+			throws IOException {
+
+		// 获取用户名
+		String userName = request.getParameter("userName");
+		UserDetails userDetails = jdbcUserDetailsManager.loadUserByUsername(userName);
+		return userDetails.getAuthorities();
 	}
 
 	@RequestMapping(value = "add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -65,9 +89,13 @@ public class UsersController extends BaseController {
 		// 获取请求参数
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String tel = request.getParameter("tel");
-		String enabled = request.getParameter("enabled");
+		String roles = request.getParameter("roles");
+		boolean enabled = true;
+		String sEnabled = request.getParameter("enabled");
+		if("0".equals(sEnabled)){
+			enabled = false;
+		}
+		
 
 		// 数据校验
 		if ("".equals(username) || username == null) {
@@ -79,9 +107,7 @@ public class UsersController extends BaseController {
 			retModel.setMsg("密码不能为空！");
 			return retModel;
 		} else {// 校验用户名是否存在
-			Users users = new Users(username);
-			users = usersService.selectOne(users);
-			if (users != null) {
+			if (jdbcUserDetailsManager.userExists(username)) {
 				retModel.setFlag(false);
 				retModel.setMsg("用户:'" + username + "'已存在！");
 				return retModel;
@@ -90,22 +116,17 @@ public class UsersController extends BaseController {
 
 		// md5加密
 		password = MD5Utils.getMD5(password, username);
-		// 新增账号
-		Users users = new Users();
-		users.setUserName(username);
-		users.setPassword(password);
-		;
-		users.setEmail(email);
-		users.setTel(tel);
-		users.setEnabled(Integer.parseInt(enabled));
-		users.setOnTime(new Date());
-		// 新增用户组映射
-		jdbcUserDetailsManager.addUserToGroup(username, "");
-
+		// 新增用户角色
+		String[] rArry = roles.split(",");
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		for(int i = 0; i < rArry.length; i++){
+			authorities.add(new SimpleGrantedAuthority(rArry[i]));  
+		}
+		user = new User(username, password, enabled, true, true, true, authorities);
+		
 		if (retModel.isFlag()) {
 			try {
-				// 新增到数据库和计划任务
-				usersService.insert(users);
+				jdbcUserDetailsManager.createUser(user);
 				retModel.setInsertFucceed();
 			} catch (AccessDeniedException e) {
 				e.printStackTrace();
@@ -204,12 +225,14 @@ public class UsersController extends BaseController {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		// 获取请求参数
-		int id = Integer.parseInt(request.getParameter("id"));
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String tel = request.getParameter("tel");
-		String enabled = request.getParameter("enabled");
+		String roles = request.getParameter("roles");
+		boolean enabled = true;
+		String sEnabled = request.getParameter("enabled");
+		if("0".equals(sEnabled)){
+			enabled = false;
+		}
 
 		// 数据校验
 		if ("".equals(username) || username == null) {
@@ -224,20 +247,17 @@ public class UsersController extends BaseController {
 
 		// md5加密
 		password = MD5Utils.getMD5(password, username);
-
-		Users users = new Users();
-		users.setId(id);
-		users.setUserName(username);
-		users.setPassword(password);
-		;
-		users.setEmail(email);
-		users.setTel(tel);
-		users.setEnabled(Integer.parseInt(enabled));
-
+		// 修改用户角色
+		String[] rArry = roles.split(",");
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		for(int i = 0; i < rArry.length; i++){
+			authorities.add(new SimpleGrantedAuthority(rArry[i]));  
+		}
+		user = new User(username, password, enabled, true, true, true, authorities);
+		
 		if (retModel.isFlag()) {
 			try {
-				// 更新数据库和计划任务
-				usersService.update(users);
+				jdbcUserDetailsManager.updateUser(user);
 				retModel.setUpdateFucceed();
 			} catch (AccessDeniedException e) {
 				e.printStackTrace();

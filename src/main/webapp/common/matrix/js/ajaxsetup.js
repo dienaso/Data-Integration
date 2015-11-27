@@ -8,12 +8,14 @@ $.ajaxSetup({
         	window.location.href="/"; 
         }
   	},success: function (data) {
-        table.ajax.reload();
-        $("#myModal").modal("hide");
-        $.gritter.add({
-			title:	'操作提示！',
-			text:	data.msg,
-			sticky: false
-		});	
+  		if(data !== null && data.msg !== undefined && data.msg !== ''){
+  			table.ajax.reload();
+  	        $("#myModal").modal("hide");
+  	        $.gritter.add({
+  				title:	'操作提示！',
+  				text:	data.msg,
+  				sticky: false
+  			});	
+  		}
      }
 });

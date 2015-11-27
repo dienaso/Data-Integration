@@ -28,8 +28,6 @@
 					<thead>
 						<tr>
 							<th>用户名</th>
-							<th>联系电话</th>
-							<th>邮箱</th>
 							<th>状态</th>
 							<th>注册时间</th>
 							<th>操作</th>
@@ -65,11 +63,11 @@
 	                    </div>
 	                </div>
 	                <div class="control-group">
-		              <label class="control-label">用户组:</label>
+		              <label class="control-label">角色:</label>
 		              <div class="controls">
-		                <select id="group">
-		                  <#list groups as list>
-		                  	<option>${list}</option>
+		                <select multiple id="roles">
+		                  <#list roles as list>
+		                  	<option>${list.roleName}</option>
 		                  </#list>
 		                </select>
 		              </div>
@@ -85,18 +83,6 @@
 			                 	 禁用</label>
 	                    </div>
 	                </div>
-	                <div class="control-group">
-						<label class="control-label">联系电话:</label>
-						<div class="controls">
-							<input type="text" class="form-control" id="tel" placeholder="联系电话">
-						</div>
-					</div>
-	                <div class="control-group">
-						<label class="control-label">邮箱:</label>
-						<div class="controls">
-							<input type="text" class="form-control" id="email" placeholder="邮箱">
-						</div>
-					</div>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-primary" id="save">保存</button>
@@ -129,8 +115,6 @@
 	        "aoColumns":
 	           [  
 		        	{ "mData": "userName"},
-		        	{ "mData": "tel"},
-		        	{ "mData": "email"},
 		        	{ "mData": "enabled",
 		        	  "mRender": function (data, type) {
 	            		 if(data == 1){
@@ -150,12 +134,12 @@
 	        	],
 	        "columnDefs": [
 		                {
-		                    targets: 5,
+		                    targets: 3,
 		                    render: function (a, b, c, d) {
 		                        var context =
 		                        {
 		                            func: [
-		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\',\'" + c.email + "\',\'" + c.tel + "\')", "type": "primary"},
+		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\')", "type": "primary"},
 		                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
 		                            ]
 		                        };
@@ -194,8 +178,6 @@
 	    	$("#id").val("");
 	        $("#username").val("");
 	        $("#password").val("");
-	        $("#email").val("");
-	        $("#tel").val("");
 	        $(".checked").removeClass("checked");
 	    }
 	 
@@ -210,13 +192,17 @@
 	        		enabled = $(this).children().val();
 	        	} 
 			});
+			//遍历选中角色
+			var roles = new Array();
+			$("#roles option:selected").each(function(){
+	            roles.push($(this).text());
+	        });
+	        roles = roles.join(',');
 	        var addJson = {
 	        	"id": $("#id").val(),
 	            "username": $("#username").val(),
 	            "password": $("#password").val(),
-	            "group": $("#group option:selected").val(),
-	            "email": $("#email").val(),
-	            "tel": $("#tel").val(),
+	            "roles": roles,
 	            "enabled": enabled
 	        };
 	        ajax(addJson);
@@ -234,8 +220,6 @@
 	        $("#id").val(id);
 	        $("#username").val(username);
 	        $("#password").val();
-	        $("#email").val(email);
-	        $("#tel").val(tel);
 	        $("input:radio[name=enabled][value="+enabled+"]").parent("span").attr("class","checked");
 	        $("#myModal").modal("show");
 	        
@@ -256,8 +240,7 @@
 	                "id": obj.id,
 	                "username": obj.username,
 	                "password": obj.password,
-	                "email": obj.email,
-	                "tel": obj.tel,
+	                "roles": obj.roles,
 	                "enabled": obj.enabled
 	            }
 	        });

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.epweike.model.Menus;
 import com.epweike.model.RetModel;
-import com.epweike.service.AclObjectIdentityService;
 import com.epweike.service.MenusService;
 
 import org.slf4j.Logger;
@@ -35,9 +34,6 @@ public class MenusController extends BaseController {
 
 	@Autowired
 	private MenusService menusService;
-	
-	@Autowired
-	private AclObjectIdentityService aclObjectIdentityService;
 	
 	@Autowired    
 	MutableAclService mutableAclService;  

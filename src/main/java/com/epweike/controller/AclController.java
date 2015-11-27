@@ -1,11 +1,8 @@
 package com.epweike.controller;
 
-import com.epweike.model.AclObjectIdentity;
 import com.epweike.model.Menus;
 import com.epweike.model.RetModel;
 import com.epweike.model.Roles;
-import com.epweike.service.AclObjectIdentityService;
-import com.epweike.service.GroupAuthoritiesService;
 import com.epweike.service.MenusService;
 import com.epweike.service.RolesService;
 
@@ -48,9 +45,6 @@ public class AclController extends BaseController {
 			.getLogger(AclController.class);
 
 	@Autowired
-	private AclObjectIdentityService aclObjectIdentityService;
-
-	@Autowired
 	private MenusService menusService;
 
 	@Autowired
@@ -58,11 +52,6 @@ public class AclController extends BaseController {
 
 	@Autowired
 	MutableAclService mutableAclService;
-
-	@Autowired
-	private GroupAuthoritiesService groupAuthoritiesService;
-
-	public List<AclObjectIdentity> aclObjectIdentityList;
 
 	/**
 	 * @Description:获取角色

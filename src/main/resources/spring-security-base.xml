@@ -27,7 +27,7 @@
 	<bean id="userDetailsService"
 		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
 		<property name="dataSource" ref="dataSource" />
-		<property name="enableGroups" value="true" />
+		<property name="enableGroups" value="false" />
 		<property name="enableAuthorities" value="true" />
 	</bean>
 	<!-- 配置密码加密 -->
