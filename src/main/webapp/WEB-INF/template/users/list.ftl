@@ -140,7 +140,7 @@
 		                        {
 		                            func: [
 		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\')", "type": "primary"},
-		                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
+		                                {"name": "删除", "fn": "del(\'" + c.userName + "\')", "type": "danger"}
 		                            ]
 		                        };
 		                        var html = template(context);
@@ -251,12 +251,12 @@
 	     * 删除数据
 	     * @param id
 	     */
-	    function del(id) {
+	    function del(username) {
 	        $.ajax({
 	            "url": "/users/del",
 	            "type": "get",
 	            "data": {
-		            "id": id
+		            "username": username
 		         }
 	        });
 	    }
