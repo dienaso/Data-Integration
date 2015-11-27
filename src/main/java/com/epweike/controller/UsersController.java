@@ -150,10 +150,10 @@ public class UsersController extends BaseController {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		// 获取主键
-		int id = Integer.parseInt(request.getParameter("id"));
+		String username = request.getParameter("username");
 
 		try {
-			this.usersService.deleteByPrimaryKey(id);
+			jdbcUserDetailsManager.deleteUser(username);
 			retModel.setDelFucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
