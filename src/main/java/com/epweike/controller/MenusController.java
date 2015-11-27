@@ -8,12 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.epweike.model.Menus;
 import com.epweike.model.RetModel;
+import com.epweike.service.AclObjectIdentityService;
 import com.epweike.service.MenusService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.acls.domain.ObjectIdentityImpl;
+import org.springframework.security.acls.model.MutableAclService;
+import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +35,12 @@ public class MenusController extends BaseController {
 
 	@Autowired
 	private MenusService menusService;
+	
+	@Autowired
+	private AclObjectIdentityService aclObjectIdentityService;
+	
+	@Autowired    
+	MutableAclService mutableAclService;  
 
 	public List<Menus> menusList;
 
@@ -99,7 +109,7 @@ public class MenusController extends BaseController {
 	}
 
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String paginationDataTables(HttpServletRequest request)
+	public @ResponseBody String get(HttpServletRequest request)
 			throws IOException {
 
 		return getJsonTree(0);
@@ -155,6 +165,11 @@ public class MenusController extends BaseController {
 				m2.setId(m1.getPid());
 				m2.setHasChild(hasChild);
 				this.menusService.updateBySelective(m2);
+				// 删除acl记录
+				ObjectIdentity oid1 = new ObjectIdentityImpl(Menus.class,
+						id);
+				mutableAclService.deleteAcl(oid1, true);
+				
 
 				break;
 			case "create_node":
@@ -208,7 +223,8 @@ public class MenusController extends BaseController {
 				m.setUrl(menus.getUrl());
 				m.setTarget(menus.getTarget());
 				m.setSort(menus.getSort());
-				this.menusService.insert(m);
+				this.menusService.insertUseGeneratedKeys(m);
+				
 				// 更新父级has_child字段
 				Menus pm4 = new Menus();
 				pm4.setId(parent);

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.epweike.mapper.GroupAuthoritiesMapper" >
+  <resultMap id="BaseResultMap" type="com.epweike.model.GroupAuthorities" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="authority" property="authority" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

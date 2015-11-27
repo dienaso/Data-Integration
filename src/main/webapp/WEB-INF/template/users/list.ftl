@@ -9,6 +9,9 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-key"></i>
+				权限管理
+			</a>
 			<a href="#" class="current">用户管理</a>
 		</div>
 		<h1>用户管理</h1>
@@ -61,6 +64,16 @@
 	                    	<input type="text" class="form-control" id="password" placeholder="密码">
 	                    </div>
 	                </div>
+	                <div class="control-group">
+		              <label class="control-label">用户组:</label>
+		              <div class="controls">
+		                <select id="group">
+		                  <#list groups as list>
+		                  	<option>${list}</option>
+		                  </#list>
+		                </select>
+		              </div>
+		            </div>
 	                <div class="control-group">
 	                	<label class="control-label">状态:</label>
 	                	<div class="controls">
@@ -201,6 +214,7 @@
 	        	"id": $("#id").val(),
 	            "username": $("#username").val(),
 	            "password": $("#password").val(),
+	            "group": $("#group option:selected").val(),
 	            "email": $("#email").val(),
 	            "tel": $("#tel").val(),
 	            "enabled": enabled

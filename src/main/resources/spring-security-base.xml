@@ -23,6 +23,7 @@
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:/messages/messages_zh_CN" />
 	</bean>
+	<!-- 自定义UserDetailsService认证  -->  
 	<bean id="userDetailsService"
 		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
 		<property name="dataSource" ref="dataSource" />
@@ -36,6 +37,10 @@
 		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
 		<property name="userPropertyToUse" value="username" />
 	</bean>
+	
+	<bean id="jdbcUserService" class="org.springframework.security.provisioning.JdbcUserDetailsManager" >
+        <property name= "dataSource" ref="dataSource" />
+    </bean >
 
 	<!-- Start ACL Configuration -->
 
@@ -44,16 +49,16 @@
 		id="aclDecisionManager">
 		<constructor-arg name="decisionVoters">
 			<list>
-				<ref bean="categoryReadVoter" />
+				<ref bean="menusReadVoter" />
 			</list>
 		</constructor-arg>
 	</bean>
-	<bean class="org.springframework.security.acls.AclEntryVoter" id="categoryReadVoter">
+	<bean class="org.springframework.security.acls.AclEntryVoter" id="menusReadVoter">
 		<!-- public AclEntryVoter(AclService aclService, String processConfigAttribute, 
 			Permission[] requirePermission) { -->
 		<!-- <constructor-arg ref="aclService"/> -->
 		<constructor-arg ref="aclService" />
-		<constructor-arg value="VOTE_CATEGORY_READ" />
+		<constructor-arg value="VOTE_MENUS_READ" />
 		<constructor-arg>
 			<array>
 				<util:constant
@@ -64,10 +69,11 @@
 	</bean>
 
 	<!-- ACL Service -->
-	<bean class="org.springframework.security.acls.jdbc.JdbcAclService"
+	<bean class="org.springframework.security.acls.jdbc.JdbcMutableAclService"
 		id="aclService">
 		<constructor-arg ref="dataSource" />
 		<constructor-arg ref="lookupStrategy" />
+		<constructor-arg ref="aclCache" />
 	</bean>
 	
 	<bean class="org.springframework.security.acls.jdbc.BasicLookupStrategy"
@@ -88,10 +94,7 @@
 	<bean id="ehCacheAclCache"
 		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
 		<constructor-arg name="cache">
-			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-				<property name="overflowToDisk" value="true" />
-				<property name="maxElementsInMemory" value="1024" />
-			</bean>
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean"></bean>
 		</constructor-arg>
 		<constructor-arg name="permissionGrantingStrategy"
 			ref="permissionGrantingStrategy" />

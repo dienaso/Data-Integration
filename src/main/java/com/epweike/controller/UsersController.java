@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,16 +38,22 @@ public class UsersController extends BaseController {
 
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+	JdbcUserDetailsManager jdbcUserDetailsManager;
 
 	public List<Users> usersList;
 
 	public User user;
-
+	
 	@RequestMapping(value = { "list" })
 	public String list(Model model) {
-		user = (User) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
+//		user = (User) SecurityContextHolder.getContext().getAuthentication()
+//				.getPrincipal();
 
+		System.out.println("groups:"+jdbcUserDetailsManager.findAllGroups());
+		model.addAttribute("groups", jdbcUserDetailsManager.findAllGroups());
+		
 		return "users/list";
 	}
 
@@ -84,7 +90,7 @@ public class UsersController extends BaseController {
 
 		// md5加密
 		password = MD5Utils.getMD5(password, username);
-
+		// 新增账号
 		Users users = new Users();
 		users.setUserName(username);
 		users.setPassword(password);
@@ -93,6 +99,8 @@ public class UsersController extends BaseController {
 		users.setTel(tel);
 		users.setEnabled(Integer.parseInt(enabled));
 		users.setOnTime(new Date());
+		// 新增用户组映射
+		jdbcUserDetailsManager.addUserToGroup(username, "");
 
 		if (retModel.isFlag()) {
 			try {

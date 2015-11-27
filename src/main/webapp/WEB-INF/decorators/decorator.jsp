@@ -1,12 +1,15 @@
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags"%>
 <%@ page import="com.epweike.service.MenusService"%>
 <%@ page import="com.epweike.model.Menus"%>
 <%@ page import="com.epweike.util.SpringUtils"%>
 <%@ page import="com.epweike.util.SysconfigUtils"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.Collection"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%
 MenusService menusService = SpringUtils.getBean("menusService");
@@ -22,11 +25,10 @@ if (request.getParameter("pid") != null
     pid = request.getParameter("pid");
 }
 
-System.out.println("id:" + id + " pid:" + pid);
-
 //一级菜单
-List<Menus>
-menus = menusService.select(new Menus(0));
+System.out.println("select menus");
+Collection<Menus> menus = menusService.getFilterMenus(new Menus(0));
+System.out.println("menus:"+menus.toString());
 
 //拼接一二级菜单作为网页标题
 String title = "";
@@ -43,9 +45,10 @@ if (!"".equals(title)) {
 
 //网站名称
 String webName = SysconfigUtils.getVarValue("web_name");
-//网站名称
+//网站版权
 String webCopyright = SysconfigUtils.getVarValue("web_copyright");
 
+request.setAttribute("menus", menus);
 %>
 <!DOCTYPE html>
 <html>
@@ -135,7 +138,7 @@ class="icon-refresh"></i>
 </ul>
 </li>
 <li class="">
-<a title="" href="/j_spring_security_logout">
+<a title="退出" href="/j_spring_security_logout">
 <i
 class="icon icon-share-alt"></i>
 <span class="text">退出</span>
@@ -165,18 +168,14 @@ if (menus != null && menus.size() >
     it = menus.iterator(); it.hasNext();) {
         Menus menu = it.next();
         System.out.println("一级菜单对象：" + menu.toString());
-        String url = menu.getUrl();
-        if (!"#".equals(url)) {
-            url = menu.getUrl() + "?id=" + menu.getId() + "&pid="
-            + menu.getPid();
-        }
+        String url = "";
+        url = menu.getUrl() + "?id=" + menu.getId() + "&pid="
+        + menu.getPid();
         String icon = menu.getIcon();
         String name = menu.getName();
-        %>
-        <%
         //二级菜单
-        List<Menus>
-        two_menus = menusService.select(new Menus(menu
+        Collection<Menus>
+        two_menus = menusService.getFilterMenus(new Menus(menu
         .getId()));
         if (two_menus != null && two_menus.size() > 0) { //存在二级菜单
             if (menu.getId().toString().equals(pid)) { //当前一级菜单且存在子级菜单

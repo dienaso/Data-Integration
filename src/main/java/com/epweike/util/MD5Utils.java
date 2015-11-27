@@ -16,6 +16,6 @@ public class MD5Utils {
 	}
 
 	public static void main(String args[]) {
-		System.out.println("加密后的：" + getMD5("epweike", "admin"));
+		System.out.println("加密后的：" + getMD5("pm0592", "pm"));
 	}
 }

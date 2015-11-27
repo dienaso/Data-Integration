@@ -38,8 +38,6 @@ public class AppDownController extends BaseController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AppDownController.class);
 
-	
-
 	/**
 	 * @Description:app下载统计列表
 	 * 
@@ -68,7 +66,7 @@ public class AppDownController extends BaseController {
 		String source = getParamFromAodata(aoData, "source");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
-				.addDateRangeFacet("down_time", start, end, statType)
+				.addDateRangeFacet("down_time_date", start, end, statType)
 				.setFacetLimit(1000);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);

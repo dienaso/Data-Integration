@@ -4,6 +4,7 @@ import com.epweike.model.PageModel;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author wuxp
  */
 @Service
+@Secured("ROLE_USER")
 public abstract class BaseService<T> {
 
 	@Autowired
@@ -45,6 +47,10 @@ public abstract class BaseService<T> {
 
 	public int count(T record) {
 		return mapper.selectCount(record);
+	}
+	
+	public List<T> selectAll() {
+		return mapper.selectAll();
 	}
 	
 	public List<T> select(T record) {
