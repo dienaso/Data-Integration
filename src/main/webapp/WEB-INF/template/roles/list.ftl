@@ -97,8 +97,7 @@
 	                        {
 	                            func: [
 	                                {"name": "修改", "fn": "edit(\'" + c.id + "\', \'" + c.roleName + "\')", "type": "primary"},
-	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"},
-	                                {"name": "成员管理", "fn": "members(\'" + c.roleName + "\')", "type": "info"}
+	                                {"name": "删除", "fn": "del(\'" + c.id + "\')", "type": "danger"}
 	                            ]
 	                        };
 	                        var html = template(context);
@@ -194,19 +193,6 @@
         });
     }
     
-    /**
-     * 成员管理
-     * @param id
-     */
-    function members(roleName) {
-        $.ajax({
-            "url": "/roles/members",
-            "type": "get",
-            "data": {
-	            "id": id
-	         }
-        });
-    }
     
 </script>
 </body>
