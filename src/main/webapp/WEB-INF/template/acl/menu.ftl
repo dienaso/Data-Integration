@@ -71,7 +71,7 @@
 					"#" : { "max_children" : 1, "max_depth" : 3, "valid_children" : ["root"] },
 					"default" : { "valid_children" : ["default","file"] }
 				},
-				"plugins" : ["search", "state", "types", "wholerow", "checkbox" ]
+				"plugins" : ["search", "types", "wholerow", "checkbox" ]
 			})
 			
 	});
