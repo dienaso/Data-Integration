@@ -48,18 +48,23 @@ public class JdbcUtils<T> {
 	 * @throws Exception 
 	   * */
 	public static DataSource getDataSource(String dataSourceName) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, SysconfigUtils.getVarValue("driverClass"));
-		map.put(DruidDataSourceFactory.PROP_URL, SysconfigUtils.getVarValue("url"));
-		map.put(DruidDataSourceFactory.PROP_USERNAME, SysconfigUtils.getVarValue("user"));
-		map.put(DruidDataSourceFactory.PROP_PASSWORD, SysconfigUtils.getVarValue("password"));
-		try {
-			dataSource = DruidDataSourceFactory.createDataSource(map);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(dataSourceName != null){
+			dataSource = SpringUtils.getBean(dataSourceName);
+		}else{
+			Map<String, String> map = new HashMap<String, String>();
+			map.put(DruidDataSourceFactory.PROP_DRIVERCLASSNAME, SysconfigUtils.getVarValue("driverClass"));
+			map.put(DruidDataSourceFactory.PROP_URL, SysconfigUtils.getVarValue("url"));
+			map.put(DruidDataSourceFactory.PROP_USERNAME, SysconfigUtils.getVarValue("user"));
+			map.put(DruidDataSourceFactory.PROP_PASSWORD, SysconfigUtils.getVarValue("password"));
+			try {
+				dataSource = DruidDataSourceFactory.createDataSource(map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(dataSource.toString());
 		}
-		System.out.println(dataSource.toString());
+		
 		return dataSource;
 	}
 

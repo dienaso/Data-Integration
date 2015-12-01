@@ -6,12 +6,15 @@ import com.epweike.model.Roles;
 import com.epweike.service.MenusService;
 import com.epweike.service.RolesService;
 
+import net.sf.json.JSONArray;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
+import org.springframework.security.acls.jdbc.JdbcMutableAclService;
 import org.springframework.security.acls.model.AccessControlEntry;
 import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.MutableAclService;
@@ -52,6 +55,9 @@ public class AclController extends BaseController {
 
 	@Autowired
 	MutableAclService mutableAclService;
+	
+	@Autowired
+	JdbcMutableAclService jdbcMutableAclService;
 
 	/**
 	 * @Description:获取角色
@@ -76,6 +82,18 @@ public class AclController extends BaseController {
 
 		return getJsonTree(0);
 
+	}
+	
+	@RequestMapping(value = "getAceByRole", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getAceByRole(HttpServletRequest request)
+			throws IOException {
+		// 获取角色
+		String role = request.getParameter("role");
+		List<Menus> list = this.menusService.getMenusByRole(role);
+		
+		JSONArray  json = JSONArray.fromObject(list);
+		
+		return json.toString();
 	}
 
 	@RequestMapping(value = "saveMenuAcl", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

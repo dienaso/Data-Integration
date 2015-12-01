@@ -76,6 +76,25 @@
 			
 	});
 	
+	checkMenus($("#role option:selected").val());
+	
+	//角色下拉框事件监听
+	$('#role').change(function(){
+		checkMenus($(this).children('option:selected').val());
+	}) 
+	
+	//回选指定角色菜单权限
+	function checkMenus(role) {
+		$('#jstree_menu').jstree('uncheck_all');
+		
+		$.get('/acl/getAceByRole', { 'role' : role})
+			.done(function (d) {
+				for(var i=0; i<d.length; i++){  
+					$('#jstree_menu').jstree('check_node',d[i].id);
+				}  
+			});
+	}
+	
 	//保存菜单权限
 	function save() {
 		//1、获取选中角色

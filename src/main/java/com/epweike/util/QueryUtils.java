@@ -68,7 +68,7 @@ public class QueryUtils<T> {
 		// 创建SQL执行工具
 		QueryRunner qr = new QueryRunner(JdbcUtils.getDataSource(dataSourceName));
 		// 执行SQL查询，并获取结果
-		return (List<T>) qr.query(sql, new BeanListHandler((Class) clazz));
+		return (List<T>) qr.query(sql, new BeanListHandler((Class) clazz), params);
 	}
 
 	private void log(String sql, Object[] params, String name) {
