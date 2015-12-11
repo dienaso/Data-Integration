@@ -113,7 +113,7 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": true,
-	        "sAjaxSource": '/loginInfo/loginDetail/get', 
+	        "sAjaxSource": '/loginInfo/detail/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "uid"},

@@ -455,6 +455,39 @@ function ajaxPassword(obj) {
         }
     });
 }
+
+function getSessionId(){
+	var c_name = 'JSESSIONID';
+	if(document.cookie.length>0){
+	  c_start=document.cookie.indexOf(c_name + "=")
+	  if(c_start!=-1){ 
+	    c_start=c_start + c_name.length+1 
+	    c_end=document.cookie.indexOf(";",c_start)
+	    if(c_end==-1) c_end=document.cookie.length
+	    return unescape(document.cookie.substring(c_start,c_end));
+	  }
+	}
+}
+
+(function() {
+    _fmOpt = {
+        partner: 'epweike',
+        appName: 'epweike_web',
+        token: getSessionId(),
+		fpHost: 'https://fptest.fraudmetrix.cn',
+    	staticHost: 'statictest.fraudmetrix.cn',
+        tcpHost: 'fptest.fraudmetrix.cn',
+    	wsHost: 'fptest.fraudmetrix.cn:9090'
+    };
+    var cimg = new Image(1,1);
+    cimg.onload = function() {
+        _fmOpt.imgLoaded = true;
+    };
+    cimg.src = "https://fptest.fraudmetrix.cn/fp/clear.png?partnerCode=epweike&appName=epweike_web&tokenId=" + _fmOpt.token;
+    var fm = document.createElement('script'); fm.type = 'text/javascript'; fm.async = true;
+    fm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'statictest.fraudmetrix.cn/fm.js?ver=0.1&t=' + (new Date().getTime()/3600000).toFixed(0);
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(fm, s);
+})();
 </script>
 </body>
 </html>

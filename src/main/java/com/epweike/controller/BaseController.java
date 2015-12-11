@@ -70,7 +70,7 @@ public class BaseController {
 		String param = "";
 		for (int i = 0, len = ja.size(); i < len; i++) {
 			JSONObject obj = (JSONObject) ja.get(i);
-			if (obj.get("name").equals(name))
+			if (obj != null && obj.get("name").equals(name) && obj.get("value") != null)
 				param = obj.get("value").toString();
 		}
 		return param;

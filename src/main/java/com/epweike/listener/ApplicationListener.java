@@ -26,8 +26,6 @@ public class ApplicationListener extends ContextLoaderListener {
 		// TODO Auto-generated method stub
 		String webAppRootKey = sce.getServletContext().getRealPath("/");
 		System.setProperty("webapp.root", webAppRootKey);
-		String path = System.getProperty("webapp.root");
-		System.out.println("path=" + path);
 	}
 
 }

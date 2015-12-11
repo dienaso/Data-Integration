@@ -119,18 +119,14 @@ $(function () {
 					{ "mData": "title"}, 
 		        	{ "mData": "messagetype"}, 
 		        	{ "mData": "targetno"},
-		        	{ "mData": "returncode",
-		        	  "mRender": function (data, type) {
-		        	  	if (data == null)
-	        		  		return null;
-		        	},
+		        	{ "mData": "returncode"},
 		        	{ "mData": "intime",
 		        	  "mRender": function (data, type) {
 		        	  	if (data == null)
 	        		  		return null;
 	        		  	return formatDateTime(data * 1000);
 	                  }
-		        	},
+		        	}
 	        	],
 	        "fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "title", "value": $("input[name='title']").val() } );

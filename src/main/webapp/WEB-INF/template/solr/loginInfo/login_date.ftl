@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>索引管理</title>
+	<title>数据统计</title>
 </head>
 
 <body>
@@ -12,12 +12,12 @@
 			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-cloud"></i>
+			<a href="#" title="Go to Chart" class="tip-bottom"> <i class="icon-bar-chart"></i>
 				数据统计
 			</a>
-			<a href="#" class="current">访问列表</a>
+			<a href="#" class="current">用户活跃统计</a>
 		</div>
-		<h1>访问列表</h1>
+		<h1>用户活跃统计</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -41,6 +41,35 @@
 							<input type="text" class="input-sm form-control" name="end" placeholder="结束时间" readonly></div>
 					</div>
 
+					<label class="control-label">登陆类型:</label>
+					<div class="controls">
+						<select id="loginType">
+							<option>全部</option>
+							<option>web</option>
+							<option>app</option>
+							<option>wap</option>
+							<option>web_qq</option>
+							<option>web_sina</option>
+							<option>app_QZone</option>
+						</select>
+					</div>
+					
+					<label class="control-label">统计类型:</label>
+					<div class="controls">
+						<select id="statType">
+							<option value="+1DAY">按日</option>
+							<option value="+1MONTH">按月</option>
+							<option value="+1YEAR">按年</option>
+						</select>
+					</div>
+
+	                <label class="control-label">是否去重</label>
+	                <div class="controls">
+	                  <label>
+	                    <input type="radio" name="distinct" value="1"/>是</label>
+	                  <label>
+	                    <input type="radio" name="distinct" value="0" checked/>否</label>
+	                </div>
 				</div>
 
 				<div class="form-actions">
@@ -52,14 +81,14 @@
 				<span class="icon">
 					<i class="icon-th"></i>
 				</span>
-				<h5>访问统计列表</h5>
+				<h5>用户活跃统计列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
 					<thead>
 						<tr>
-							<th>链接</th>
-							<th>访问量</th>
+							<th>日期</th>
+							<th>活跃量</th>
 						</tr>
 					</thead>
 				</table>
@@ -70,8 +99,9 @@
 
 	<script type="text/javascript">
 	$(function () {
+		
 		$('.input-daterange').datepicker({
-		    format: "yyyy-m-d",
+		    format: "yyyy-mm-dd",
     		language: "zh-CN",
     		todayHighlight: true,
     		autoclose: true
@@ -89,15 +119,18 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/urlTrace/get', 
+	        "sAjaxSource": '/loginInfo/date/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "name"},
-		        	{ "mData": "count"},
+					{ "mData": "date"},
+		        	{ "mData": "count"}
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
+	    		aoData.push( { "name": "loginType", "value": $("#loginType option:selected").val() } );
+	    		aoData.push( { "name": "distinct", "value": $(".checked").children().val() } );
+	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,
@@ -111,6 +144,7 @@
 				});
 			}
 		});
+		
 		<!--search-->
 		$('#search-btn').on( 'click', function () {
 		    table.ajax.reload();
