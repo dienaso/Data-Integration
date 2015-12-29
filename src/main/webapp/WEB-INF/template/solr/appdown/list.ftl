@@ -72,6 +72,14 @@
 						<option value="+1YEAR">按年</option>
 					</select>
 				</div>
+				
+				<label class="control-label">是否去重</label>
+                <div class="controls">
+                  <label>
+                    <input type="radio" name="distinct" value="1"/>是</label>
+                  <label>
+                    <input type="radio" name="distinct" value="0" checked/>否</label>
+                </div>
 					
 				<div class="form-actions">
 					<button id="search-btn" class="btn">查询</button>
@@ -131,6 +139,7 @@
 	    		aoData.push( { "name": "app_name", "value": $("#app_name option:selected").val() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
 	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
+	    		aoData.push( { "name": "distinct", "value": $(".checked").children().val() } );
 	    		
 				$.ajax({
 					"type" : "get",

@@ -90,6 +90,7 @@
 		$.get('/acl/getAceByRole', { 'role' : role})
 			.done(function (d) {
 				for(var i=0; i<d.length; i++){  
+					console.log(d[i].id);
 					$('#jstree_menu').jstree('check_node',d[i].id);
 				}  
 			});
@@ -100,7 +101,7 @@
 		//1、获取选中角色
 		var role = $("#role option:selected").val();
 		//2、获取选中菜单id
-		var menu_ids = $('#jstree_menu').jstree(true).get_checked ();
+		var menu_ids = $('#jstree_menu').jstree(true).get_checked();
 		//3、ajax保存菜单权限
 		$.get('/acl/saveMenuAcl', { 'role' : role, 'menu_ids' : menu_ids.join(",")})
 			.done(function (d) {

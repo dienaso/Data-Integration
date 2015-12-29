@@ -20,6 +20,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
+import org.apache.solr.common.params.GroupParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -60,6 +61,8 @@ public class AppDownController extends BaseController {
 		Date end = DateUtils.parseDateTime(endString + " 23:59:59");
 		// 应用类型
 		String app_name = getParamFromAodata(aoData, "app_name");
+		// 是否去重
+		String distinct = getParamFromAodata(aoData, "distinct");
 		// 统计类型(日、月、年)
 		String statType = getParamFromAodata(aoData, "statType");
 		// 来源(web、iphone、Android等)
@@ -72,6 +75,12 @@ public class AppDownController extends BaseController {
 			parameters.addFilterQuery("source:" + source);
 		if (!app_name.equals("全部"))
 			parameters.addFilterQuery("app_name:" + app_name);
+		
+		//去重
+		if("1".equals(distinct)){
+			parameters.setParam(GroupParams.GROUP_FACET, true);
+			parameters.setParam(GroupParams.GROUP_FIELD, "down_ip");
+		}
 
 		// 日期根据统计类型截取
 		int endIndex = 10;

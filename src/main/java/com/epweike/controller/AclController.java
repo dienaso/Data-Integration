@@ -157,15 +157,19 @@ public class AclController extends BaseController {
 	public void deletePermission(Menus menus, Sid recipient,
 			Permission permission) {
 		ObjectIdentity oid = new ObjectIdentityImpl(Menus.class, menus.getId());
-		MutableAcl acl = (MutableAcl) mutableAclService.readAclById(oid);
-		List<AccessControlEntry> entries = acl.getEntries();
-		for (int i = 0; i < entries.size(); i++) {
-			if (entries.get(i).getSid().equals(recipient)
-					&& entries.get(i).getPermission().equals(permission)) {
-				acl.deleteAce(i);
+		MutableAcl acl = null;
+		try {
+			acl = (MutableAcl) mutableAclService.readAclById(oid);
+			List<AccessControlEntry> entries = acl.getEntries();
+			for (int i = 0; i < entries.size(); i++) {
+				if (entries.get(i).getSid().equals(recipient)
+						&& entries.get(i).getPermission().equals(permission)) {
+					acl.deleteAce(i);
+				}
 			}
+			mutableAclService.updateAcl(acl);
+		} catch (NotFoundException nfe) {
 		}
-		mutableAclService.updateAcl(acl);
 		logger.debug("Deleted permission " + permission + " for Sid " + recipient
 				+ " menus " + menus);
 	}
