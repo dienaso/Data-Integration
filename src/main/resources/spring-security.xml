@@ -32,7 +32,8 @@
 		<s:intercept-url pattern="/favicon.ico" access="permitAll" />
 		<s:intercept-url pattern="/**" access="isAuthenticated()" />
 		
-		<s:form-login login-page="/login" username-parameter="j_username"
+		<s:form-login login-page="/login" default-target-url="/users/my"
+			username-parameter="j_username"
 			password-parameter="j_password" login-processing-url="/j_spring_security_check"
 			authentication-failure-url="/login?login_error=1" />
 		<s:logout logout-url="/j_spring_security_logout" />

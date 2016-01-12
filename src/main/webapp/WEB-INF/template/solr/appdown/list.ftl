@@ -47,11 +47,9 @@
 				<div class="controls">
 					<select id="app_name">
 						<option>全部</option>
-						<option>android</option>
-						<option>android_wx</option>
-						<option>android_weike</option>
-						<option>android_weike_wx</option>
-						<option>iphone</option>
+						<#list appTypeList as list>
+							<option>${list.name}</option>
+						</#list>
 					</select>
 				</div>
 				
@@ -59,8 +57,9 @@
 				<div class="controls">
 					<select id="source">
 						<option>全部</option>
-						<option>web</option>
-						<option>qr</option>
+						<#list sourceList as list>
+							<option>${list.name}</option>
+						</#list>
 					</select>
 				</div>
 				

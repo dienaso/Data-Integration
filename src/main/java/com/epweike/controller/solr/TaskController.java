@@ -200,8 +200,9 @@ public class TaskController extends BaseController {
 		}
 		params.addFilterQuery("pub_time_date:[" + pub_start + " TO " + pub_end
 				+ "]");
-		params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
-				+ cash_end + "]");
+		if (!cash_start.equals("*") && !cash_end.equals("*"))
+			params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
+					+ cash_end + "]");
 		if (!"".equals(indus_name))
 			params.addFilterQuery("indus_name:" + indus_name);
 		params.setGetFieldStatistics(true);
@@ -273,8 +274,8 @@ public class TaskController extends BaseController {
 			Collections.sort(list, new Comparator<Map<String, Object>>() {
 				public int compare(Map<String, Object> arg0,
 						Map<String, Object> arg1) {
-					return -(Double.valueOf((String) arg0.get("sum"))
-							.compareTo(Double.valueOf(arg1.get("sum")
+					return -(Double.valueOf(arg0.get("count").toString())
+							.compareTo(Double.valueOf(arg1.get("count")
 									.toString())));
 				}
 			});
@@ -359,8 +360,9 @@ public class TaskController extends BaseController {
 		}
 		params.addFilterQuery("pub_time_date:[" + pub_start + " TO " + pub_end
 				+ "]");
-		params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
-				+ cash_end + "]");
+		if (!cash_start.equals("*") && !cash_end.equals("*"))
+			params.addFilterQuery("cash_time_date:[" + cash_start + " TO "
+					+ cash_end + "]");
 		if (!"".equals(username))
 			params.addFilterQuery("username:" + username);
 		params.setGetFieldStatistics(true);
@@ -428,8 +430,8 @@ public class TaskController extends BaseController {
 			Collections.sort(list, new Comparator<Map<String, Object>>() {
 				public int compare(Map<String, Object> arg0,
 						Map<String, Object> arg1) {
-					return -(Double.valueOf((String) arg0.get("sum"))
-							.compareTo(Double.valueOf(arg1.get("sum")
+					return -(Double.valueOf(arg0.get("count").toString())
+							.compareTo(Double.valueOf(arg1.get("count")
 									.toString())));
 				}
 			});
@@ -451,6 +453,7 @@ public class TaskController extends BaseController {
 			IOException {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("stat/task/task_user");
+		mv.addObject("sourceList", getFacetList("task", "source", 10));
 		logger.info("进入任务统计(按雇主)！！！");
 		return mv;
 	}
@@ -459,6 +462,7 @@ public class TaskController extends BaseController {
 	public ModelAndView taskStatByDate() throws Exception {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("stat/task/task_date");
+		mv.addObject("sourceList", getFacetList("task", "source", 10));
 		logger.info("进入任务统计(按日期)！！！");
 		return mv;
 	}
@@ -467,6 +471,7 @@ public class TaskController extends BaseController {
 	public ModelAndView taskStatByIndus() throws Exception {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("stat/task/task_indus");
+		mv.addObject("sourceList", getFacetList("task", "source", 10));
 		logger.info("进入任务统计(按分类)！！！");
 		return mv;
 	}

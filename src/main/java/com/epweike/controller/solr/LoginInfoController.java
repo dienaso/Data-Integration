@@ -134,6 +134,7 @@ public class LoginInfoController extends BaseController {
 	public ModelAndView loginDetail() throws SolrServerException, IOException {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("solr/loginInfo/login_detail");
+		mv.addObject("sourceList", getFacetList("login", "login_type", 10));
 		logger.info("进入用户登陆明细列表！！！");
 		return mv;
 	}
@@ -203,7 +204,7 @@ public class LoginInfoController extends BaseController {
 	}
 	
 	/**
-	 * @Description:一品用户登陆明细
+	 * @Description:一品用户活跃统计
 	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
@@ -212,6 +213,7 @@ public class LoginInfoController extends BaseController {
 	public ModelAndView date() throws SolrServerException, IOException {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("solr/loginInfo/login_date");
+		mv.addObject("sourceList", getFacetList("login", "login_type", 10));
 		logger.info("进入用户登陆明细列表！！！");
 		return mv;
 	}

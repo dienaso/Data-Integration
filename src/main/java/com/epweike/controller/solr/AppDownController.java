@@ -120,8 +120,11 @@ public class AppDownController extends BaseController {
 
 	@RequestMapping(value = { "/list" })
 	public ModelAndView taskWorkStat() throws SolrServerException, IOException {
+		
 		// 返回视图
 		ModelAndView mv = new ModelAndView("/solr/appdown/list");
+		mv.addObject("sourceList", getFacetList("app_down", "source", 50));
+		mv.addObject("appTypeList", getFacetList("app_down", "app_name", 50));
 		logger.info("进入app下载统计！！！");
 		return mv;
 	}

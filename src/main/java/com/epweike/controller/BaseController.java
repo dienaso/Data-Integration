@@ -10,12 +10,15 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 
 import com.epweike.model.PageModel;
 import com.epweike.util.DateUtils;
 import com.epweike.util.SolrUtils;
+import com.epweike.util.StatUtils;
 
 /**  
  * @Description:控制器通用方法类
@@ -242,4 +245,24 @@ public class BaseController {
 		return name;
 	}
 
+	public List<Map<String, Object>> getFacetList(String core, String facetField, int minCount) {
+		SolrQuery params = new SolrQuery("*:*")
+		.addFacetField(facetField).setFacetMinCount(minCount);
+		
+		QueryResponse response = null;
+		try {
+			response = SolrUtils.getSolrServer(core).query(
+					params);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// 获取统计列表
+		List<FacetField> facetFields = response.getFacetFields();
+		
+		List<Map<String, Object>> list = StatUtils
+				.getFacetList(facetFields, "");
+		
+		return list;
+	}
 }

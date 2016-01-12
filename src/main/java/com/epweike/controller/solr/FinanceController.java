@@ -309,6 +309,7 @@ public class FinanceController extends BaseController {
 			IOException {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("solr/finance/finance_user");
+		mv.addObject("sourceList", getFacetList("finance", "source", 10));
 		logger.info("进入接单统计(按威客)！！！");
 		return mv;
 	}

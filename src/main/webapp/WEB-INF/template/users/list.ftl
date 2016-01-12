@@ -30,6 +30,7 @@
 							<th>用户名</th>
 							<th>状态</th>
 							<th>注册时间</th>
+							<th>角色</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -67,7 +68,7 @@
 		              <div class="controls">
 		                <select multiple id="roles">
 		                  <#list roles as list>
-		                  	<option>${list.roleName}</option>
+		                  	<option value="${list.roleName}">${list.roleName}</option>
 		                  </#list>
 		                </select>
 		              </div>
@@ -131,15 +132,16 @@
 	        		  	return formatDateTime(data.time);
 	                  }
 		        	},
+		        	{ "mData": "authoritys"},
 	        	],
 	        "columnDefs": [
 		                {
-		                    targets: 3,
+		                    targets: 4,
 		                    render: function (a, b, c, d) {
 		                        var context =
 		                        {
 		                            func: [
-		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\')", "type": "primary"},
+		                                {"name": "修改", "fn": "edit(\'" + c.id + "\',\'" + c.userName + "\',\'" + c.enabled + "\',\'" + c.authoritys + "\')", "type": "primary"},
 		                                {"name": "删除", "fn": "del(\'" + c.userName + "\')", "type": "danger"}
 		                            ]
 		                        };
@@ -178,6 +180,8 @@
 	    	$("#id").val("");
 	        $("#username").val("");
 	        $("#password").val("");
+	        //取消选中
+	        //$("#roles").select2().val(null).trigger("change");
 	        $(".checked").removeClass("checked");
 	    }
 	 
@@ -211,18 +215,22 @@
 	    /**
 	     *编辑方法
 	     **/
-	    function edit(id,username,enabled,email,tel) {
+	    function edit(id,username,enabled,authoritys) {
+	    	clear();
 	    	//修改type属性为密码框，防止火狐自动填充用户名故采用js
 			document.getElementById("password").type="password"; 
-	        clear();
 	        editFlag = true;
 	        $("#myModalLabel").text("修改");
 	        $("#id").val(id);
 	        $("#username").val(username);
 	        $("#password").val();
 	        $("input:radio[name=enabled][value="+enabled+"]").parent("span").attr("class","checked");
+	        //角色回选
+	        authoritys = authoritys.split(',')
+	        $("#roles").select2().val(authoritys).trigger("change");
+	        //重新渲染多选框
+	        $('select').select2();
 	        $("#myModal").modal("show");
-	        
 	    }
 	 
 	 	/**
@@ -245,7 +253,6 @@
 	            }
 	        });
 	    }
-	 
 	 
 	    /**
 	     * 删除数据

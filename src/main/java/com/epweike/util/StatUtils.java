@@ -183,11 +183,20 @@ public class StatUtils extends BaseController {
 							new Comparator<Map<String, Object>>() {
 								public int compare(Map<String, Object> arg0,
 										Map<String, Object> arg1) {
-									return -(Integer.valueOf(arg0.get("count").toString()))
-											.compareTo(Integer.valueOf(arg1.get("count").toString()));
+									return -(Integer.valueOf(arg0.get("count")
+											.toString())).compareTo(Integer
+											.valueOf(arg1.get("count")
+													.toString()));
 								}
 							});
 					break;
+				default:
+					for (Count count : ff.getValues()) {
+						Map<String, Object> map1 = new HashMap<String, Object>();
+						map1.put("name", count.getName());
+						map1.put("count", count.getCount());
+						list.add(map1);
+					}
 				}
 			}
 		}

@@ -11,5 +11,11 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="enabled" jdbcType="CHAR" property="enabled" />
     <result column="on_time" jdbcType="VARCHAR" property="onTime" />
+    <result column="authoritys" jdbcType="VARCHAR" property="authoritys" />
   </resultMap>
+  
+  <select id="selectUsers" parameterType="Map" resultType="hashmap">  
+  	SELECT u.`id`, u.`username` AS userName, CONVERT(u.`enabled`, SIGNED) AS enabled , u.`on_time` AS onTime, GROUP_CONCAT(a.`authority`) AS authoritys FROM `users` u  LEFT JOIN `authorities` a ON u.`username`=a.`username` GROUP BY username
+  </select> 
+  
 </mapper>

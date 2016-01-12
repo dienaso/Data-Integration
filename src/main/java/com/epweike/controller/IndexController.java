@@ -19,6 +19,7 @@ import org.apache.solr.common.params.GroupParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author wuxp
@@ -80,28 +81,28 @@ public class IndexController extends BaseController {
 		// 获取各个注册来源区间统计列表
 		response1 = solr1.query(regParams);
 		List<Map<String, Object>> regList = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams1);
 		List<Map<String, Object>> regList1 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams2);
 		List<Map<String, Object>> regList2 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams3);
 		List<Map<String, Object>> regList3 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams4);
 		List<Map<String, Object>> regList4 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams5);
 		List<Map<String, Object>> regList5 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams6);
 		List<Map<String, Object>> regList6 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 		response1 = solr1.query(regParams7);
 		List<Map<String, Object>> regList7 = StatUtils.getFacetRangeList(
-				response1.getFacetRanges(), 4, 10);
+				response1.getFacetRanges(), 0, 10);
 
 		/*
 		 * --------------------------------------------------------------
@@ -131,16 +132,16 @@ public class IndexController extends BaseController {
 		// 获取各个注册来源区间统计列表
 		response5 = solr5.query(regParams8);
 		List<Map<String, Object>> regList8 = StatUtils.getFacetRangeList(
-				response5.getFacetRanges(), 4, 10);
+				response5.getFacetRanges(), 0, 10);
 		response5 = solr5.query(regParams9);
 		List<Map<String, Object>> regList9 = StatUtils.getFacetRangeList(
-				response5.getFacetRanges(), 4, 10);
+				response5.getFacetRanges(), 0, 10);
 		response5 = solr5.query(regParams10);
 		List<Map<String, Object>> regList10 = StatUtils.getFacetRangeList(
-				response5.getFacetRanges(), 4, 10);
+				response5.getFacetRanges(), 0, 10);
 		response5 = solr5.query(regParams11);
 		List<Map<String, Object>> regList11 = StatUtils.getFacetRangeList(
-				response5.getFacetRanges(), 4, 10);
+				response5.getFacetRanges(), 0, 10);
 
 		/*
 		 * --------------------------------------------------------------
@@ -204,28 +205,28 @@ public class IndexController extends BaseController {
 		// 获取各个注册来源区间统计列表
 		response2 = solr2.query(loginParams);
 		List<Map<String, Object>> loginList = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams1);
 		List<Map<String, Object>> loginList1 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams2);
 		List<Map<String, Object>> loginList2 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams3);
 		List<Map<String, Object>> loginList3 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams4);
 		List<Map<String, Object>> loginList4 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams5);
 		List<Map<String, Object>> loginList5 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams6);
 		List<Map<String, Object>> loginList6 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 		response2 = solr2.query(loginParams7);
 		List<Map<String, Object>> loginList7 = StatUtils.getFacetRangeList(
-				response2.getFacetRanges(), 4, 10);
+				response2.getFacetRanges(), 0, 10);
 
 		/*
 		 * --------------------------------------------------------------
@@ -450,19 +451,9 @@ public class IndexController extends BaseController {
 		return map;
 	}
 
-	// @RequestMapping(value = { "/" })
-	// public ModelAndView index() throws Exception {
-	//
-	// // 返回视图
-	// ModelAndView mv = new ModelAndView("/html/home.html");
-	// // Map<String, Object> map = getIndexDataModel();
-	// // for (String key : map.keySet()) {
-	// // System.out.println("key= "+ key + " and value= " + map.get(key));
-	// // mv.addObject(key, map.get(key));
-	// // }
-	//
-	// logger.info("进入主页！！！");
-	// return mv;
-	// }
+	 @RequestMapping(value = { "/blank" })
+	 public String blank() throws Exception {
+		 return "blank";
+	 }
 
 }

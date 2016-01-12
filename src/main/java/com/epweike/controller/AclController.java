@@ -129,6 +129,7 @@ public class AclController extends BaseController {
 		String[] mArr = menu_ids.split(",");
 
 		for (int j = 0; j < mArr.length; j++) {
+			System.out.println("ace--:"+mArr[j]);
 			Menus menus = new Menus();
 			menus.setId(Integer.parseInt(mArr[j]));
 			addPermission(menus,
@@ -148,7 +149,7 @@ public class AclController extends BaseController {
 		} catch (NotFoundException nfe) {
 			acl = mutableAclService.createAcl(oid);
 		}
-		acl.insertAce(acl.getEntries().size(), permission, recipient, true);
+		acl.insertAce(0, permission, recipient, true);
 		mutableAclService.updateAcl(acl);
 		logger.debug("Added permission " + permission + " for Sid " + recipient
 				+ " menus " + menus);

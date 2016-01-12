@@ -45,7 +45,7 @@ public class MenusService extends BaseService<Menus> {
 	}
 	
 	public List<Menus> getMenusByRole(String role){
-		String sql = "SELECT object_id_identity AS id FROM acl_entry e LEFT JOIN acl_object_identity oi ON e.acl_object_identity=oi.id AND oi.object_id_class=1 LEFT JOIN acl_sid s ON e.sid=s.id WHERE s.sid=?";
+		String sql = "SELECT object_id_identity AS id,has_child AS hasChild FROM acl_entry e LEFT JOIN acl_object_identity oi ON e.acl_object_identity=oi.id AND oi.object_id_class=1 LEFT JOIN acl_sid s ON e.sid=s.id LEFT JOIN menus m ON oi.object_id_identity=m.id WHERE s.sid=?";
 		QueryUtils<Menus> queryRunnerUtils = new QueryUtils<Menus>(
 				Menus.class);
 

@@ -59,12 +59,9 @@
 					<div class="controls">
 						<select id="source">
 							<option>全部</option>
-							<option>web</option>
-							<option>iphone</option>
-							<option>ipad</option>
-							<option>android</option>
-							<option>wap</option>
-							<option>akey_pub</option>
+							<#list sourceList as list>
+								<option>${list.name}</option>
+							</#list>
 						</select>
 					</div>
 

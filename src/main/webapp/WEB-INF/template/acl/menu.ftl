@@ -90,8 +90,9 @@
 		$.get('/acl/getAceByRole', { 'role' : role})
 			.done(function (d) {
 				for(var i=0; i<d.length; i++){  
-					console.log(d[i].id);
-					$('#jstree_menu').jstree('check_node',d[i].id);
+					if(d[i].hasChild == 0){
+						$('#jstree_menu').jstree('check_node',d[i].id);
+					}
 				}  
 			});
 	}
@@ -101,9 +102,17 @@
 		//1、获取选中角色
 		var role = $("#role option:selected").val();
 		//2、获取选中菜单id
-		var menu_ids = $('#jstree_menu').jstree(true).get_checked();
+		var menu_ids = $('#jstree_menu').jstree(true).get_bottom_checked();
+		
+		var menu_parent_ids = $('#jstree_menu').jstree(true).get_bottom_checked('full');
+		$.each(menu_parent_ids,function(n,value) {  
+			if(value.parent != '0' && menu_ids.indexOf(value.parent) == '-1'){
+				menu_ids = menu_ids + ',' +value.parent
+			} 
+  		});  
+  		console.log(menu_ids);
 		//3、ajax保存菜单权限
-		$.get('/acl/saveMenuAcl', { 'role' : role, 'menu_ids' : menu_ids.join(",")})
+		$.get('/acl/saveMenuAcl', { 'role' : role, 'menu_ids' : menu_ids})
 			.done(function (d) {
 				if(d.flag == false){
 					$.gritter.add({

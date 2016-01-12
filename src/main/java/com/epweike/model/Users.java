@@ -38,7 +38,7 @@ public class Users extends BaseModel<Users> {
     private String email;
 
     private String tel;
-    
+
 	/**
    	 * @return the id
    	 */

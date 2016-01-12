@@ -469,25 +469,6 @@ function getSessionId(){
 	}
 }
 
-(function() {
-    _fmOpt = {
-        partner: 'epweike',
-        appName: 'epweike_web',
-        token: getSessionId(),
-		fpHost: 'https://fptest.fraudmetrix.cn',
-    	staticHost: 'statictest.fraudmetrix.cn',
-        tcpHost: 'fptest.fraudmetrix.cn',
-    	wsHost: 'fptest.fraudmetrix.cn:9090'
-    };
-    var cimg = new Image(1,1);
-    cimg.onload = function() {
-        _fmOpt.imgLoaded = true;
-    };
-    cimg.src = "https://fptest.fraudmetrix.cn/fp/clear.png?partnerCode=epweike&appName=epweike_web&tokenId=" + _fmOpt.token;
-    var fm = document.createElement('script'); fm.type = 'text/javascript'; fm.async = true;
-    fm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'statictest.fraudmetrix.cn/fm.js?ver=0.1&t=' + (new Date().getTime()/3600000).toFixed(0);
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(fm, s);
-})();
 </script>
 </body>
 </html>

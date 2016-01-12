@@ -67,12 +67,9 @@
 					<div class="controls">
 						<select id="source">
 							<option>全部</option>
-							<option>web</option>
-							<option>iphone</option>
-							<option>ipad</option>
-							<option>android</option>
-							<option>wap</option>
-							<option>akey_pub</option>
+							<#list sourceList as list>
+								<option>${list.name}</option>
+							</#list>
 						</select>
 					</div>
 
@@ -132,8 +129,8 @@
 		
 		//获取当前时间
 		var date = new Date().Format("yyyy-MM-dd");
-		$("input[name='cash_start']").val(date);
-		$("input[name='cash_end']").val(date);
+		$("input[name='pub_start']").val(date);
+		$("input[name='pub_end']").val(date);
 		
 		<!--dateTable-->
 		var table = $('#list').DataTable({

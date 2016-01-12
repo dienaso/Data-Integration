@@ -45,12 +45,9 @@
 					<div class="controls">
 						<select id="loginType">
 							<option>全部</option>
-							<option>web</option>
-							<option>app</option>
-							<option>wap</option>
-							<option>web_qq</option>
-							<option>web_sina</option>
-							<option>app_QZone</option>
+							<#list sourceList as list>
+								<option>${list.name}</option>
+							</#list>
 						</select>
 					</div>
 					

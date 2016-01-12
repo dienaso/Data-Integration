@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -58,6 +59,14 @@ public class UsersController extends BaseController {
 	public List<Users> usersList;
 
 	public User user;
+	
+	@RequestMapping(value = { "my" })
+	public String user(Model model) {
+		user = (User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		model.addAttribute("user", user);
+		return "users/user";
+	}
 	
 	@RequestMapping(value = { "list" })
 	public String list(Model model) {
@@ -225,6 +234,7 @@ public class UsersController extends BaseController {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		// 获取请求参数
+		String id = request.getParameter("id");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String roles = request.getParameter("roles");
@@ -240,13 +250,16 @@ public class UsersController extends BaseController {
 			retModel.setMsg("用户名不能为空！");
 			return retModel;
 		} else if ("".equals(password) || password == null) {
-			retModel.setFlag(false);
-			retModel.setMsg("密码不能为空！");
-			return retModel;
+//			retModel.setFlag(false);
+//			retModel.setMsg("密码不能为空！");
+//			return retModel;
+			Users tmp = this.usersService.get(Integer.parseInt(id));
+			password = tmp.getPassword();
+		}else{
+			// md5加密
+			password = MD5Utils.getMD5(password, username);
 		}
 
-		// md5加密
-		password = MD5Utils.getMD5(password, username);
 		// 修改用户角色
 		String[] rArry = roles.split(",");
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -283,16 +296,12 @@ public class UsersController extends BaseController {
 	public @ResponseBody String paginationDataTables(HttpServletRequest request)
 			throws IOException {
 
-		// 获取查询关键参数
-		String aoData = request.getParameter("aoData");
 		// 解析查询关键参数
-		PageModel<Users> pageModel = parsePageParamFromJson(aoData);
-		// 搜索条件
-		String sSearch = pageModel.getsSearch();
+		PageModel<Users> pageModel = new PageModel<Users>();
 		// 总条数
 		int total = this.usersService.count(new Users());
 		// 搜索结果集
-		usersList = this.usersService.selectPage(new Users(sSearch), pageModel);
+		usersList = this.usersService.select();
 		pageModel.setiTotalDisplayRecords(total);
 		pageModel.setiTotalRecords(total);
 		pageModel.setAaData(usersList);
