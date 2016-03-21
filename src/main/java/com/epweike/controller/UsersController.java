@@ -60,12 +60,12 @@ public class UsersController extends BaseController {
 
 	public User user;
 	
-	@RequestMapping(value = { "my" })
+	@RequestMapping(value = { "info" })
 	public String user(Model model) {
 		user = (User) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		model.addAttribute("user", user);
-		return "users/user";
+		return "users/info";
 	}
 	
 	@RequestMapping(value = { "list" })

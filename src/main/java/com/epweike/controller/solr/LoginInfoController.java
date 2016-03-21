@@ -103,11 +103,11 @@ public class LoginInfoController extends BaseController {
 
 		if (!uid.equals(""))
 			params.addFilterQuery("uid:" + uid);
-		params.addFilterQuery("on_time:[" + startTime + "T00:00:00Z TO "
+		params.addFilterQuery("on_time_date:[" + startTime + "T00:00:00Z TO "
 				+ endTime + "T23:59:59Z]");
 		params.setStart(pageModel.getiDisplayStart());
 		params.setRows(pageModel.getiDisplayLength());
-		params.setSort("on_time", SolrQuery.ORDER.desc);
+		params.setSort("on_time_date", SolrQuery.ORDER.desc);
 
 		QueryResponse response = SolrUtils.getSolrServer("login").query(params);
 
@@ -169,7 +169,7 @@ public class LoginInfoController extends BaseController {
 		String loginType = getParamFromAodata(aoData, "loginType");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
-				.addDateRangeFacet("on_time", start, end, statType)
+				.addDateRangeFacet("on_time_date", start, end, statType)
 				.setFacetLimit(1000);
 		if (!loginType.equals("全部"))
 			parameters.addFilterQuery("login_type:" + loginType);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epweike.mapper.WebpageMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.Webpage">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="modifiedTime" jdbcType="BIGINT" property="modifiedtime" />
+    <result column="prevModifiedTime" jdbcType="BIGINT" property="prevmodifiedtime" />
+    <result column="score" jdbcType="REAL" property="score" />
+    <result column="typ" jdbcType="VARCHAR" property="typ" />
+    <result column="batchId" jdbcType="VARCHAR" property="batchid" />
+    <result column="baseUrl" jdbcType="VARCHAR" property="baseurl" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="reprUrl" jdbcType="VARCHAR" property="reprurl" />
+    <result column="fetchInterval" jdbcType="INTEGER" property="fetchinterval" />
+    <result column="prevFetchTime" jdbcType="BIGINT" property="prevfetchtime" />
+    <result column="fetchTime" jdbcType="BIGINT" property="fetchtime" />
+    <result column="retriesSinceFetch" jdbcType="INTEGER" property="retriessincefetch" />
+    <result column="headers" jdbcType="LONGVARBINARY" property="headers" />
+    <result column="text" jdbcType="LONGVARCHAR" property="text" />
+    <result column="markers" jdbcType="LONGVARBINARY" property="markers" />
+    <result column="parseStatus" jdbcType="LONGVARBINARY" property="parsestatus" />
+    <result column="content" jdbcType="LONGVARBINARY" property="content" />
+    <result column="inlinks" jdbcType="LONGVARBINARY" property="inlinks" />
+    <result column="prevSignature" jdbcType="LONGVARBINARY" property="prevsignature" />
+    <result column="outlinks" jdbcType="LONGVARBINARY" property="outlinks" />
+    <result column="protocolStatus" jdbcType="LONGVARBINARY" property="protocolstatus" />
+    <result column="signature" jdbcType="LONGVARBINARY" property="signature" />
+    <result column="metadata" jdbcType="LONGVARBINARY" property="metadata" />
+  </resultMap>
+  
+  <select id="selectByPage" parameterType="Map" resultMap="BaseResultMap">  
+  	SELECT * FROM `webpage` limit #{offset},#{limit}
+  </select>  
+</mapper>

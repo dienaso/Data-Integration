@@ -6,7 +6,7 @@
 <body>
 	<div id="content-header">
 		<div id="breadcrumb">
-			<a href="/" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
+			<a href="#" title="Go to Home" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
 			<a href="#" class="current">系统参数管理</a>

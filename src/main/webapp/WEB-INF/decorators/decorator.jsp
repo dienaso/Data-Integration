@@ -14,7 +14,7 @@
 <%
 MenusService menusService = SpringUtils.getBean("menusService");
 
-String id = "1";
+String id = "160";
 String pid = "0";
 if (request.getParameter("id") != null
 && !request.getParameter("id").toString().equals("")) {
@@ -122,11 +122,6 @@ Welcome
 class="caret"></b>
 </a>
 <ul class="dropdown-menu">
-<li>
-<a id="showChangePassword" href="javascript:void(0)"> <i class="icon-key"></i>
-修改密码
-</a>
-</li>
 <li class="divider"></li>
 <li>
 <a id="clear" href="javascript:void(0)">
@@ -297,49 +292,10 @@ if (menus != null && menus.size() >
 <%=webCopyright %></div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myPasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span
-aria-hidden="true">&times;</span>
-</button>
-<h4 class="modal-title" id="myModalLabel">修改密码</h4>
-</div>
-<div class="modal-body form-horizontal">
-<input type="hidden" id="id">
-<div class="control-group">
-<label class="control-label">原始密码 :</label>
-<div class="controls">
-<input type="text" class="form-control" id="oldPassword" placeholder="原始密码"></div>
-</div>
-<div class="control-group">
-<label class="control-label">新密码 :</label>
-<div class="controls">
-<input type="text" class="form-control" id="newPassword" placeholder="新密码"></div>
-</div>
-<div class="control-group">
-<label class="control-label">确认密码 :</label>
-<div class="controls">
-<input type="text" class="form-control" id="confirmPassword" placeholder="确认密码"></div>
-</div>
-</div>
-<div class="modal-footer">
-<button type="button" class="btn btn-primary" id="changePassword">保存</button>
-<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-</div>
-</div>
-</div>
-</div>
-
 <!--end-Footer-part-->
 <script src="/common/matrix/js/matrix.tables.js"></script>
 <script type="text/javascript">
 $(function () {
-    $("#showChangePassword").on("click", showChangePassword);
-    $("#changePassword").click(changePassword);
     $("#clear").on("click", clearConfig);
 } );
 /**
@@ -350,103 +306,6 @@ function clearConfig() {
         "url": "/sysconfig/clear",
         "type": "get",
         success: function (data) {
-            $.gritter.add({
-                title:    '操作提示！',
-                text:    data.msg,
-                sticky: false
-            });
-        }
-    });
-}
-/**
-* 显示修改密码界面
-*/
-function showChangePassword() {
-    clearPassword();
-    $("#myPasswordModal").modal("show");
-    //修改type属性为密码框，防止火狐自动填充用户名故采用js
-    document.getElementById("oldPassword").type="password";
-    document.getElementById("newPassword").type="password";
-    document.getElementById("confirmPassword").type="password";
-}
-/**
-* 清除
-*/
-function clearPassword() {
-    editFlag = false;
-    $("#oldPassword").val("");
-    $("#newPassword").val("");
-    $("#confirmPassword").val("");
-}
-/**
-* 保存
-**/
-function changePassword() {
-    var addJson = {
-        "username": "<sec:authentication property="name" />",
-        "oldPassword": $("#oldPassword").val(),
-        "newPassword": $("#newPassword").val(),
-        "confirmPassword": $("#confirmPassword").val()
-    };
-    ajaxPassword(addJson);
-}
-
-/**
-*ajax提交
-**/
-function ajaxPassword(obj) {
-    
-    if(obj.oldPassword == "") {
-        $("#myPasswordModal").modal("hide");
-        $.gritter.add({
-            title:    '操作提示！',
-            text:    '旧密码不能为空！',
-            sticky: false
-        });
-        return;
-    }
-    
-    if(obj.newPassword == "") {
-        $("#myPasswordModal").modal("hide");
-        $.gritter.add({
-            title:    '操作提示！',
-            text:    '新密码不能为空！',
-            sticky: false
-        });
-        return;
-    }
-    
-    if(obj.confirmPassword == "") {
-        $("#myPasswordModal").modal("hide");
-        $.gritter.add({
-            title:    '操作提示！',
-            text:    '确认密码不能为空！',
-            sticky: false
-        });
-        return;
-    }
-    
-    if(obj.newPassword != obj.confirmPassword) {
-        $("#myPasswordModal").modal("hide");
-        $.gritter.add({
-            title:    '操作提示！',
-            text:    '新密码与确认密码不一致！',
-            sticky: false
-        });
-        return;
-    }
-    
-    $.ajax({
-        "url": "/users/changePassword" ,
-        "type": "post",
-        "data": {
-            "username": obj.username,
-            "oldPassword": obj.oldPassword,
-            "newPassword": obj.newPassword,
-            "confirmPassword": obj.confirmPassword
-            }, success: function (data) {
-            $("#myPasswordModal").modal("hide");
-            clearPassword();
             $.gritter.add({
                 title:    '操作提示！',
                 text:    data.msg,

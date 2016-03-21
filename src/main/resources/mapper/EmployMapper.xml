@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.epweike.mapper.EmployMapper">
+  <resultMap id="BaseResultMap" type="com.epweike.model.Employ">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="views" jdbcType="INTEGER" property="views" />
+    <result column="num" jdbcType="VARCHAR" property="num" />
+    <result column="workplace" jdbcType="VARCHAR" property="workplace" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="pub_date" jdbcType="VARCHAR" property="pubDate" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  
+  <insert id="insertBatch" parameterType="java.util.List">  
+    INSERT INTO `employ`
+            (`id`,
+             `title`,
+             `views`,
+             `num`,
+             `workplace`,
+             `company_name`,
+             `pub_date`,
+             `content`,
+             `publisher`,
+             `linkman`,
+             `address`,
+             `phone`,
+             `email`,
+             `zip_code`,
+             `fax`)
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.id},#{item.title},#{item.views},#{item.num},#{item.workplace},#{item.companyName},#{item.pubDate},#{item.content},#{item.publisher},#{item.linkman},#{item.address},#{item.phone},#{item.email},#{item.zipCode},#{item.fax})  
+    </foreach>  
+  </insert> 
+  
+</mapper>

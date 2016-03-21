@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.epweike.mapper.LogsStatMapper" >
+  <resultMap id="BaseResultMap" type="com.epweike.model.LogsStat" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="on_time" property="onTime" jdbcType="INTEGER" />
+    <result column="pv" property="pv" jdbcType="INTEGER" />
+    <result column="reguser" property="reguser" jdbcType="INTEGER" />
+    <result column="ip" property="ip" jdbcType="INTEGER" />
+    <result column="jumper" property="jumper" jdbcType="INTEGER" />
+    <result column="spider" property="spider" jdbcType="INTEGER" />
+    <result column="windows_2000" property="windows2000" jdbcType="INTEGER" />
+    <result column="windows_xp" property="windowsXp" jdbcType="INTEGER" />
+    <result column="windows_vista" property="windowsVista" jdbcType="INTEGER" />
+    <result column="windows_7" property="windows7" jdbcType="INTEGER" />
+    <result column="windows_81" property="windows81" jdbcType="INTEGER" />
+    <result column="windows_10" property="windows10" jdbcType="INTEGER" />
+    <result column="mac" property="mac" jdbcType="INTEGER" />
+    <result column="linux" property="linux" jdbcType="INTEGER" />
+    <result column="android" property="android" jdbcType="INTEGER" />
+    <result column="ios" property="ios" jdbcType="INTEGER" />
+    <result column="otheros" property="otheros" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

@@ -54,7 +54,7 @@
 	<!-- 生成mapxml对应client，也就是接口mapper -->  
     <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
 
-    <table tableName="acl_object_identity" >
+    <table tableName="employ" >
     </table>
   </context>
 </generatorConfiguration>
