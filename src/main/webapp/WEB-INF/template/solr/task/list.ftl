@@ -39,6 +39,26 @@
 					<label class="control-label">TASK_ID:</label>
 					<div class="controls">
 						<input type="text" name="task_id" placeholder="TASK_ID" value=""></div>
+						
+					<label class="control-label">任务状态:</label>
+					<div class="controls">
+						<select id="task_status">
+							<option>全部</option>
+							<option value="\-1">未确认</option>
+							<option value="0">未付款</option>
+							<option value="1">待审核</option>
+							<option value="2">投稿中</option>
+							<option value="3">选稿中</option>
+							<option value="4">摇奖中</option>
+							<option value="5">公示中</option>
+							<option value="6">交付</option>
+							<option value="7">冻结</option>
+							<option value="8">结束</option>
+							<option value="9">失败</option>
+							<option value="10">审核失败</option>
+							<option value="11">仲裁</option>
+						</select>
+					</div>
 				</div>
 
 				<div class="form-actions">
@@ -169,6 +189,8 @@ $(function () {
 	        	aoData.push( { "name": "task_title", "value": $("input[name='task_title']").val() } );
 	    		aoData.push( { "name": "uid", "value": $("input[name='uid']").val() } );
 	    		aoData.push( { "name": "task_id", "value": $("input[name='task_id']").val() } );
+	    		aoData.push( { "name": "task_status", "value": $("#task_status option:selected").val() } );
+	    		
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

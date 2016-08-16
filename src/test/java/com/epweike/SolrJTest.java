@@ -204,16 +204,17 @@ public class SolrJTest<E> {
 
 	@Test
 	public void getPivot() throws Exception {
-		String urlString = "http://solr.api.epweike.com/login";
+		String urlString = "http://solr2.api.epweike.com:8080/talent";
 		SolrServer solr = new HttpSolrServer(urlString);
 //		long end = System.currentTimeMillis() / 1000;// 结束时间
 //		long start = end - 20 * 24 * 60 * 60;// 开始时间(20天前)
 		Date end = new Date();// 结束时间
 		Date start = DateUtils.addDays(end, -10);// 开始时间(20天前)
 		SolrQuery parameters = new SolrQuery("*:*");
-		parameters.addFilterQuery("on_time:[" + start + " TO " + end + "]");
+		//parameters.addFilterQuery("on_time:[" + start + " TO " + end + "]");
+		parameters.addDateRangeFacet("reg_time_date", start, end, "+1DAY");
 		parameters.setFacet(true);
-		parameters.addFacetPivotField("d,login_type");
+		parameters.addFacetPivotField("user_role,come");
 		//parameters.setParam(FacetParams.FACET_PIVOT_MINCOUNT, "0");
 
 		QueryResponse response = solr.query(parameters);
@@ -240,30 +241,11 @@ public class SolrJTest<E> {
 						if (fieldList != null) {
 							for (PivotField field : fieldList) {
 								map2 = new HashMap<String, Object>();
-								map2.put("login_type", field.getValue().toString());
+								map2.put("user_role", field.getValue().toString());
 								map2.put("count", field.getCount());
 								tmpList.add(map2);
 							}
 						}
-						// 排序(按注册日期升序)
-//						Collections.sort(tmpList, new Comparator<Map<String, Object>>() {
-//							public int compare(Map<String, Object> arg0,
-//									Map<String, Object> arg1) {
-//								SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
-//								Date date1 = null;
-//								Date date2 = null;
-//								try {
-//									date1 = simpleDateFormat .parse(arg0.get("date").toString());
-//									date2 = simpleDateFormat .parse(arg1.get("date").toString());
-//								} catch (ParseException e) {
-//									// TODO Auto-generated catch block
-//									e.printStackTrace();
-//								}
-//								Double timeStemp1 = (double) date1.getTime();
-//								Double timeStemp2 = (double) date2.getTime();
-//								return -(timeStemp1.compareTo(timeStemp2));
-//							}
-//						});
 						map.put("data", tmpList);
 						
 						resultMap = new HashMap<String, Object>();

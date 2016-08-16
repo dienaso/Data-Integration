@@ -12,8 +12,8 @@
 			<a href="#" class="tip-bottom"> <i class="icon-home"></i>
 				Home
 			</a>
-			<a href="#" class="tip-bottom"> <i class="icon-cloud"></i>
-				索引管理
+			<a href="#" class="tip-bottom"> <i class="icon-bar-chart"></i>
+				数据统计
 			</a>
 			<a href="#" class="current">搜索列表</a>
 		</div>

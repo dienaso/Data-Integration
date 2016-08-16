@@ -115,7 +115,7 @@ public class ServiceController extends BaseController {
 			params.addFilterQuery("service_id:" + service_id);
 
 		if (!username.equals(""))
-			params.addFilterQuery("username:" + username);
+			params.addFilterQuery("username:" + "\"*" + username + "*\"");
 
 		QueryResponse response = SolrUtils.query(params, "service");
 		// 获取服务列表

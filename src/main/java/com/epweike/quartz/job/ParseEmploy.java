@@ -62,61 +62,18 @@ public class ParseEmploy {
 			while (it.hasNext()) {
 
 				Webpage webpage = it.next();
-
+				Employ employ = new Employ();
 				if (webpage != null && webpage.getBaseurl() != null
 						&& webpage.getBaseurl().contains("employ/show")) {
-					Employ employ = new Employ();
-					// 开始解析html
-					Document doc = null;
-					try {
-						doc = Jsoup.parse(new String(webpage.getContent(),
-								"UTF-8"));
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
 
-					Elements mainwrap = doc.select(".mainwrap");
-
-					if (mainwrap != null) {
-
-						employ.setTitle(mainwrap.select("h2").text());
-						employ.setNum(mainwrap
-								.select(".col-sm-3.col-md-3.col-lg-3").first()
-								.select("span").text());// 招聘人数
-						employ.setWorkplace(mainwrap
-								.select(".col-sm-3.col-md-3.col-lg-3").eq(1)
-								.select("span").text());// 工作地点
-						employ.setCompanyName(mainwrap
-								.select(".col-sm-6.col-md-6.col-lg-6")
-								.select("span").text());// 公司名称
-						int views = Integer.parseInt(mainwrap.select("h3")
-								.select("span").text());// 人气
-						employ.setViews(views);// 人气
-						String pubDate = mainwrap.select(".employ-head-date")
-								.select("div").select(".row.nopadding").text();// 发布日期
-						employ.setPubDate(pubDate);
-						employ.setContent(mainwrap.select(".projectcontent")
-								.text());// 内容描述
-
-						employ.setPublisher(mainwrap
-								.select(".rightbar_title.rightbar-author.nowrap")
-								.select("a").text());// 发布人
-
-						Elements rightbarLi = mainwrap.select(
-								".rightbar-author-content").select("li");
-						employ.setLinkman(rightbarLi.eq(0).select("span")
-								.text());// 联系人
-						employ.setAddress(rightbarLi.eq(1).select("span")
-								.text());// 地址
-						employ.setPhone(rightbarLi.eq(2).select("span").text());// 电话
-						employ.setEmail(rightbarLi.eq(3).select("span").text());// 邮箱
-						employ.setZipCode(rightbarLi.eq(4).select("span")
-								.text());// 邮编
-						employ.setFax(rightbarLi.eq(5).select("span").text());// 传真
-
-						record.add(employ);
-					}
-
+					// 解析html
+					parse(new String(webpage.getContent(), "UTF-8"), employ, 0);
+					record.add(employ);
+				} else if (webpage != null && webpage.getBaseurl() != null
+						&& webpage.getBaseurl().contains("employee/show")) {
+					// 解析html
+					parse(new String(webpage.getContent(), "UTF-8"), employ, 1);
+					record.add(employ);
 				}
 
 			}
@@ -126,8 +83,7 @@ public class ParseEmploy {
 				System.out.println("成功插入数量：" + result);
 			}
 		}
-		
-		
+
 		long t2 = System.currentTimeMillis(); // 计时结束
 		// 计时结束
 		Calendar c = Calendar.getInstance();
@@ -135,6 +91,81 @@ public class ParseEmploy {
 		System.out.println("耗时: " + c.get(Calendar.MINUTE) + "分 "
 				+ c.get(Calendar.SECOND) + "秒 " + c.get(Calendar.MILLISECOND)
 				+ " 毫秒");
+	}
+
+	public static void parse(String cotent, Employ employ, int type) {
+		// 开始解析html
+		Document doc = null;
+		doc = Jsoup.parse(cotent);
+
+		Elements mainwrap = doc.select(".mainwrap");
+
+		if (mainwrap != null) {
+			if (type == 0) {
+				employ.setTitle(mainwrap.select("h2").text());
+				employ.setNum(mainwrap.select(".col-sm-3.col-md-3.col-lg-3")
+						.first().select("span").text());// 招聘人数
+				employ.setWorkplace(mainwrap
+						.select(".col-sm-3.col-md-3.col-lg-3").eq(1)
+						.select("span").text());// 工作地点
+				employ.setCompanyName(mainwrap
+						.select(".col-sm-6.col-md-6.col-lg-6").select("span")
+						.text());// 公司名称
+				int views = Integer.parseInt(mainwrap.select("h3")
+						.select("span").text());// 人气
+				employ.setViews(views);// 人气
+				String pubDate = mainwrap.select(".employ-head-date")
+						.select("div").select(".row.nopadding").text();// 发布日期
+				employ.setPubDate(pubDate);
+				employ.setContent(mainwrap.select(".projectcontent").text());// 内容描述
+
+				employ.setPublisher(mainwrap
+						.select(".rightbar_title.rightbar-author.nowrap")
+						.select("a").text());// 发布人
+
+				Elements rightbarLi = mainwrap.select(
+						".rightbar-author-content").select("li");
+				employ.setLinkman(rightbarLi.eq(0).select("span").text());// 联系人
+				employ.setAddress(rightbarLi.eq(1).select("span").text());// 地址
+				employ.setPhone(rightbarLi.eq(2).select("span").text());// 电话
+				employ.setEmail(rightbarLi.eq(3).select("span").text());// 邮箱
+				employ.setZipCode(rightbarLi.eq(4).select("span").text());// 邮编
+				employ.setFax(rightbarLi.eq(5).select("span").text());// 传真
+				employ.setType(type);// 0:招聘；1:求职
+			} else {
+				employ.setTitle(mainwrap.select(".col-sm-9.col-md-9.col-lg-9").select("h3").text());
+
+				employ.setEducation(mainwrap.select(".col-sm-3.col-md-3.col-lg-3")
+						.first().select("span").text());// 学历
+				
+				employ.setSex(mainwrap.select(".col-sm-3.col-md-3.col-lg-3")
+						.eq(1).select("span").text());// 性别
+				employ.setAge(mainwrap
+						.select(".col-sm-6.col-md-6.col-lg-6").select("span")
+						.text());// 年龄
+				int views = Integer.parseInt(mainwrap.select("h3")
+						.select("span").text());// 人气
+				employ.setViews(views);// 人气
+				String pubDate = mainwrap.select(".employ-head-date")
+						.select("div").select(".row.nopadding").text();// 发布日期
+				employ.setPubDate(pubDate);
+				employ.setContent(mainwrap.select(".projectcontent").text());// 内容描述
+
+				employ.setPublisher(mainwrap
+						.select(".rightbar_title.rightbar-author.nowrap")
+						.select("a").text());// 发布人
+
+				Elements rightbarLi = mainwrap.select(
+						".rightbar-author-content").select("li");
+				employ.setLinkman(rightbarLi.eq(0).select("span").text());// 联系人
+				employ.setAddress(rightbarLi.eq(1).select("span").text());// 地址
+				employ.setPhone(rightbarLi.eq(2).select("span").text());// 电话
+				employ.setEmail(rightbarLi.eq(3).select("span").text());// 邮箱
+				employ.setZipCode(rightbarLi.eq(4).select("span").text());// 邮编
+				employ.setFax(rightbarLi.eq(5).select("span").text());// 传真
+				employ.setType(type);// 0:招聘；1:求职
+			}
+		}
 	}
 
 	public static void main(String[] args) throws IOException {

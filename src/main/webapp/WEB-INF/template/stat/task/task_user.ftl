@@ -82,6 +82,26 @@
 						</select>
 					</div>
 
+					<label class="control-label">任务状态:</label>
+					<div class="controls">
+						<select id="task_status">
+							<option>全部</option>
+							<option value="\-1">未确认</option>
+							<option value="0">未付款</option>
+							<option value="1">待审核</option>
+							<option value="2">投稿中</option>
+							<option value="3">选稿中</option>
+							<option value="4">摇奖中</option>
+							<option value="5">公示中</option>
+							<option value="6">交付</option>
+							<option value="7">冻结</option>
+							<option value="8">结束</option>
+							<option value="9">失败</option>
+							<option value="10">审核失败</option>
+							<option value="11">仲裁</option>
+						</select>
+					</div>
+
 					<label class="control-label">用户名:</label>
 					<div class="controls">
 						<input type="text" name="username" placeholder="雇主用户名"></div>
@@ -158,6 +178,7 @@
 	    		aoData.push( { "name": "cash_status", "value": $("#cash_status option:selected").val() } );
 	    		aoData.push( { "name": "cash_start", "value": $("input[name='cash_start']").val() } );
 	    		aoData.push( { "name": "cash_end", "value": $("input[name='cash_end']").val() } );
+	    		aoData.push( { "name": "task_status", "value": $("#task_status option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

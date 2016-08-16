@@ -4,6 +4,7 @@ import com.epweike.controller.BaseController;
 import com.epweike.model.PageModel;
 import com.epweike.model.RetModel;
 import com.epweike.model.solr.Talent;
+import com.epweike.util.DateUtils;
 import com.epweike.util.QueryUtils;
 import com.epweike.util.SolrUtils;
 import com.epweike.util.StatUtils;
@@ -16,6 +17,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
@@ -51,8 +53,7 @@ import java.lang.reflect.Field;
 @RequestMapping("/talent")
 public class TalentController extends BaseController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TalentController.class);
+	private static final Logger logger = LoggerFactory.getLogger(TalentController.class);
 
 	public List<Talent> talentList;
 
@@ -82,8 +83,7 @@ public class TalentController extends BaseController {
 				+ "GROUP_CONCAT(CONCAT(d.g_id,'-',d.indus_pid,'-',d.indus_id)) AS skill_ids,GROUP_CONCAT(d.indus_id) AS indus_ids,GROUP_CONCAT(d.indus_name) AS indus_names"
 				+ " FROM keke_witkey_space a LEFT JOIN keke_witkey_shop b ON a.uid=b.uid LEFT JOIN keke_witkey_member_skill c ON a.uid=c.uid LEFT JOIN keke_witkey_industry d ON c.skill_id=d.indus_id"
 				+ " WHERE a.uid=?";
-		QueryUtils<Talent> queryRunnerUtils = new QueryUtils<Talent>(
-				Talent.class);
+		QueryUtils<Talent> queryRunnerUtils = new QueryUtils<Talent>(Talent.class);
 
 		Object params[] = { uid };
 		// 搜索结果集
@@ -121,20 +121,119 @@ public class TalentController extends BaseController {
 		String username = getParamFromAodata(aoData, "username");
 		// 商铺名
 		String shop_name = getParamFromAodata(aoData, "shop_name");
+		// 电话
+		String mobile = getParamFromAodata(aoData, "mobile");
+		// 商铺等级
+		String shop_level = getParamFromAodata(aoData, "shop_level");
+		// 能力品级
+		String w_level = getParamFromAodata(aoData, "w_level");
+		// 已认证信息
+		String auth = getParamFromAodata(aoData, "auth");
+
+		// 未认证信息
+		String no_auth = getParamFromAodata(aoData, "no_auth");
+
+		String login_time = getParamFromAodata(aoData, "login_time");
+
+		String no_login_time = getParamFromAodata(aoData, "no_login_time");
+		// 注册时间
+		String reg_start = getParamFromAodata(aoData, "start");
+		reg_start = (!"".equals(reg_start)) ? reg_start + "T00:00:00Z" : "*";
+		String reg_end = getParamFromAodata(aoData, "end");
+		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
 
 		SolrQuery params = new SolrQuery("*:*");
-		params.addSort(new SortClause("uid", SolrQuery.ORDER.asc));
+
+		// vip开通时间
+		String vip_start_start = getParamFromAodata(aoData, "vip_start_start");
+		String vip_start_end = getParamFromAodata(aoData, "vip_start_end");
+		if (!"".equals(vip_start_start) && !"".equals(vip_start_end)) {
+			vip_start_start += "T00:00:00Z";
+			vip_start_end += "T23:59:59Z";
+			params.addFilterQuery("vip_start_time_date:[" + vip_start_start + " TO " + vip_start_end + "]");
+		}
+
+		// vip截止时间
+		String vip_end_start = getParamFromAodata(aoData, "vip_end_start");
+		String vip_end_end = getParamFromAodata(aoData, "vip_end_end");
+		if (!"".equals(vip_end_start) && !"".equals(vip_end_end)) {
+			vip_end_start += "T00:00:00Z";
+			vip_end_end += "T23:59:59Z";
+			params.addFilterQuery("vip_start_time_date:[" + vip_end_start + " TO " + vip_end_end + "]");
+		}
+
 		params.setStart(pageModel.getiDisplayStart());
 		params.setRows(pageModel.getiDisplayLength());
+		params.setParam("bf", "");
 
 		if (!uid.equals(""))
 			params.addFilterQuery("uid:" + uid);
 
 		if (!username.equals(""))
-			params.addFilterQuery("username:" + username);
+			params.addFilterQuery("username:" + "\"*" + username + "*\"");
 
 		if (!shop_name.equals(""))
-			params.addFilterQuery("shop_name:" + shop_name);
+			params.addFilterQuery("shop_name:" + "\"*" + shop_name + "*\"");
+
+		if (!mobile.equals(""))
+			params.addFilterQuery("mobile:" + mobile);
+
+		if (!"全部".equals(login_time) && !"".equals(login_time)) {
+			params.addFilterQuery("last_login_time:" + login_time);
+			params.addSort(new SortClause("last_login_time", SolrQuery.ORDER.desc));
+		}
+
+		if (!"全部".equals(no_login_time) && !"".equals(no_login_time)) {
+			params.addFilterQuery("last_login_time:" + no_login_time);
+			params.addSort(new SortClause("last_login_time", SolrQuery.ORDER.desc));
+		}
+
+		if (!"全部".equals(w_level)) {
+			params.addFilterQuery("w_level:" + w_level);
+		}
+
+		if (shop_level.equals("全部VIP")) {
+			params.addFilterQuery("shop_level:{1 TO *}");
+		} else {
+			if (!shop_level.equals("全部"))
+				params.addFilterQuery("shop_level:" + shop_level);
+		}
+
+		if (auth != null && auth.contains("auth_bank")) {
+			params.addFilterQuery("auth_bank:1");
+		}
+
+		if (auth != null && auth.contains("auth_email")) {
+			params.addFilterQuery("auth_email:1");
+		}
+
+		if (auth != null && auth.contains("auth_realname")) {
+			params.addFilterQuery("auth_realname:1");
+		}
+
+		if (auth != null && no_auth.contains("auth_mobile")) {
+			params.addFilterQuery("auth_mobile:0");
+		}
+
+		if (no_auth != null && no_auth.contains("auth_bank")) {
+			params.addFilterQuery("auth_bank:0");
+		}
+
+		if (no_auth != null && no_auth.contains("auth_email")) {
+			params.addFilterQuery("auth_email:0");
+		}
+
+		if (no_auth != null && no_auth.contains("auth_realname")) {
+			params.addFilterQuery("auth_realname:0");
+		}
+
+		if (no_auth != null && no_auth.contains("auth_mobile")) {
+			params.addFilterQuery("auth_mobile:0");
+		}
+
+		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end + "]");
+
+		params.addSort(new SortClause("credit_score", SolrQuery.ORDER.desc));
 
 		QueryResponse response = SolrUtils.query(params, "talent");
 		// 获取人才列表
@@ -154,8 +253,7 @@ public class TalentController extends BaseController {
 
 	@RequestMapping(value = "update", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public @ResponseBody RetModel update(HttpServletRequest request)
-			throws IOException, SQLException, IllegalArgumentException,
-			IllegalAccessException {
+			throws IOException, SQLException, IllegalArgumentException, IllegalAccessException {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		// 获取主键
@@ -186,8 +284,7 @@ public class TalentController extends BaseController {
 			Field f = fields[i];
 			f.setAccessible(true);
 			System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(talent));
-			if ("indus_ids".equals(f.getName())
-					|| "indus_names".equals(f.getName())
+			if ("indus_ids".equals(f.getName()) || "indus_names".equals(f.getName())
 					|| "skill_ids".equals(f.getName())) {// 处理多值字段
 				if (f.get(talent) != null) {
 					String[] arr = f.get(talent).toString().split(",");
@@ -195,8 +292,7 @@ public class TalentController extends BaseController {
 						doc.addField(f.getName(), arr[j]);
 					}
 				}
-			} else if (!"uid".equals(f.getName())
-					&& !"serialVersionUID".equals(f.getName())) {
+			} else if (!"uid".equals(f.getName()) && !"serialVersionUID".equals(f.getName())) {
 				Map<String, Object> oper = new HashMap<String, Object>();
 				oper.put("set", f.get(talent));
 				doc.addField(f.getName(), oper);
@@ -219,8 +315,7 @@ public class TalentController extends BaseController {
 	}
 
 	@RequestMapping(value = "del", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody RetModel del(HttpServletRequest request)
-			throws IOException {
+	public @ResponseBody RetModel del(HttpServletRequest request) throws IOException {
 		// 返回结果对象
 		RetModel retModel = new RetModel();
 		// 获取主键
@@ -249,10 +344,8 @@ public class TalentController extends BaseController {
 	@RequestMapping(value = { "stat/province" })
 	public ModelAndView provinceStat() throws SolrServerException, IOException {
 
-		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField(
-				"province");
-		QueryResponse response = SolrUtils.getSolrServer("talent")
-				.query(params);
+		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("province");
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
 		SolrDocumentList results = response.getResults();
 
 		// 地区分布统计
@@ -277,7 +370,7 @@ public class TalentController extends BaseController {
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
 	@RequestMapping(value = { "stat/register" })
-	public ModelAndView register() throws SolrServerException, IOException {
+	public ModelAndView registerByDate() throws SolrServerException, IOException {
 		// 返回视图
 		ModelAndView mv = new ModelAndView("solr/talent/register");
 		logger.info("进入用户注册统计！！！");
@@ -291,8 +384,7 @@ public class TalentController extends BaseController {
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
 	@RequestMapping(value = "register/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String getRegister(HttpServletRequest request)
-			throws Exception {
+	public @ResponseBody String getRegister(HttpServletRequest request) throws Exception {
 
 		// 获取查询关键参数
 		String aoData = request.getParameter("aoData");
@@ -307,14 +399,11 @@ public class TalentController extends BaseController {
 		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
 
 		SolrQuery params = new SolrQuery("*:*");
-		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end
-				+ "]");
+		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end + "]");
 		params.setFacet(true);
-		params.addFacetPivotField("reg_date,user_role,come").setFacetLimit(
-				Integer.MAX_VALUE);
+		params.addFacetPivotField("reg_date,user_role,come").setFacetLimit(Integer.MAX_VALUE);
 
-		QueryResponse response = SolrUtils.getSolrServer("talent")
-				.query(params);
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
 		NamedList<List<PivotField>> namedList = response.getFacetPivot();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
@@ -368,12 +457,10 @@ public class TalentController extends BaseController {
 								List<PivotField> fieldList2 = field.getPivot();
 								for (PivotField field2 : fieldList2) {
 									int count2 = field2.getCount();
-									String value2 = field2.getValue()
-											.toString();
+									String value2 = field2.getValue().toString();
 									int tmp2 = 0;
 									if (map.get(value2) != null)
-										tmp2 = Integer.parseInt(map.get(value2)
-												.toString());
+										tmp2 = Integer.parseInt(map.get(value2).toString());
 									map.put(value2, tmp2 + count2);
 
 									switch (value2) {
@@ -441,17 +528,13 @@ public class TalentController extends BaseController {
 
 		// 排序(按注册日期升序)
 		Collections.sort(list, new Comparator<Map<String, Object>>() {
-			public int compare(Map<String, Object> arg0,
-					Map<String, Object> arg1) {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-						"yyyy-MM-dd");
+			public int compare(Map<String, Object> arg0, Map<String, Object> arg1) {
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				Date date1 = null;
 				Date date2 = null;
 				try {
-					date1 = simpleDateFormat
-							.parse(arg0.get("label").toString());
-					date2 = simpleDateFormat
-							.parse(arg1.get("label").toString());
+					date1 = simpleDateFormat.parse(arg0.get("label").toString());
+					date2 = simpleDateFormat.parse(arg1.get("label").toString());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -488,5 +571,240 @@ public class TalentController extends BaseController {
 
 		return json.toString();
 	}
-	
+
+	/**
+	 * @Description:一品用户注册统计(按时间)
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "stat/register/date" })
+	public ModelAndView register() throws SolrServerException, IOException {
+		// 返回视图
+		ModelAndView mv = new ModelAndView("solr/talent/register_date");
+		return mv;
+	}
+
+	/**
+	 * @Description:注册统计列表（按时间）
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2016年6月13日 下午5:29:08
+	 */
+	@RequestMapping(value = "/register/date/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getRegisterFacetByDate(HttpServletRequest request) throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		// 开始时间
+		String startString = getParamFromAodata(aoData, "start");
+		Date start = DateUtils.parseDate(startString);
+		// 结束时间
+		String endString = getParamFromAodata(aoData, "end");
+		Date end = DateUtils.parseDateTime(endString + " 23:59:59");
+		// 用户类型
+		String user_role = getParamFromAodata(aoData, "user_role");
+		// 注册渠道
+		String come = getParamFromAodata(aoData, "come");
+		// 统计类型(日、月、年)
+		String statType = getParamFromAodata(aoData, "statType");
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
+				.addDateRangeFacet("reg_time_date", start, end, statType).setFacetLimit(1000);
+		if (!come.equals("全部"))
+			parameters.addFilterQuery("come:" + come);
+		if (!user_role.equals("全部"))
+			parameters.addFilterQuery("user_role:" + user_role);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+		// facet统计列表
+		// 日期根据统计类型截取
+		int endIndex = 10;
+		if (statType.contains("YEAR")) {
+			endIndex = 4;
+		} else if (statType.contains("MONTH")) {
+			endIndex = 7;
+		}
+
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(parameters);
+		// 获取区间统计列表
+		@SuppressWarnings("rawtypes")
+		List<RangeFacet> listFacet = response.getFacetRanges();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (RangeFacet<?, ?> rf : listFacet) {
+			List<RangeFacet.Count> listCounts = rf.getCounts();
+			for (RangeFacet.Count count : listCounts) {
+				System.out.println("RangeFacet:" + count.getValue() + ":" + count.getCount());
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("date", count.getValue().substring(0, endIndex));// 日期截取只保留年月日形式
+				map.put("count", count.getCount());
+				list.add(map);
+			}
+		}
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.size());
+		pageModel.setiTotalRecords(list.size());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取任务统计列表！！！" + json);
+
+		return json.toString();
+	}
+
+	/**
+	 * @Description:一品用户注册统计(按地区)
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "stat/register/area" })
+	public ModelAndView registerByCat() throws SolrServerException, IOException {
+		// 返回视图
+		ModelAndView mv = new ModelAndView("solr/talent/register_area");
+		return mv;
+	}
+
+	/**
+	 * @Description:获取注册用户(按地区)
+	 * 
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = "/register/area/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getRegisterByCat(HttpServletRequest request) throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// 注册时间
+		String reg_start = getParamFromAodata(aoData, "start");
+		reg_start = (!"".equals(reg_start)) ? reg_start + "T00:00:00Z" : "*";
+		String reg_end = getParamFromAodata(aoData, "end");
+		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
+		// 注册渠道
+		String come = getParamFromAodata(aoData, "come");
+		// 分类
+		String indus1 = getParamFromAodata(aoData, "indus1");
+		String indus2 = getParamFromAodata(aoData, "indus2");
+		String indus3 = getParamFromAodata(aoData, "indus3");
+		// 店铺等级
+		String shop_level = getParamFromAodata(aoData, "shop_level");
+		// 地区类型
+		String area_type = getParamFromAodata(aoData, "area_type");
+
+		SolrQuery params = new SolrQuery("*:*");
+		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end + "]");
+
+		if (!come.equals("全部"))
+			params.addFilterQuery("come:" + come);
+		if (!indus1.equals("全部"))
+			params.addFilterQuery("indus_ids_str:" + indus1);
+		if (indus2 != null && !indus2.equals(""))
+			params.addFilterQuery("indus_ids_str:" + indus2);
+		if (indus3 != null && !indus3.equals(""))
+			params.addFilterQuery("indus_ids_str:" + indus3);
+		if (shop_level.equals("全部VIP")) {
+			params.addFilterQuery("shop_level:{1 TO *}");
+		} else {
+			if (!shop_level.equals("全部"))
+				params.addFilterQuery("shop_level:" + shop_level);
+		}
+
+		params.setFacet(true);
+
+		String pivotField = "province,user_role";
+		if ("按城市".equals(area_type))
+			pivotField = "city,user_role";
+		params.addFacetPivotField(pivotField).setFacetLimit(Integer.MAX_VALUE);
+
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
+		NamedList<List<PivotField>> namedList = response.getFacetPivot();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+
+		int allTotal = 0;
+		int allUncertain = 0;
+		int allWitkey = 0;
+		int allEmployer = 0;
+		int allBoth = 0;
+
+		if (namedList != null) {
+			List<PivotField> pivotList = null;
+			for (int i = 0, len = namedList.size(); i < len; i++) {
+				pivotList = namedList.getVal(i);
+				if (pivotList != null) {
+					for (PivotField pivot : pivotList) {
+						int total = 0;
+						map = new HashMap<String, Object>();
+						map.put("label", pivot.getValue());
+						// 处理身份类型
+						List<PivotField> fieldList = pivot.getPivot();
+						if (fieldList != null) {
+							for (PivotField field : fieldList) {
+								int count = field.getCount();
+								String value = field.getValue().toString();
+								System.out.println("field=" + field.getField());
+								String tmp = "";
+								if ("0".equals(value)) {// 未确定
+									tmp = "uncertain";
+									allUncertain += count;
+								} else if ("1".equals(value)) {// 威客
+									tmp = "witkey";
+									allWitkey += count;
+								} else if ("2".equals(value)) {// 雇主
+									tmp = "employer";
+									allEmployer += count;
+								} else if ("3".equals(value)) {
+									tmp = "both";
+									allBoth += count;
+								}
+								map.put(tmp, count);
+								total += count;
+							}
+						}
+						allTotal += total;
+						System.out.println("map" + map.toString());
+						map.put("TOTAL", total);
+						// 不存在赋值0
+						if (map.get("witkey") == null)
+							map.put("witkey", 0);
+						if (map.get("employer") == null)
+							map.put("employer", 0);
+						if (map.get("both") == null)
+							map.put("both", 0);
+						if (map.get("uncertain") == null)
+							map.put("uncertain", 0);
+						if (map.get("TOTAL") == null)
+							map.put("TOTAL", 0);
+
+						list.add(map);
+					}
+				}
+			}
+		}
+
+		// 汇总
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("label", "汇总");
+		map2.put("TOTAL", allTotal);
+		map2.put("witkey", allWitkey);
+		map2.put("employer", allEmployer);
+		map2.put("uncertain", allUncertain);
+		map2.put("both", allBoth);
+		list.add(0, map2);
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.size());
+		pageModel.setiTotalRecords(list.size());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+		logger.info("获取用户注册统计列表！！！" + json);
+
+		return json.toString();
+	}
+
 }

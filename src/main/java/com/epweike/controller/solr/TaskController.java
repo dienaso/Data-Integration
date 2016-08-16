@@ -73,6 +73,8 @@ public class TaskController extends BaseController {
 		String uid = getParamFromAodata(aoData, "uid");
 		// 任务标题
 		String task_title = getParamFromAodata(aoData, "task_title");
+		// 任务状态
+		String task_status = getParamFromAodata(aoData, "task_status");
 
 		SolrQuery params = new SolrQuery("*:*");
 		params.addSort(new SortClause("pub_time", SolrQuery.ORDER.desc));
@@ -87,6 +89,9 @@ public class TaskController extends BaseController {
 
 		if (!task_title.equals(""))
 			params.addFilterQuery("task_title:" + task_title);
+		
+		if (!"全部".equals(task_status))
+			params.addFilterQuery("task_status:" + task_status);
 
 		QueryResponse response = SolrUtils.query(params, "task");
 		// 获取服务列表
@@ -164,6 +169,9 @@ public class TaskController extends BaseController {
 		String source = getParamFromAodata(aoData, "source");
 		// 是否已托管
 		String cash_status = getParamFromAodata(aoData, "cash_status");
+		// 任务状态
+		String task_status = getParamFromAodata(aoData, "task_status");
+		
 		// 分类名称
 		String indus_name = getParamFromAodata(aoData, "indus_name");
 
@@ -219,6 +227,8 @@ public class TaskController extends BaseController {
 				params.addFilterQuery("cash_status:{0 TO *}");
 			}
 		}
+		if (!"全部".equals(task_status))
+			params.addFilterQuery("task_status:" + task_status);
 
 		// 查询统计任务报表
 		QueryResponse response = SolrUtils.getSolrServer("task").query(params);
@@ -293,7 +303,7 @@ public class TaskController extends BaseController {
 	}
 
 	/**
-	 * @Description:接单统计列表（按用户）
+	 * @Description:任务统计列表（按雇主）
 	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年9月9日 下午10:29:08
@@ -322,6 +332,9 @@ public class TaskController extends BaseController {
 		String taskType = getParamFromAodata(aoData, "taskType");
 		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
+		// 任务状态
+				String task_status = getParamFromAodata(aoData, "task_status");
+		
 		// 用户名
 		String username = getParamFromAodata(aoData, "username");
 		// 是否已托管
@@ -368,6 +381,8 @@ public class TaskController extends BaseController {
 		params.setGetFieldStatistics(true);
 		params.setParam(StatsParams.STATS_FIELD, "task_cash");
 		params.setParam(StatsParams.STATS_FACET, "username");
+		if (!"全部".equals(task_status))
+			params.addFilterQuery("task_status:" + task_status);
 
 		if (!source.equals("全部"))
 			params.addFilterQuery("source:" + source);

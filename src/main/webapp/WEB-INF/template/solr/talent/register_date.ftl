@@ -15,9 +15,9 @@
 			<a href="#" class="tip-bottom"> <i class="icon-bar-chart"></i>
 				数据统计
 			</a>
-			<a href="#" class="current">接单统计</a>
+			<a href="#" class="current">用户注册统计</a>
 		</div>
-		<h1>接单统计</h1>
+		<h1>用户注册统计(按地区)</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -33,7 +33,7 @@
 			</div>
 			<div class="widget-content nopadding form-horizontal">
 				<div class="control-group">
-					<label class="control-label">时间区间 :</label>
+					<label class="control-label">注册时间 :</label>
 					<div class="controls">
 						<div class="input-daterange" id="datepicker">
 							<input type="text" class="input-sm form-control" name="start" placeholder="开始时间" readonly>
@@ -41,49 +41,40 @@
 							<input type="text" class="input-sm form-control" name="end" placeholder="结束时间" readonly></div>
 					</div>
 
-					<label class="control-label">任务类型:</label>
+					<label class="control-label">身份类型:</label>
 					<div class="controls">
-						<select id="taskType">
-							<option>全部(不包含计件)</option>
-							<option>单赏</option>
-							<option>多赏</option>
-							<option>计件</option>
-							<option>招标</option>
-							<option>雇佣</option>
-							<option>服务</option>
-							<option>直接雇佣</option>
-						</select>
-					</div>
-
-					<label class="control-label">任务来源:</label>
-					<div class="controls">
-						<select id="source">
+						<select id="user_role">
 							<option>全部</option>
-							<#list sourceList as list>
-								<option>${list.name}</option>
-							</#list>
+							<option value="1">威客</option>
+							<option value="2">雇主</option>
+							<option value="3">威客雇主</option>
+							<option value="0">未确定</option>
+						</select>
+					</div>
+					
+					<label class="control-label">注册渠道:</label>
+					<div class="controls">
+						<select id="come">
+						    <option>全部</option>
+							<option value="WEB">WEB</option>
+							<option value="cpm">CPM</option>
+							<option value="APP">APP</option>
+							<option value="WAP">WAP</option>
+							<option value="yun">云创平台</option>
+							<option value="mall">酷贝街</option>
+							<option value="background">后台</option>
+							
 						</select>
 					</div>
 
-					<label class="control-label">店铺等级:</label>
+					<label class="control-label">统计类型:</label>
 					<div class="controls">
-						<select id="shop_level">
-							<option>全部</option>
-							<option>全部VIP</option>
-							<option value="1">基础版本</option>
-							<option value="2">扩展版</option>
-							<option value="3">旗舰版</option>
-							<option value="4">白金版</option>
-							<option value="5">钻石版</option>
-							<option value="6">皇冠版</option>
-							<option value="7">金尊皇冠版</option>
-							<option value="8">至尊皇冠版</option>
+						<select id="statType">
+							<option value="+1DAY">按日</option>
+							<option value="+1MONTH">按月</option>
+							<option value="+1YEAR">按年</option>
 						</select>
 					</div>
-
-					<label class="control-label">用户名:</label>
-					<div class="controls">
-						<input type="text" name="username" placeholder="威客用户名"></div>
 				</div>
 
 				<div class="form-actions">
@@ -95,19 +86,14 @@
 				<span class="icon">
 					<i class="icon-th"></i>
 				</span>
-				<h5>接单统计列表</h5>
+				<h5>注册统计列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
 					<thead>
 						<tr>
-							<th>名称</th>
-							<th>接单量</th>
-							<th>总额</th>
-							<th>最大</th>
-							<th>最小</th>
-							<th>平均</th>
-							<th>标准差</th>
+							<th>注册时间</th>
+							<th>数量</th>
 						</tr>
 					</thead>
 				</table>
@@ -117,7 +103,7 @@
 	</div>
 
 	<script type="text/javascript">
-	$(function () {
+	$(document).ready(function() {
 		$('.input-daterange').datepicker({
 		    format: "yyyy-m-d",
     		language: "zh-CN",
@@ -132,29 +118,23 @@
 		
 		<!--dateTable-->
 		var table = $('#list').DataTable({
+			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
-			"bServerSide": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/finance/user/get', 
+	        "sAjaxSource": '/talent/register/date/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "name"},
+					{ "mData": "date"},
 		        	{ "mData": "count"},
-		        	{ "mData": "sum"},
-		        	{ "mData": "max"},
-		        	{ "mData": "min"},
-		        	{ "mData": "mean"},
-		        	{ "mData": "stddev"}
-	           ],
-	    	"fnServerData": function(sSource, aoData, fnCallback) {
+	        	],
+	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
-	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
-	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
-	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
-	    		aoData.push( { "name": "shop_level", "value": $("#shop_level option:selected").val() } );
+	    		aoData.push( { "name": "come", "value": $("#come option:selected").val() } );
+	    		aoData.push( { "name": "user_role", "value": $("#user_role option:selected").val() } );
+	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

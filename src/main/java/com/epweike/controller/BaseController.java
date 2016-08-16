@@ -100,12 +100,25 @@ public class BaseController {
 		String statType = getParamFromAodata(aoData, "statType");
 		// 来源(web、iphone、Android等)
 		String source = getParamFromAodata(aoData, "source");
+		// 是否已托管
+		String cash_status = getParamFromAodata(aoData, "cash_status");
+		// 任务状态
+		String task_status = getParamFromAodata(aoData, "task_status");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet(field, start, end, statType)
 				.setFacetLimit(1000);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
+		if (!"全部".equals(task_status))
+			parameters.addFilterQuery("task_status:" + task_status);
+		if (!cash_status.equals("全部")) {
+			if (cash_status.equals("未托管")) {
+				parameters.addFilterQuery("cash_status:0");
+			} else {
+				parameters.addFilterQuery("cash_status:{0 TO *}");
+			}
+		}
 		// 过滤任务类型
 		switch (taskType) {
 		case "单赏":

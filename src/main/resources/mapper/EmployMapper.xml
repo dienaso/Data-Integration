@@ -19,10 +19,14 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
     <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="TINYINT" property="age" />
+    <result column="type" jdbcType="BIT" property="type" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   
-  <insert id="insertBatch" parameterType="java.util.List">  
+   <insert id="insertBatch" parameterType="java.util.List">  
     INSERT INTO `employ`
             (`id`,
              `title`,
@@ -38,11 +42,15 @@
              `phone`,
              `email`,
              `zip_code`,
-             `fax`)
+             `fax`,
+             `type`,
+             `education`,
+             `sex`,
+             `age`)
     values  
     <foreach collection="list" item="item" index="index" separator="," >  
-        (#{item.id},#{item.title},#{item.views},#{item.num},#{item.workplace},#{item.companyName},#{item.pubDate},#{item.content},#{item.publisher},#{item.linkman},#{item.address},#{item.phone},#{item.email},#{item.zipCode},#{item.fax})  
+        (#{item.id},#{item.title},#{item.views},#{item.num},#{item.workplace},#{item.companyName},#{item.pubDate},#{item.content},#{item.publisher},#{item.linkman},#{item.address},#{item.phone},#{item.email},#{item.zipCode},#{item.fax},#{item.type},#{item.education},#{item.sex},#{item.age})  
     </foreach>  
-  </insert> 
+  </insert>
   
 </mapper>

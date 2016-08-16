@@ -71,74 +71,79 @@ public class ParseCompany {
 
 				Document doc = null;
 				try {
-					doc = Jsoup.parse(new String(webpage.getContent(), "GBK"));
+					if (webpage != null && webpage.getBaseurl() != null
+							&& webpage.getBaseurl().contains("/co/") && webpage.getContent() != null) {
+						doc = Jsoup.parse(new String(webpage.getContent(), "GBK"));
+					}
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
+				
+				if(doc != null) {
+					company.setRemarks(doc.select("#contact").html());// 基本资料原始html存作为备注
 
-				company.setRemarks(doc.select("#contact").html());// 基本资料原始html存作为备注
+					Element h1 = doc.select("h1").first();// 公司名称
 
-				Element h1 = doc.select("h1").first();// 公司名称
+					try {
+						if (h1 != null) {
+							company.setName(h1.text());
+							String intro = doc.select(".boxcontent").text();// 公司名称简介
+							company.setIntro(intro);
 
-				try {
-					if (h1 != null) {
-						company.setName(h1.text());
-						String intro = doc.select(".boxcontent").text();// 公司名称简介
-						company.setIntro(intro);
+							// 解析基本资料
+							Elements names = doc.select("dt");
+							Elements values = doc.select("dd");
+							// 基本资料封装map
+							Map<String, String> companyMap = new HashMap<String, String>();
+							int index = 0;
+							for (Element name : names) {
+								if ("电话".equals(name.text())
+										|| "总经理手机".equals(name.text())
+										|| "座机电话".equals(name.text())
+										|| "联系人电话".equals(name.text())
+										|| "联系人手机".equals(name.text())
+										|| "销售经理".equals(name.text())
+										|| "业务经理手机".equals(name.text())
+										|| "厂长手机".equals(name.text())
+										|| "经理".equals(name.text())) {
 
-						// 解析基本资料
-						Elements names = doc.select("dt");
-						Elements values = doc.select("dd");
-						// 基本资料封装map
-						Map<String, String> companyMap = new HashMap<String, String>();
-						int index = 0;
-						for (Element name : names) {
-							if ("电话".equals(name.text())
-									|| "总经理手机".equals(name.text())
-									|| "座机电话".equals(name.text())
-									|| "联系人电话".equals(name.text())
-									|| "联系人手机".equals(name.text())
-									|| "销售经理".equals(name.text())
-									|| "业务经理手机".equals(name.text())
-									|| "厂长手机".equals(name.text())
-									|| "经理".equals(name.text())) {
+									companyMap.put("phone_img", values.get(index)
+											.html());
 
-								companyMap.put("phone_img", values.get(index)
-										.html());
+									// 获取图片路径
+									String imgUrl = values.get(index)
+											.getElementsByTag("img").attr("src");
+									// 图片识别
+									String phone = "";
+									if (imgUrl != null
+											&& imgUrl.contains("http://")) {
+										phone = OcrUtils.ocr(imgUrl);
+									} else {// 不是图片直接取文本
+										phone = values.get(index).text();
+									}
 
-								// 获取图片路径
-								String imgUrl = values.get(index)
-										.getElementsByTag("img").attr("src");
-								// 图片识别
-								String phone = "";
-								if (imgUrl != null
-										&& imgUrl.contains("http://")) {
-									phone = OcrUtils.ocr(imgUrl);
-								} else {// 不是图片直接取文本
-									phone = values.get(index).text();
+									companyMap.put(name.text(), phone);
+								} else if ("电子邮件".equals(name.text())) {
+									companyMap.put(name.text(), values.get(index)
+											.html());
+								} else {
+									companyMap.put(name.text(), values.get(index)
+											.text());
 								}
-
-								companyMap.put(name.text(), phone);
-							} else if ("电子邮件".equals(name.text())) {
-								companyMap.put(name.text(), values.get(index)
-										.html());
-							} else {
-								companyMap.put(name.text(), values.get(index)
-										.text());
+								index++;
 							}
-							index++;
+
+							// map中取出数据赋值于company对象
+							company = parse(companyMap, company);
+
+							// companyMapper.insert(company);
+							record.add(company);
 						}
-
-						// map中取出数据赋值于company对象
-						company = parse(companyMap, company);
-
-						// companyMapper.insert(company);
-						record.add(company);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
-
+				
 			}
 			// 插入数据库
 			if(record != null && record.size() > 0){

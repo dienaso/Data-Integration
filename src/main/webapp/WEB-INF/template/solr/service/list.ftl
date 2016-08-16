@@ -28,13 +28,13 @@
 			</div>
 			<div class="widget-content nopadding form-horizontal">
 				<div class="control-group">
-					<label class="control-label">用户名:</label>
-					<div class="controls">
-						<input type="text" name="username" placeholder="用户名"></div>
-
 					<label class="control-label">UID:</label>
 					<div class="controls">
 						<input type="text" name="uid" placeholder="UID" value=""></div>
+						
+					<label class="control-label">用户名:</label>
+					<div class="controls">
+						<input type="text" name="username" placeholder="用户名"></div>
 						
 					<label class="control-label">SERVICE_ID:</label>
 					<div class="controls">
