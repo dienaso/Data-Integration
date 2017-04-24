@@ -104,10 +104,14 @@ public class BaseController {
 		String cash_status = getParamFromAodata(aoData, "cash_status");
 		// 任务状态
 		String task_status = getParamFromAodata(aoData, "task_status");
+		// 任务金额
+		String task_cash = getParamFromAodata(aoData, "task_cash");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet(field, start, end, statType)
 				.setFacetLimit(1000);
+		if (!task_cash.equals("全部"))
+			parameters.addFilterQuery(task_cash);
 		if (!source.equals("全部"))
 			parameters.addFilterQuery("source:" + source);
 		if (!"全部".equals(task_status))
@@ -120,35 +124,39 @@ public class BaseController {
 			}
 		}
 		// 过滤任务类型
-		switch (taskType) {
-		case "单赏":
-			parameters.addFilterQuery("model_id:1");
-			break;
-		case "多赏":
-			parameters.addFilterQuery("model_id:2");
-			break;
-		case "计件":
-			parameters.addFilterQuery("model_id:3");
-			break;
-		case "招标":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:{* TO 2}");
-			break;
-		case "雇佣":
-			parameters.addFilterQuery("model_id:4")
-					.addFilterQuery("task_type:{* TO 2}")
-					.addFilterQuery("task_cash_coverage:0");
-			break;
-		case "服务":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:2");
-			break;
-		case "直接雇佣":
-			parameters.addFilterQuery("model_id:4").addFilterQuery(
-					"task_type:3");
-		default:
-			break;
+		String filter = "";
+		if (!"".equals(taskType)) {
+			String[] types = taskType.split(",");
+			for (int i = 0; i < types.length; i++) {
+				// 过滤任务类型
+				switch (types[i]) {
+				case "单赏":
+					filter += "(model_id:1) OR ";
+					break;
+				case "多赏":
+					filter += "(model_id:2) OR ";
+					break;
+				case "计件":
+					filter += "(model_id:3) OR ";
+					break;
+				case "招标":
+					filter += "(model_id:4 AND task_type:{* TO 2}) OR ";
+					break;
+				case "雇佣":
+					filter += "(model_id:4 AND task_type:{* TO 2} AND task_cash_coverage:0) OR ";
+					break;
+				case "服务":
+					filter += "(model_id:4 AND task_type:2) OR ";
+					break;
+				case "直接雇佣":
+					filter += "(model_id:4 AND task_type:3) OR ";
+				default:
+					break;
+				}
+			}
+			filter = filter.substring(0, filter.length() - 3);
 		}
+		parameters.addFilterQuery(filter);
 
 		// 日期根据统计类型截取
 		int endIndex = 10;
@@ -190,25 +198,28 @@ public class BaseController {
 
 		switch (shop_level) {
 		case "1":
-			name = "基础版本";
+			name = "基础版";
 			break;
 		case "2":
-			name = "扩展版";
+			name = "VIP拓展";
 			break;
 		case "3":
-			name = "旗舰版";
+			name = "VIP旗舰";
 			break;
 		case "4":
-			name = "白金版";
+			name = "VIP白金";
 			break;
 		case "5":
-			name = "钻石版";
+			name = "VIP钻石";
 			break;
 		case "6":
-			name = "皇冠版";
+			name = "VIP皇冠";
 			break;
 		case "7":
-			name = "战略合作版";
+			name = "金尊皇冠";
+			break;
+		case "8":
+			name = "至尊皇冠";
 			break;
 		}
 

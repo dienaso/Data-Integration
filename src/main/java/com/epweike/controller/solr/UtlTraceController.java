@@ -32,8 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/urlTrace")
 public class UtlTraceController extends BaseController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(UtlTraceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UtlTraceController.class);
 
 	/**
 	 * @Description:用户访问链接统计
@@ -42,8 +41,7 @@ public class UtlTraceController extends BaseController {
 	 * @version 创建时间：2015年6月9日 下午5:29:08
 	 */
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String getSearchHistory(HttpServletRequest request)
-			throws Exception {
+	public @ResponseBody String getSearchHistory(HttpServletRequest request) throws Exception {
 
 		// 获取查询关键参数
 		String aoData = request.getParameter("aoData");
@@ -55,21 +53,45 @@ public class UtlTraceController extends BaseController {
 		String startString = getParamFromAodata(aoData, "start");
 		// 结束时间
 		String endString = getParamFromAodata(aoData, "end");
+		// 页面类型
+		String doView = getParamFromAodata(aoData, "do_view");
 
 		SolrQuery params = new SolrQuery("*:*")
-				.addFilterQuery(
-						"add_time:[" + startString + "T00:00:00Z TO "
-								+ endString + "T23:59:59Z]").setFacet(true)
-				.addFacetField("source").setFacetMinCount(1)
-				.setFacetLimit(100);
+				.addFilterQuery("add_time:[" + startString + "T00:00:00Z TO " + endString + "T23:59:59Z]")
+				.setFacet(true).addFacetField("source").setFacetMinCount(1).setFacetLimit(Integer.MAX_VALUE);
 
-		QueryResponse response = SolrUtils.getSolrServer("urltrace").query(
-				params);
+		// 过滤页面类型
+		switch (doView) {
+		case "首页":
+			params.addFilterQuery("do:index").addFilterQuery("view:index");
+			break;
+		case "任务列表":
+			params.addFilterQuery("do:task").addFilterQuery("view:list");
+			break;
+		case "任务详情":
+			params.addFilterQuery("do:task").addFilterQuery("view:info");
+			break;
+		case "人才列表":
+			params.addFilterQuery("do:talent").addFilterQuery("view:list");
+			break;
+		case "人才详情":
+			params.addFilterQuery("do:talent").addFilterQuery("view:info");
+			break;
+		case "服务列表":
+			params.addFilterQuery("do:service").addFilterQuery("view:list");
+			break;
+		case "服务详情":
+			params.addFilterQuery("do:service").addFilterQuery("view:detail");
+			break;
+		default:
+			break;
+		}
+
+		QueryResponse response = SolrUtils.getSolrServer("urltrace").query(params);
 		// 获取统计列表
 		List<FacetField> facetFields = response.getFacetFields();
 
-		List<Map<String, Object>> list = StatUtils
-				.getFacetList(facetFields, "");
+		List<Map<String, Object>> list = StatUtils.getFacetList(facetFields, "");
 
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());

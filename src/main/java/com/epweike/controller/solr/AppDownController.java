@@ -96,6 +96,7 @@ public class AppDownController extends BaseController {
 		@SuppressWarnings("rawtypes")
 		List<RangeFacet> listFacet = response.getFacetRanges();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		int total = 0;
 		for (RangeFacet<?, ?> rf : listFacet) {
 			List<RangeFacet.Count> listCounts = rf.getCounts();
 			for (RangeFacet.Count count : listCounts) {
@@ -104,9 +105,14 @@ public class AppDownController extends BaseController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("date", count.getValue().substring(0, endIndex));// 日期截取只保留年月日形式
 				map.put("count", count.getCount());
+				total += count.getCount();
 				list.add(map);
 			}
 		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("date", "总计");
+		map.put("count", total);
+		list.add(0, map);
 
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());

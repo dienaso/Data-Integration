@@ -67,9 +67,9 @@ href="/common/matrix/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/common/matrix/css/matrix-media.css" />
 <link rel="stylesheet"
 href="/common/matrix/font-awesome/css/font-awesome.css" />
-<link rel='stylesheet'
+<!--<link rel='stylesheet'
 href='/common/matrix/font-open+sans/css/font-open+sans.css'
-type='text/css'>
+type='text/css'>-->
 <link rel="stylesheet"
 href="/common/matrix/css/bootstrap-datepicker3.css" />
 <link rel="stylesheet"

@@ -96,7 +96,7 @@ public class SysconfigController extends BaseController {
 		try {
 			// 添加到数据库
 			sysconfigService.insert(sysconfig);
-			retModel.setInsertFucceed();
+			retModel.setInsertSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -123,7 +123,7 @@ public class SysconfigController extends BaseController {
 			sysconfigService.deleteByPrimaryKey(id);
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -175,7 +175,7 @@ public class SysconfigController extends BaseController {
 			sysconfigService.update(sysconfig);
 			// 清空系统参数
 			SysconfigUtils.sysconfigMap = null;
-			retModel.setUpdateFucceed();
+			retModel.setUpdateSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

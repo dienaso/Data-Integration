@@ -57,7 +57,7 @@ public class CompanyController extends BaseController {
 
 		try {
 			this.companyService.deleteByPrimaryKey(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

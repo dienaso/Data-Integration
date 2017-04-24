@@ -1,12 +1,5 @@
 package com.epweike;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.List;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -15,6 +8,13 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
 
 public class WriteTest {
 
@@ -27,7 +27,7 @@ public class WriteTest {
 
 	@Test
 	public void write() throws SolrServerException {
-		String path = "F:\\talent.txt";
+		String path = "F:\\shop_name.ext";
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(
@@ -37,19 +37,21 @@ public class WriteTest {
 			long t1 = System.currentTimeMillis();
 
 			SolrQuery params = new SolrQuery("*:*");
+			params.setFields("shop_name");
+			params.addFilterQuery("shop_id:{0 TO *}");
 
 			QueryResponse response = solr.query(params);
 			
 			long total = response.getResults().getNumFound();// 总数
-			int size = 1000;// 单次遍历数据量
+			int size = 5000;// 单次遍历数据量
 			int start = 0; // 起始
 
 			// 遍历所有数据
-			long lenth = (total / size) + 1;
+			long lenth = (total / size);
 			for (int i = 0; i <= lenth; i++) {
 				
 				System.out.println(i+"-------------------------"+lenth);
-				
+
 				params.setStart(start + i * size);
 				params.setRows(size);
 				response = solr.query(params);
@@ -58,7 +60,8 @@ public class WriteTest {
 				solrDocs = response.getResults();
 				
 				for (int j = 0; j < size; j++) {
-					writer.write(solrDocs.get(j).getFieldValue("username")+","+solrDocs.get(j).getFieldValue("shop_name")+","+solrDocs.get(j).getFieldValue("mobile")+","+solrDocs.get(j).getFieldValue("email")+"\r\n");
+					//writer.write(solrDocs.get(j).getFieldValue("username")+","+solrDocs.get(j).getFieldValue("shop_name")+","+solrDocs.get(j).getFieldValue("mobile")+","+solrDocs.get(j).getFieldValue("email")+"\r\n");
+					writer.write(solrDocs.get(j).getFieldValue("shop_name")+"\r\n");
 				}
 			}
 			long t2 = System.currentTimeMillis(); // 排序后取得当前时间

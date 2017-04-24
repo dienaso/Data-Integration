@@ -43,7 +43,7 @@
 
 					<label class="control-label">稿件类型:</label>
 					<div class="controls">
-						<select id="taskType">
+						<select multiple id="taskType">
 							<option>全部</option>
 							<option>单赏</option>
 							<option>多赏</option>
@@ -65,6 +65,26 @@
 							<option>android</option>
 							<option>wap</option>
 							<option>akey_pub</option>
+						</select>
+					</div>
+
+					<label class="control-label">任务状态:</label>
+					<div class="controls">
+						<select id="task_status">
+							<option>全部</option>
+							<option value="\-1">未确认</option>
+							<option value="0">未付款</option>
+							<option value="1">待审核</option>
+							<option value="2">投稿中</option>
+							<option value="3">选稿中</option>
+							<option value="4">摇奖中</option>
+							<option value="5">公示中</option>
+							<option value="6">交付</option>
+							<option value="7">冻结</option>
+							<option value="8">结束</option>
+							<option value="9">失败</option>
+							<option value="10">审核失败</option>
+							<option value="11">仲裁</option>
 						</select>
 					</div>
 
@@ -124,18 +144,23 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/task_work/date/get', 
+	        "sAjaxSource": '/stat/task_work/date/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "date"},
 		        	{ "mData": "count"},
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
+	    		var taskType = new Array();
+				$("#taskType option:selected").each(function(){
+		            taskType.push($(this).val());
+		        });
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
-	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
+	    		aoData.push( { "name": "taskType", "value": taskType.toString() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
 	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
+	    		aoData.push( { "name": "task_status", "value": $("#task_status option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

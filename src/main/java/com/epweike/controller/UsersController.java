@@ -136,7 +136,7 @@ public class UsersController extends BaseController {
 		if (retModel.isFlag()) {
 			try {
 				jdbcUserDetailsManager.createUser(user);
-				retModel.setInsertFucceed();
+				retModel.setInsertSucceed();
 			} catch (AccessDeniedException e) {
 				e.printStackTrace();
 				retModel.setAccessDenied(e);
@@ -163,7 +163,7 @@ public class UsersController extends BaseController {
 
 		try {
 			jdbcUserDetailsManager.deleteUser(username);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -271,7 +271,7 @@ public class UsersController extends BaseController {
 		if (retModel.isFlag()) {
 			try {
 				jdbcUserDetailsManager.updateUser(user);
-				retModel.setUpdateFucceed();
+				retModel.setUpdateSucceed();
 			} catch (AccessDeniedException e) {
 				e.printStackTrace();
 				retModel.setAccessDenied(e);

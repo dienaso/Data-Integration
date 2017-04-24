@@ -125,7 +125,7 @@
 	<bean
 		class="org.springframework.security.core.authority.SimpleGrantedAuthority"
 		id="aclAdminAuthority">
-		<constructor-arg value="ROLE_ADMIN" />
+		<constructor-arg value="管理员" />
 	</bean>
 	
 	<!-- END Explicit ACL-Enabled Method Security -->

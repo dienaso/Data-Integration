@@ -75,7 +75,7 @@ public class LexiconsController extends BaseController {
 			lexicons.setSynonym(synonym);
 			// 更新数据库
 			lexiconService.insert(lexicons);
-			retModel.setInsertFucceed();
+			retModel.setInsertSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -99,7 +99,7 @@ public class LexiconsController extends BaseController {
 
 		try {
 			this.lexiconService.deleteByPrimaryKey(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -147,7 +147,7 @@ public class LexiconsController extends BaseController {
 			lexicons.setSynonym(synonym);
 			// 更新数据库
 			lexiconService.update(lexicons);
-			retModel.setUpdateFucceed();
+			retModel.setUpdateSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

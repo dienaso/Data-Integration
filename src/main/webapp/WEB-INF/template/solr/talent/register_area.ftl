@@ -55,6 +55,17 @@
 							
 						</select>
 					</div>
+					
+					<label class="control-label">身份类型:</label>
+					<div class="controls">
+						<select id="user_role">
+							<option>全部</option>
+							<option value="0">未确定</option>
+							<option value="1">威客</option>
+							<option value="2">雇主</option>
+							<option value="3">威客雇主</option>
+						</select>
+					</div>
 
 					<label class="control-label">行业分类:</label>
 					<div class="controls">
@@ -173,6 +184,7 @@
 	    		aoData.push( { "name": "indus3", "value": $("#indus3 option:selected").val() } );
 	    		aoData.push( { "name": "shop_level", "value": $("#shop_level option:selected").val() } );
 	    		aoData.push( { "name": "area_type", "value": $("#area_type option:selected").val() } );
+	    		aoData.push( { "name": "user_role", "value": $("#user_role option:selected").val() } );
 	    		
 				$.ajax({
 					"type" : "get",

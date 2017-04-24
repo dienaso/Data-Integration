@@ -15,9 +15,9 @@
 			<a href="#" class="tip-bottom"> <i class="icon-bar-chart"></i>
 				数据统计
 			</a>
-			<a href="#" class="current">任务统计(按时间)</a>
+			<a href="#" class="current">交易统计</a>
 		</div>
-		<h1>任务统计(按时间)</h1>
+		<h1>交易统计</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -33,7 +33,7 @@
 			</div>
 			<div class="widget-content nopadding form-horizontal">
 				<div class="control-group">
-					<label class="control-label">发布时间 :</label>
+					<label class="control-label">时间区间 :</label>
 					<div class="controls">
 						<div class="input-daterange" id="datepicker">
 							<input type="text" class="input-sm form-control" name="start" placeholder="开始时间" readonly>
@@ -44,7 +44,7 @@
 					<label class="control-label">任务类型:</label>
 					<div class="controls">
 						<select id="taskType">
-							<option>全部</option>
+							<option>全部(不包含计件)</option>
 							<option>单赏</option>
 							<option>多赏</option>
 							<option>计件</option>
@@ -65,54 +65,33 @@
 						</select>
 					</div>
 
-                    <label class="control-label">任务金额:</label>
-                    <div class="controls">
-                        <select id="task_cash">
-                            <option>全部</option>
-                            <option value="task_cash:[* TO 1000}">1000以下</option>
-                            <option value="task_cash:[1000 TO 10000}">1000~10000</option>
-                            <option value="task_cash:[10000 TO 50000}">10000~50000</option>
-                            <option value="task_cash:[50000 TO *}">50000以上</option>
-                        </select>
-                    </div>
-
-					<label class="control-label">统计类型:</label>
+					<label class="control-label">店铺等级:</label>
 					<div class="controls">
-						<select id="statType">
-							<option value="+1DAY">按日</option>
-							<option value="+1MONTH">按月</option>
-							<option value="+1YEAR">按年</option>
-						</select>
-					</div>
-
-					<label class="control-label">托管状态:</label>
-					<div class="controls">
-						<select id="cash_status">
+						<select id="shop_level">
 							<option>全部</option>
-							<option>未托管</option>
-							<option>已托管</option>
+							<option>全部VIP</option>
+							<option value="1">基础版本</option>
+							<option value="2">扩展版</option>
+							<option value="3">旗舰版</option>
+							<option value="4">白金版</option>
+							<option value="5">钻石版</option>
+							<option value="6">皇冠版</option>
+							<option value="7">金尊皇冠版</option>
+							<option value="8">至尊皇冠版</option>
 						</select>
 					</div>
 
-					<label class="control-label">任务状态:</label>
+					<label class="control-label">用户名:</label>
 					<div class="controls">
-						<select id="task_status">
-							<option>全部</option>
-							<option value="\-1">未确认</option>
-							<option value="0">未付款</option>
-							<option value="1">待审核</option>
-							<option value="2">投稿中</option>
-							<option value="3">选稿中</option>
-							<option value="4">摇奖中</option>
-							<option value="5">公示中</option>
-							<option value="6">交付</option>
-							<option value="7">冻结</option>
-							<option value="8">结束</option>
-							<option value="9">失败</option>
-							<option value="10">审核失败</option>
-							<option value="11">仲裁</option>
-						</select>
-					</div>
+						<input type="text" name="username" placeholder="威客用户名"></div>
+						
+					<label class="control-label">交易类型:</label>
+					<div class="controls">
+						<input type="text" name="fina_action" placeholder="交易类型"></div>
+						
+					<label class="control-label">最少交易次数:</label>
+					<div class="controls">
+						<input type="text" name="minCount" placeholder="最少交易次数" value="1"></div>
 				</div>
 
 				<div class="form-actions">
@@ -124,14 +103,14 @@
 				<span class="icon">
 					<i class="icon-th"></i>
 				</span>
-				<h5>任务统计列表</h5>
+				<h5>交易统计列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
 					<thead>
 						<tr>
-							<th>发布时间</th>
-							<th>发布数量</th>
+							<th>用户名</th>
+							<th>交易量</th>
 						</tr>
 					</thead>
 				</table>
@@ -141,7 +120,7 @@
 	</div>
 
 	<script type="text/javascript">
-	$(document).ready(function() {
+	$(function () {
 		$('.input-daterange').datepicker({
 		    format: "yyyy-m-d",
     		language: "zh-CN",
@@ -156,27 +135,27 @@
 		
 		<!--dateTable-->
 		var table = $('#list').DataTable({
-			"bServerSide" : true,
 			"bDestroy": true,
 			"bStateSave": true,
+			"bServerSide": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/task/date/get', 
+	        "sAjaxSource": '/finance/times/get', 
+	        "sDom": '<"F"ip>T<"#mytool"><"clear"><"H"lfr>t',
 	        "aoColumns":
 	           [  
-					{ "mData": "date"},
+					{ "mData": "name"},
 		        	{ "mData": "count"},
-	        	],
-	    	"fnServerData" : function(sSource, aoData, fnCallback) {
+	           ],
+	    	"fnServerData": function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
 	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
-	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
-	    		aoData.push( { "name": "task_status", "value": $("#task_status option:selected").val() } );
-	    		aoData.push( { "name": "cash_status", "value": $("#cash_status option:selected").val() } );
-                aoData.push( { "name": "task_cash", "value": $("#task_cash option:selected").val() } );
-
+	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
+	    		aoData.push( { "name": "shop_level", "value": $("#shop_level option:selected").val() } );
+	    		aoData.push( { "name": "fina_action", "value": $("input[name='fina_action']").val() } );
+	    		aoData.push( { "name": "minCount", "value": $("input[name='minCount']").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

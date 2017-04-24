@@ -58,7 +58,7 @@ public class QueryUtils<T> {
 	 *            添加的sql语句
 	 * @param params
 	 *            数据的参数
-	 * @param name
+	 * @param dataSourceName
 	 *            连接池的名字
 	 * */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

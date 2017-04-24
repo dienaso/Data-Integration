@@ -71,7 +71,7 @@ public class RolesController extends BaseController {
 		try {
 			// 添加到数据库
 			rolesService.insert(roles);
-			retModel.setInsertFucceed();
+			retModel.setInsertSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -96,7 +96,7 @@ public class RolesController extends BaseController {
 
 		try {
 			rolesService.deleteByPrimaryKey(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -140,7 +140,7 @@ public class RolesController extends BaseController {
 		try {
 			// 更新数据
 			rolesService.update(roles);
-			retModel.setUpdateFucceed();
+			retModel.setUpdateSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

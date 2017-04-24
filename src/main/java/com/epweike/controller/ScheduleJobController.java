@@ -131,7 +131,7 @@ public class ScheduleJobController extends BaseController {
 		try {
 			// 添加到数据库和计划任务
 			quartzService.addTaskJob(job);
-			retModel.setInsertFucceed();
+			retModel.setInsertSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -158,7 +158,7 @@ public class ScheduleJobController extends BaseController {
 
 		try {
 			quartzService.deleteTaskJob(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -206,7 +206,7 @@ public class ScheduleJobController extends BaseController {
 		try {
 			// 更新数据库和计划任务
 			quartzService.updateTaskJob(job);
-			retModel.setUpdateFucceed();
+			retModel.setUpdateSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

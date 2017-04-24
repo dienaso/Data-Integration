@@ -54,7 +54,7 @@ public class IndexController extends BaseController {
 				.addDateRangeFacet("reg_time_date", start, end, statType);
 		// CPM
 		SolrQuery regParams2 = new SolrQuery("*:*").setFacet(true)
-				.addFilterQuery("come:cpm")
+				.addFilterQuery("come:cpm OR come:ztepwk")
 				.addDateRangeFacet("reg_time_date", start, end, statType);
 		// APP
 		SolrQuery regParams3 = new SolrQuery("*:*").setFacet(true)

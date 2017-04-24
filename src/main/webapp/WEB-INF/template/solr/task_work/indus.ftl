@@ -15,9 +15,9 @@
 			<a href="#" class="tip-bottom"> <i class="icon-bar-chart"></i>
 				数据统计
 			</a>
-			<a href="#" class="current">任务统计(按分类)</a>
+			<a href="#" class="current">稿件统计(按分类)</a>
 		</div>
-		<h1>任务统计(按分类)</h1>
+		<h1>稿件统计(按分类)</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -50,6 +50,7 @@
 					</div>
 
 					<label class="control-label">任务类型:</label>
+					
 					<div class="controls">
 						<select multiple id="taskType">
 							<option>单赏</option>
@@ -120,15 +121,15 @@
 				<span class="icon">
 					<i class="icon-th"></i>
 				</span>
-				<h5>任务统计列表</h5>
+				<h5>稿件统计列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
 					<thead>
 						<tr>
 							<th>名称</th>
-							<th>发布数量</th>
-							<th>总额</th>
+							<th>任务总量</th>
+							<th>稿件总量</th>
 							<th>最大</th>
 							<th>最小</th>
 							<th>平均</th>
@@ -162,7 +163,7 @@
 			"bServerSide": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/task/indus/get', 
+	        "sAjaxSource": '/task_work/indus/get', 
 	        "aoColumns":
 	           [  
 					{ "mData": "name"},

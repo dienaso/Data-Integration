@@ -137,7 +137,7 @@ public class AclController extends BaseController {
 					BasePermission.READ);
 		}
 
-		retModel.setUpdateFucceed();
+		retModel.setUpdateSucceed();
 		return retModel;
 	}
 

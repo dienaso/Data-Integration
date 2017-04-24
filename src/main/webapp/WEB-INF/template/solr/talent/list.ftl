@@ -77,6 +77,17 @@
 						</select>
 					</div>
 					
+					<label class="control-label">身份类型:</label>
+					<div class="controls">
+						<select id="user_role">
+							<option>全部</option>
+							<option value="0">未确定</option>
+							<option value="1">威客</option>
+							<option value="2">雇主</option>
+							<option value="3">威客雇主</option>
+						</select>
+					</div>
+					
 					<div class="control-group">
 		              <label class="control-label">已认证信息:</label>
 		              <div class="controls">
@@ -238,17 +249,19 @@ $(function () {
 	            		 if(data == 1){
 	                         return "基础版本" 
 	                      }else if(data == 2){
-	                         return "VIP扩展版"
+	                         return "扩展版"
 	                      }else if(data == 3){
-	                         return "VIP旗舰版"
+	                         return "旗舰版"
 	                      }else if(data == 4){
-	                         return "VIP白金版"
+	                         return "白金版"
 	                      }else if(data == 5){
-	                         return "VIP钻石版"
+	                         return "钻石版"
 	                      }else if(data == 6){
-	                         return "VIP皇冠版"
+	                         return "皇冠版"
 	                      }else if(data == 7){
-	                         return "战略合作版"
+	                         return "金尊皇冠版"
+	                      }else if(data == 8){
+	                         return "至尊皇冠版"
 	                      }
 	                  }
 		        	},
@@ -388,6 +401,8 @@ $(function () {
 	    		aoData.push( { "name": "vip_start_end", "value": $("input[name='vip_start_end']").val() } );
 	    		aoData.push( { "name": "vip_end_start", "value": $("input[name='vip_end_start']").val() } );
 	    		aoData.push( { "name": "vip_end_end", "value": $("input[name='vip_end_end']").val() } );
+	    		aoData.push( { "name": "user_role", "value": $("#user_role option:selected").val() } );
+	    		
 	    		
 				$.ajax({
 					"type" : "get",

@@ -51,8 +51,7 @@
 
 					<label class="control-label">任务类型:</label>
 					<div class="controls">
-						<select id="taskType">
-							<option>全部</option>
+						<select multiple id="taskType">
 							<option>单赏</option>
 							<option>多赏</option>
 							<option>计件</option>
@@ -170,9 +169,13 @@
 		        	{ "mData": "stddev"}
 	           ],
 	    	"fnServerData": function(sSource, aoData, fnCallback) {
+	    		var taskType = new Array();
+				$("#taskType option:selected").each(function(){
+		            taskType.push($(this).val());
+		        });
 	    		aoData.push( { "name": "pub_start", "value": $("input[name='pub_start']").val() } );
 	    		aoData.push( { "name": "pub_end", "value": $("input[name='pub_end']").val() } );
-	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
+	    		aoData.push( { "name": "taskType", "value": taskType.toString() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
 	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
 	    		aoData.push( { "name": "cash_status", "value": $("#cash_status option:selected").val() } );

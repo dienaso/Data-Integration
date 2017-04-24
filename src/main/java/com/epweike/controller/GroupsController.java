@@ -85,7 +85,7 @@ public class GroupsController extends BaseController {
 		try {
 			// 添加到数据库
 			groupsService.insert(groups);
-			retModel.setInsertFucceed();
+			retModel.setInsertSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -110,7 +110,7 @@ public class GroupsController extends BaseController {
 
 		try {
 			groupsService.deleteByPrimaryKey(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);
@@ -154,7 +154,7 @@ public class GroupsController extends BaseController {
 		try {
 			// 更新数据
 			groupsService.update(groups);
-			retModel.setUpdateFucceed();
+			retModel.setUpdateSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

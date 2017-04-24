@@ -42,6 +42,20 @@
 					</div>
 
 				</div>
+				
+				<label class="control-label">页面类型:</label>
+					<div class="controls">
+						<select id="do_view">
+							<option>全部</option>
+							<option>首页</option>
+							<option>任务列表</option>
+							<option>任务详情</option>
+							<option>人才列表</option>
+							<option>人才详情</option>
+							<option>服务列表</option>
+							<option>服务详情</option>
+						</select>
+					</div>
 
 				<div class="form-actions">
 					<button id="search-btn" class="btn">查询</button>
@@ -98,6 +112,7 @@
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
+	    		aoData.push( { "name": "do_view", "value": $("#do_view option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

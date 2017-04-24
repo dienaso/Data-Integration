@@ -2,8 +2,8 @@
  * Copyright 2010-2015 epweike.com.
  * @Description: TODO
  * @author 吴小平
- * @date Sep 29, 2015 2:32:38 PM 
- * 
+ * @date Sep 29, 2015 2:32:38 PM
+ *
  */
 package com.epweike;
 
@@ -71,14 +71,13 @@ public class QueryRunnerCRUDTest {
 				+ "a.auth_bank,a.auth_email,a.auth_mobile,a.chief_designer,a.isvip,CRC32(a.city) AS sch_city,CRC32(a.province) AS sch_province,a.integrity_points,"
 				+ "a.vip_start_time,a.vip_end_time,CASE WHEN a.come IS NULL THEN 'WEB' WHEN a.come = '' THEN 'WEB' ELSE come END AS come,"
 				+ "DATE_FORMAT(FROM_UNIXTIME(a.reg_time),'%Y-%m-%d') AS reg_date,a.last_login_time,b.shop_name,b.shop_desc,b.views,c.skill_id,"
-				+ "GROUP_CONCAT(CONCAT(d.g_id,'-',d.indus_pid,'-',d.indus_id)) AS skill_ids,GROUP_CONCAT(d.indus_id) AS indus_ids,GROUP_CONCAT(d.indus_name) AS indus_names"
+				+ "GROUP_CONCAT(CONCAT(d.g_id,'-',d.indus_pid,'-',d.indus_id)) AS skill_ids,GROUP_CONCAT(d.indus_id) AS indus_ids"
 				+ " FROM keke_witkey_space a LEFT JOIN keke_witkey_shop b ON a.uid=b.uid LEFT JOIN keke_witkey_member_skill c ON a.uid=c.uid LEFT JOIN keke_witkey_industry d ON c.skill_id=d.indus_id"
 				+ " WHERE a.uid=? AND a.uid NOT IN (476, 517, 1084, 621530, 1601, 564517) GROUP BY uid";
 		Object params[] = { 555 };
 		//Talent talent = qr.query(sql, new BeanHandler<Talent>(Talent.class),params);
 		QueryUtils<Talent> queryRunnerUtils = new QueryUtils<Talent>(Talent.class);
 		Talent talent = queryRunnerUtils.get(sql, params, null);
-		System.out.println(talent.getIndus_names());
 	}
 
 	@Test

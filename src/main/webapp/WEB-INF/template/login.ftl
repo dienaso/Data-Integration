@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="/common/matrix/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="/common/matrix/css/matrix-login.css" />
 	<link href="/common/matrix/font-awesome/css/font-awesome.css" rel="stylesheet" />
-	<link href='http://fonts.useso.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'></head>
 <body>
 	<div id="loginbox">
 		<form id="loginform" class="form-vertical" action="/j_spring_security_check" method="post">

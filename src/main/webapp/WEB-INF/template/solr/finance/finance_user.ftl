@@ -43,8 +43,8 @@
 
 					<label class="control-label">任务类型:</label>
 					<div class="controls">
-						<select id="taskType">
-							<option>全部(不包含计件)</option>
+						<select multiple id="taskType">
+							<option>全部</option>
 							<option>单赏</option>
 							<option>多赏</option>
 							<option>计件</option>
@@ -52,6 +52,16 @@
 							<option>雇佣</option>
 							<option>服务</option>
 							<option>直接雇佣</option>
+						</select>
+					</div>
+					
+					<label class="control-label">财务类型:</label>
+					<div class="controls">
+						<select multiple id="finaAction">
+							<option>全部</option>
+							<option value="task_bid">中标</option>
+							<option value="task_mark">入围</option>
+							<option value="task_lettory">摇奖</option>
 						</select>
 					</div>
 
@@ -79,6 +89,22 @@
 							<option value="7">金尊皇冠版</option>
 							<option value="8">至尊皇冠版</option>
 						</select>
+					</div>
+					
+					<label class="control-label">VIP开通时间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker2">
+							<input type="text" class="input-sm form-control" name="vip_start_start" placeholder="开始时间" readonly>
+							<span class="input-group-addon">to</span>
+							<input type="text" class="input-sm form-control" name="vip_start_end" placeholder="结束时间" readonly></div>
+					</div>
+					
+					<label class="control-label">VIP到期时间 :</label>
+					<div class="controls">
+						<div class="input-daterange" id="datepicker3">
+							<input type="text" class="input-sm form-control" name="vip_end_start" placeholder="开始时间" readonly>
+							<span class="input-group-addon">to</span>
+							<input type="text" class="input-sm form-control" name="vip_end_end" placeholder="结束时间" readonly></div>
 					</div>
 
 					<label class="control-label">用户名:</label>
@@ -149,12 +175,26 @@
 		        	{ "mData": "stddev"}
 	           ],
 	    	"fnServerData": function(sSource, aoData, fnCallback) {
+	    		var taskType = new Array();
+				$("#taskType option:selected").each(function(){
+		            taskType.push($(this).val());
+		        });
+		        var finaAction = new Array();
+				$("#finaAction option:selected").each(function(){
+		            finaAction.push($(this).val());
+		        });
 	    		aoData.push( { "name": "start", "value": $("input[name='start']").val() } );
 	    		aoData.push( { "name": "end", "value": $("input[name='end']").val() } );
-	    		aoData.push( { "name": "taskType", "value": $("#taskType option:selected").val() } );
+	    		aoData.push( { "name": "taskType", "value": taskType.toString() } );
+	    		aoData.push( { "name": "fina_action", "value": finaAction.toString() } );
 	    		aoData.push( { "name": "source", "value": $("#source option:selected").val() } );
 	    		aoData.push( { "name": "username", "value": $("input[name='username']").val() } );
 	    		aoData.push( { "name": "shop_level", "value": $("#shop_level option:selected").val() } );
+	    		aoData.push( { "name": "vip_start_start", "value": $("input[name='vip_start_start']").val() } );
+	    		aoData.push( { "name": "vip_start_end", "value": $("input[name='vip_start_end']").val() } );
+	    		aoData.push( { "name": "vip_end_start", "value": $("input[name='vip_end_start']").val() } );
+	    		aoData.push( { "name": "vip_end_end", "value": $("input[name='vip_end_end']").val() } );
+	    		
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

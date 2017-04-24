@@ -15,9 +15,9 @@
 			<a href="#" class="tip-bottom"> <i class="icon-bar-chart"></i>
 				数据统计
 			</a>
-			<a href="#" class="current">用户注册统计</a>
+			<a href="#" class="current">能力品级x商铺等级</a>
 		</div>
-		<h1>用户注册统计</h1>
+		<h1>能力品级x商铺等级</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -51,30 +51,22 @@
 				<span class="icon">
 					<i class="icon-th"></i>
 				</span>
-				<h5>用户组注册统计列表</h5>
+				<h5>能力品级x商铺等级统计列表</h5>
 			</div>
 			<div class="widget-content nopadding">
 				<table id="list" class="table table-bordered data-table">
 					<thead>
 						<tr>
-							<th rowspan="2">日期</th>
-							<th rowspan="2">TOTAL</th>
-							<th colspan="4">身份类型</th>
-							<th colspan="9">注册渠道</th>
-						</tr>
-						<tr>
-							<th>未确定</th>
-							<th>威客</th>
-							<th>雇主</th>
-							<th>威客雇主</th>
-							<th>WEB</th>
-							<th>CPM</th>
-                            <th>专题</th>
-							<th>APP</th>
-							<th>WAP</th>
-							<th>云创平台</th>
-							<th>酷贝街</th>
-							<th>后台</th>
+							<th>能力品级</th>
+							<th>总计</th>
+							<th>至尊皇冠</th>
+							<th>金尊皇冠</th>
+							<th>皇冠版</th>
+							<th>钻石版</th>
+							<th>白金版</th>
+                            <th>旗舰版</th>
+							<th>拓展版</th>
+							<th>基础版</th>
 						</tr>
 					</thead>
 				</table>
@@ -104,28 +96,47 @@
 			"bStateSave": true,
 			"bFilter": false,
 			"bPaginate": false,
-	        "sAjaxSource": '/talent/register/get', 
+	        "sAjaxSource": '/talent/wAndShopLevel/get', 
 	        "aoColumns":
 	           [  
-					{ "mData": "label"},
+					{ "mData": "label",
+		        	  "mRender": function (data, type) {
+	            		 if(data == 1){
+	                         return "九品" 
+	                      }else if(data == 2){
+	                         return "八品"
+	                      }else if(data == 3){
+	                         return "七品"
+	                      }else if(data == 4){
+	                         return "六品"
+	                      }else if(data == 5){
+	                         return "五品"
+	                      }else if(data == 6){
+	                         return "四品"
+	                      }else if(data == 7){
+	                         return "三品"
+	                      }else if(data == 8){
+	                         return "二品"
+	                      }else if(data == 9){
+	                         return "一品"
+	                      }else{
+	                         return data
+	                      }
+	                    }
+	                 },
 					{ "mData": "TOTAL"},
-					{ "mData": "uncertain"},
-					{ "mData": "witkey"},
-					{ "mData": "employer"},
-					{ "mData": "both"},
-		        	{ "mData": "WEB"},
-		        	{ "mData": "cpm"},
-                   { "mData": "ztepwk"},
-		        	{ "mData": "APP"},
-		        	{ "mData": "WAP"},
-		        	{ "mData": "yun"},
-		        	{ "mData": "mall"},
-		        	{ "mData": "background"}
+					{ "mData": "至尊皇冠"},
+					{ "mData": "金尊皇冠"},
+					{ "mData": "VIP皇冠"},
+					{ "mData": "VIP钻石"},
+		        	{ "mData": "VIP白金"},
+		        	{ "mData": "VIP旗舰"},
+                    { "mData": "VIP拓展"},
+		        	{ "mData": "基础版"}
 	        	],
 	    	"fnServerData" : function(sSource, aoData, fnCallback) {
 	    		aoData.push( { "name": "reg_start", "value": $("input[name='reg_start']").val() } );
 	    		aoData.push( { "name": "reg_end", "value": $("input[name='reg_end']").val() } );
-	    		aoData.push( { "name": "statType", "value": $("#statType option:selected").val() } );
 				$.ajax({
 					"type" : "get",
 					"url" : sSource,

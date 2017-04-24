@@ -83,17 +83,94 @@ public class Talent extends BaseModel<Talent> {
 	@Field
 	private String shop_desc;
 	@Field
-	private long on_time;
-	@Field
 	private String last_login_time;
 	@Field
 	private Integer views;
 	@Field
 	private String skill_ids;
 	@Field
-	private String indus_ids;
+	private String main_skill_name;
 	@Field
-	private String indus_names;
+	private String second_skill_names;
+
+	@Field
+	private String min_match_money_ema;
+
+	@Field
+	private String forbid_match_msg;
+
+	@Field
+	private String global_match;
+
+	@Field
+	private String min_match_money_msg;
+
+	@Field
+	private String forbid_match_email;
+
+	@Field
+	private String min_match_money;
+
+	public String getMin_match_money_ema() {
+		return min_match_money_ema;
+	}
+
+	public void setMin_match_money_ema(String min_match_money_ema) {
+		this.min_match_money_ema = min_match_money_ema;
+	}
+
+	public String getForbid_match_msg() {
+		return forbid_match_msg;
+	}
+
+	public void setForbid_match_msg(String forbid_match_msg) {
+		this.forbid_match_msg = forbid_match_msg;
+	}
+
+	public String getGlobal_match() {
+		return global_match;
+	}
+
+	public void setGlobal_match(String global_match) {
+		this.global_match = global_match;
+	}
+
+	public String getMin_match_money_msg() {
+		return min_match_money_msg;
+	}
+
+	public void setMin_match_money_msg(String min_match_money_msg) {
+		this.min_match_money_msg = min_match_money_msg;
+	}
+
+	public String getForbid_match_email() {
+		return forbid_match_email;
+	}
+
+	public void setForbid_match_email(String forbid_match_email) {
+		this.forbid_match_email = forbid_match_email;
+	}
+
+	public String getMin_match_money() {
+		return min_match_money;
+	}
+
+	public void setMin_match_money(String min_match_money) {
+		this.min_match_money = min_match_money;
+	}
+
+	public String getForbid_match_sms() {
+		return forbid_match_sms;
+	}
+
+	public void setForbid_match_sms(String forbid_match_sms) {
+		this.forbid_match_sms = forbid_match_sms;
+	}
+
+	@Field
+	private String forbid_match_sms;
+
+
 
 	/**
 	 * @return the last_login_time
@@ -108,21 +185,6 @@ public class Talent extends BaseModel<Talent> {
 	 */
 	public void setLast_login_time(String last_login_time) {
 		this.last_login_time = last_login_time;
-	}
-
-	/**
-	 * @return the on_time
-	 */
-	public long getOn_time() {
-		return on_time;
-	}
-
-	/**
-	 * @param on_time
-	 *            the on_time to set
-	 */
-	public void setOn_time(long on_time) {
-		this.on_time = on_time;
 	}
 
 	/**
@@ -711,34 +773,20 @@ public class Talent extends BaseModel<Talent> {
 		this.skill_ids = skill_ids;
 	}
 
-	/**
-	 * @return the indus_ids
-	 */
-	public String getIndus_ids() {
-		return indus_ids;
+	public String getMain_skill_name() {
+		return main_skill_name;
 	}
 
-	/**
-	 * @param indus_ids
-	 *            the indus_ids to set
-	 */
-	public void setIndus_ids(String indus_ids) {
-		this.indus_ids = indus_ids;
+	public void setMain_skill_name(String main_skill_name) {
+		this.main_skill_name = main_skill_name;
 	}
 
-	/**
-	 * @return the indus_names
-	 */
-	public String getIndus_names() {
-		return indus_names;
+	public String getSecond_skill_names() {
+		return second_skill_names;
 	}
 
-	/**
-	 * @param indus_names
-	 *            the indus_names to set
-	 */
-	public void setIndus_names(String indus_names) {
-		this.indus_names = indus_names;
+	public void setSecond_skill_names(String second_skill_names) {
+		this.second_skill_names = second_skill_names;
 	}
 
 }

@@ -38,7 +38,7 @@ public class MenusService extends BaseService<Menus> {
 	* @author  吴小平
 	* @version 创建时间：Nov 24, 2015 10:53:50 AM
 	*/  
-	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('ADMIN')")
+	@PostFilter("hasPermission(filterObject, 'READ') or hasRole('管理员')")
 	public Collection<Menus> getFilterMenus(Menus menus) {    
 	  Collection<Menus> filteredMenus = mapper.select(menus);
 	  return filteredMenus;    

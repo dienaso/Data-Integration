@@ -30,7 +30,7 @@ public class RetModel {
 		this.setFlag(false);
 	}
 	
-	public void setDelFucceed() {
+	public void setDelSucceed() {
 		this.msg = "删除成功！";
 		this.setFlag(true);
 	}
@@ -41,7 +41,7 @@ public class RetModel {
 		this.setFlag(false);
 	}
 	
-	public void setInsertFucceed() {
+	public void setInsertSucceed() {
 		this.msg = "添加成功！";
 		this.setFlag(true);
 	}
@@ -52,7 +52,7 @@ public class RetModel {
 		this.setFlag(false);
 	}
 	
-	public void setUpdateFucceed() {
+	public void setUpdateSucceed() {
 		this.msg = "保存成功！";
 		this.setFlag(true);
 	}

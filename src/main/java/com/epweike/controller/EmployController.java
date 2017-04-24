@@ -62,7 +62,7 @@ public class EmployController extends BaseController {
 
 		try {
 			this.employService.deleteByPrimaryKey(id);
-			retModel.setDelFucceed();
+			retModel.setDelSucceed();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 			retModel.setAccessDenied(e);

@@ -67,22 +67,25 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:查询人才对象
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年9月29日 下午3:28:27
 	 */
 	public Talent getByUid(int uid) throws IOException {
 
-		String sql = "SELECT a.uid,a.shop_id,a.seller_credit,CRC32(a.brand) AS sch_brand,a.brand,"
-				+ "a.mobile,a.group_id,task_bid_num,IF(credit_score > 0, credit_score, 0) AS credit_score,"
-				+ "a.shop_level,a.w_level,a.w_good_rate,a.integrity,a.integrity_ids,a.user_type,DATE_FORMAT(DATE_ADD(FROM_UNIXTIME(last_login_time), INTERVAL -8 HOUR),'%Y-%m-%dT%TZ') AS last_login_time,"
-				+ "a.username,a.is_close,a.province,a.city,a.AREA,a.task_income_cash,a.task_income_credit,a.currency,a.accepted_num,a.auth_realname,"
-				+ "a.auth_bank,a.auth_email,a.auth_mobile,a.chief_designer,a.isvip,CRC32(a.city) AS sch_city,CRC32(a.province) AS sch_province,"
-				+ "a.vip_start_time,a.vip_end_time,CASE WHEN a.come IS NULL THEN 'WEB' WHEN a.come = '' THEN 'WEB' ELSE come END AS come,"
-				+ "a.integrity_points,b.shop_name,b.shop_desc,b.views,c.skill_id,"
-				+ "GROUP_CONCAT(CONCAT(d.g_id,'-',d.indus_pid,'-',d.indus_id)) AS skill_ids,GROUP_CONCAT(d.indus_id) AS indus_ids,GROUP_CONCAT(d.indus_name) AS indus_names"
-				+ " FROM keke_witkey_space a LEFT JOIN keke_witkey_shop b ON a.uid=b.uid LEFT JOIN keke_witkey_member_skill c ON a.uid=c.uid LEFT JOIN keke_witkey_industry d ON c.skill_id=d.indus_id"
-				+ " WHERE a.uid=?";
+		String sql = "SELECT a.uid,a.shop_id,a.seller_credit,CRC32(a.brand) AS sch_brand,a.brand,\n"
+				+ "                a.mobile,a.group_id,task_bid_num,IF(credit_score > 0, credit_score, 0) AS credit_score,\n"
+				+ "                a.shop_level,a.w_level,a.w_good_rate,a.integrity,a.integrity_ids,a.user_type,DATE_FORMAT(DATE_ADD(FROM_UNIXTIME(last_login_time), INTERVAL -8 HOUR),'%Y-%m-%dT%TZ') AS last_login_time,\n"
+				+ "                a.username,a.is_close,a.province,a.city,a.AREA,a.task_income_cash,a.task_income_credit,a.currency,a.accepted_num,a.auth_realname,\n"
+				+ "                a.auth_bank,a.auth_email,a.auth_mobile,a.chief_designer,a.isvip,CRC32(a.city) AS sch_city,CRC32(a.province) AS sch_province,\n"
+				+ "                a.vip_start_time,a.vip_end_time,CASE WHEN a.come IS NULL THEN 'WEB' WHEN a.come = '' THEN 'WEB' ELSE come END AS come,\n"
+				+ "                a.integrity_points,b.shop_name,b.shop_desc,b.views,c.skill_id,\n"
+				+ "                GROUP_CONCAT(DISTINCT(c.skill_id)) AS skill_ids,\n"
+				+ "                g.indus_name AS main_skill_name,GROUP_CONCAT(DISTINCT(h.indus_name)) AS second_skill_names,\n"
+				+ "                b.min_match_money_ema,b.forbid_match_msg,b.global_match,b.min_match_money_msg,b.forbid_match_email,b.min_match_money,b.forbid_match_sms"
+				+ "                 FROM keke_witkey_space a LEFT JOIN keke_witkey_shop b ON a.uid=b.uid LEFT JOIN keke_witkey_skills c ON a.uid=c.uid LEFT JOIN keke_witkey_industry d ON c.skill_id=d.indus_id\n"
+				+ "                 LEFT JOIN keke_witkey_skills e ON a.uid=e.uid AND e.skill_type='main_skill' LEFT JOIN keke_witkey_skills f ON a.uid=f.uid AND f.skill_type='second_skill' \n"
+				+ "                 LEFT JOIN keke_witkey_industry g ON e.skill_id=g.indus_id LEFT JOIN keke_witkey_industry h ON f.skill_id=h.indus_id\n"
+				+ "                WHERE a.uid=?";
 		QueryUtils<Talent> queryRunnerUtils = new QueryUtils<Talent>(Talent.class);
 
 		Object params[] = { uid };
@@ -99,11 +102,10 @@ public class TalentController extends BaseController {
 	}
 
 	/**
+	 * @throws SolrServerException
 	 * @Description:ajax获取人才列表
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年9月29日 下午3:28:27
-	 * @throws SolrServerException
 	 */
 	@RequestMapping(value = "get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String paginationDataTables(HttpServletRequest request)
@@ -129,6 +131,8 @@ public class TalentController extends BaseController {
 		String w_level = getParamFromAodata(aoData, "w_level");
 		// 已认证信息
 		String auth = getParamFromAodata(aoData, "auth");
+		// 用户类型
+		String user_role = getParamFromAodata(aoData, "user_role");
 
 		// 未认证信息
 		String no_auth = getParamFromAodata(aoData, "no_auth");
@@ -170,10 +174,10 @@ public class TalentController extends BaseController {
 			params.addFilterQuery("uid:" + uid);
 
 		if (!username.equals(""))
-			params.addFilterQuery("username:" + "\"*" + username + "*\"");
+			params.addFilterQuery("username:" + username);
 
 		if (!shop_name.equals(""))
-			params.addFilterQuery("shop_name:" + "\"*" + shop_name + "*\"");
+			params.addFilterQuery("shop_name:" + shop_name);
 
 		if (!mobile.equals(""))
 			params.addFilterQuery("mobile:" + mobile);
@@ -182,6 +186,9 @@ public class TalentController extends BaseController {
 			params.addFilterQuery("last_login_time:" + login_time);
 			params.addSort(new SortClause("last_login_time", SolrQuery.ORDER.desc));
 		}
+
+		if (!user_role.equals("全部"))
+			params.addFilterQuery("user_role:" + user_role);
 
 		if (!"全部".equals(no_login_time) && !"".equals(no_login_time)) {
 			params.addFilterQuery("last_login_time:" + no_login_time);
@@ -194,9 +201,12 @@ public class TalentController extends BaseController {
 
 		if (shop_level.equals("全部VIP")) {
 			params.addFilterQuery("shop_level:{1 TO *}");
+			params.addFilterQuery("shop_id:{0 TO *}");
 		} else {
-			if (!shop_level.equals("全部"))
+			if (!shop_level.equals("全部")) {
 				params.addFilterQuery("shop_level:" + shop_level);
+				params.addFilterQuery("shop_id:{0 TO *}");
+			}
 		}
 
 		if (auth != null && auth.contains("auth_bank")) {
@@ -284,8 +294,8 @@ public class TalentController extends BaseController {
 			Field f = fields[i];
 			f.setAccessible(true);
 			System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(talent));
-			if ("indus_ids".equals(f.getName()) || "indus_names".equals(f.getName())
-					|| "skill_ids".equals(f.getName())) {// 处理多值字段
+			if ("indus_ids".equals(f.getName()) || "second_skill_names".equals(f.getName())
+					|| "main_skill_names".equals(f.getName()) || "skill_ids".equals(f.getName())) {// 处理多值字段
 				if (f.get(talent) != null) {
 					String[] arr = f.get(talent).toString().split(",");
 					for (int j = 0; j < arr.length; j++) {
@@ -337,7 +347,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:一品用户省份分布统计
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -365,7 +374,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:一品用户注册统计
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -379,7 +387,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:获取注册用户
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -415,6 +422,7 @@ public class TalentController extends BaseController {
 		int allBoth = 0;
 		int allWeb = 0;
 		int allCpm = 0;
+		int allZtepwk = 0;
 		int allApp = 0;
 		int allWap = 0;
 		int allMall = 0;
@@ -470,6 +478,9 @@ public class TalentController extends BaseController {
 									case "cpm":
 										allCpm += count2;
 										break;
+									case "ztepwk":
+										allZtepwk += count2;
+										break;
 									case "APP":
 										allApp += count2;
 										break;
@@ -499,6 +510,8 @@ public class TalentController extends BaseController {
 							map.put("WEB", 0);
 						if (map.get("cpm") == null)
 							map.put("cpm", 0);
+						if (map.get("ztepwk") == null)
+							map.put("ztepwk", 0);
 						if (map.get("APP") == null)
 							map.put("APP", 0);
 						if (map.get("WAP") == null)
@@ -555,6 +568,7 @@ public class TalentController extends BaseController {
 		map2.put("both", allBoth);
 		map2.put("WEB", allWeb);
 		map2.put("cpm", allCpm);
+		map2.put("ztepwk", allZtepwk);
 		map2.put("APP", allApp);
 		map2.put("WAP", allWap);
 		map2.put("mall", allMall);
@@ -573,8 +587,154 @@ public class TalentController extends BaseController {
 	}
 
 	/**
+	 * @Description:能力品级X商铺等级
+	 * @author 吴小平
+	 * @version 创建时间：2017年2月15日 下午3:28:27
+	 */
+	@RequestMapping(value = { "stat/w_to_shop_level" })
+	public ModelAndView wAndShopLevel() throws SolrServerException, IOException {
+		// 返回视图
+		ModelAndView mv = new ModelAndView("solr/talent/w_to_shop_level");
+		return mv;
+	}
+
+	/**
+	 * @Description:能力品级X商铺等级
+	 * @author 吴小平
+	 * @version 创建时间：2017年2月15日 下午3:28:27
+	 */
+	@RequestMapping(value = "wAndShopLevel/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getWAndShopLevel(HttpServletRequest request) throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// 注册时间
+		String reg_start = getParamFromAodata(aoData, "reg_start");
+		reg_start = (!"".equals(reg_start)) ? reg_start + "T00:00:00Z" : "*";
+		String reg_end = getParamFromAodata(aoData, "reg_end");
+		reg_end = (!"".equals(reg_end)) ? reg_end + "T23:59:59Z" : "*";
+
+		SolrQuery params = new SolrQuery("*:*");
+		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end + "]");
+		params.setFacet(true);
+		params.addFacetPivotField("w_level,shop_level").setFacetLimit(Integer.MAX_VALUE);
+
+		QueryResponse response = SolrUtils.getSolrServer("talent").query(params);
+		NamedList<List<PivotField>> namedList = response.getFacetPivot();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+
+		int allTotal = 0;
+		int all1 = 0;
+		int all2 = 0;
+		int all3 = 0;
+		int all4 = 0;
+		int all5 = 0;
+		int all6 = 0;
+		int all7 = 0;
+		int all8 = 0;
+
+		if (namedList != null) {
+			List<PivotField> pivotList = null;
+			for (int i = 0, len = namedList.size(); i < len; i++) {
+				pivotList = namedList.getVal(i);
+				if (pivotList != null) {
+					for (PivotField pivot : pivotList) {
+						int total = 0;
+						map = new HashMap<String, Object>();
+						map.put("label", pivot.getValue().toString());
+						// 商铺类型
+						List<PivotField> fieldList = pivot.getPivot();
+						if (fieldList != null) {
+							for (PivotField field : fieldList) {
+								int count = field.getCount();
+								String value = field.getValue().toString();
+								System.out.println("field=" + field.getField());
+								if ("1".equals(value)) {
+									all1 += count;
+								} else if ("2".equals(value)) {
+									all2 += count;
+								} else if ("3".equals(value)) {
+									all3 += count;
+								} else if ("4".equals(value)) {
+									all4 += count;
+								} else if ("5".equals(value)) {
+									all5 += count;
+								} else if ("6".equals(value)) {
+									all6 += count;
+								} else if ("7".equals(value)) {
+									all7 += count;
+								} else if ("8".equals(value)) {
+									all8 += count;
+								}
+
+								map.put(getShopLevelName(value), count);
+								total += count;
+							}
+						}
+						allTotal += total;
+						System.out.println("map" + map.toString());
+						map.put("TOTAL", total);
+						// 不存在赋值0
+						if (map.get("基础版") == null)
+							map.put("基础版", 0);
+						if (map.get("VIP拓展") == null)
+							map.put("VIP拓展", 0);
+						if (map.get("VIP旗舰") == null)
+							map.put("VIP旗舰", 0);
+						if (map.get("VIP白金") == null)
+							map.put("VIP白金", 0);
+						if (map.get("VIP钻石") == null)
+							map.put("VIP钻石", 0);
+						if (map.get("VIP皇冠") == null)
+							map.put("VIP皇冠", 0);
+						if (map.get("金尊皇冠") == null)
+							map.put("金尊皇冠", 0);
+						if (map.get("至尊皇冠") == null)
+							map.put("至尊皇冠", 0);
+
+						list.add(map);
+					}
+				}
+			}
+		}
+
+		// 排序(按能力品级降序)
+		Collections.sort(list, new Comparator<Map<String, Object>>() {
+			public int compare(Map<String, Object> arg0, Map<String, Object> arg1) {
+				return arg0.get("label").toString().compareTo(arg1.get("label").toString());
+			}
+		});
+
+		// 汇总
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("label", "汇总");
+		map2.put("TOTAL", allTotal);
+		map2.put("基础版", all1);
+		map2.put("VIP拓展", all2);
+		map2.put("VIP旗舰", all3);
+		map2.put("VIP白金", all4);
+		map2.put("VIP钻石", all5);
+		map2.put("VIP皇冠", all6);
+		map2.put("金尊皇冠", all7);
+		map2.put("至尊皇冠", all8);
+		list.add(0, map2);
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.size());
+		pageModel.setiTotalRecords(list.size());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+
+		return json.toString();
+	}
+
+	/**
 	 * @Description:一品用户注册统计(按时间)
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -587,7 +747,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:注册统计列表（按时间）
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2016年6月13日 下午5:29:08
 	 */
@@ -611,8 +770,14 @@ public class TalentController extends BaseController {
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
 				.addDateRangeFacet("reg_time_date", start, end, statType).setFacetLimit(1000);
-		if (!come.equals("全部"))
-			parameters.addFilterQuery("come:" + come);
+		if (!come.equals("全部")) {
+			if (come.equals("cpm")) {
+				parameters.addFilterQuery("come:cpm OR come:ztepwk");
+			} else {
+				parameters.addFilterQuery("come:" + come);
+			}
+		}
+
 		if (!user_role.equals("全部"))
 			parameters.addFilterQuery("user_role:" + user_role);
 		// 解析查询关键参数
@@ -654,7 +819,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:一品用户注册统计(按地区)
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -667,7 +831,6 @@ public class TalentController extends BaseController {
 
 	/**
 	 * @Description:获取注册用户(按地区)
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -695,12 +858,21 @@ public class TalentController extends BaseController {
 		String shop_level = getParamFromAodata(aoData, "shop_level");
 		// 地区类型
 		String area_type = getParamFromAodata(aoData, "area_type");
+		// 身份类型
+		String user_role = getParamFromAodata(aoData, "user_role");
 
 		SolrQuery params = new SolrQuery("*:*");
 		params.addFilterQuery("reg_time_date:[" + reg_start + " TO " + reg_end + "]");
 
-		if (!come.equals("全部"))
-			params.addFilterQuery("come:" + come);
+		if (!come.equals("全部")) {
+			if (come.equals("cpm")) {
+				params.addFilterQuery("come:cpm OR come:ztepwk");
+			} else {
+				params.addFilterQuery("come:" + come);
+			}
+		}
+		if (!user_role.equals("全部"))
+			params.addFilterQuery("user_role:" + user_role);
 		if (!indus1.equals("全部"))
 			params.addFilterQuery("indus_ids_str:" + indus1);
 		if (indus2 != null && !indus2.equals(""))

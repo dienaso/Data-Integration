@@ -17,7 +17,7 @@
 			</a>
 			<a href="#" class="current">用户注册统计</a>
 		</div>
-		<h1>用户注册统计(按地区)</h1>
+		<h1>用户注册统计(按日期)</h1>
 	</div>
 
 	<div class="widget-box"></div>
@@ -45,10 +45,10 @@
 					<div class="controls">
 						<select id="user_role">
 							<option>全部</option>
+							<option value="0">未确定</option>
 							<option value="1">威客</option>
 							<option value="2">雇主</option>
 							<option value="3">威客雇主</option>
-							<option value="0">未确定</option>
 						</select>
 					</div>
 					

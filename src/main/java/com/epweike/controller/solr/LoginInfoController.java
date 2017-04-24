@@ -37,44 +37,41 @@ import com.epweike.util.StatUtils;
 public class LoginInfoController extends BaseController {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginInfoController.class);
-	
-	/**  
-	* @Description:一品用户登陆类型统计
-	*  
-	* @author  吴小平
-	* @version 创建时间：2015年6月10日 下午3:13:55
-	*/  
-	@RequestMapping(value = {"stat/type"})
-    public ModelAndView loginTypeStat() throws SolrServerException, IOException {
-		
+
+	/**
+	 * @Description:一品用户登陆类型统计
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:13:55
+	 */
+	@RequestMapping(value = { "stat/type" })
+	public ModelAndView loginTypeStat() throws SolrServerException, IOException {
+
 		SolrQuery params = new SolrQuery("*:*").setFacet(true).addFacetField("login_type");
 		QueryResponse response = SolrUtils.getSolrServer("login").query(params);
 		SolrDocumentList results = response.getResults();
-		
-		//登录类型统计
-		List<FacetField> facetFields = response.getFacetFields(); 
-		
-		//返回视图
+
+		// 登录类型统计
+		List<FacetField> facetFields = response.getFacetFields();
+
+		// 返回视图
 		ModelAndView mv = new ModelAndView("solr/loginInfo/login_type");
-		//总数
+		// 总数
 		mv.addObject("total", results.getNumFound());
-		//柱状图数据
+		// 柱状图数据
 		mv.addObject("barData", StatUtils.barJson(facetFields));
-		//饼状图数据
+		// 饼状图数据
 		mv.addObject("pieData", StatUtils.pieJson(facetFields));
 		logger.info("进入用户注册统计！！！");
-        return mv;
-    }
-	
+		return mv;
+	}
+
 	/**
 	 * @Description:获取一品用户登陆明细
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
 	@RequestMapping(value = "detail/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String getLoginDetail(HttpServletRequest request)
-			throws Exception {
+	public @ResponseBody String getLoginDetail(HttpServletRequest request) throws Exception {
 
 		// 获取查询关键参数
 		String aoData = request.getParameter("aoData");
@@ -103,8 +100,7 @@ public class LoginInfoController extends BaseController {
 
 		if (!uid.equals(""))
 			params.addFilterQuery("uid:" + uid);
-		params.addFilterQuery("on_time_date:[" + startTime + "T00:00:00Z TO "
-				+ endTime + "T23:59:59Z]");
+		params.addFilterQuery("on_time_date:[" + startTime + "T00:00:00Z TO " + endTime + "T23:59:59Z]");
 		params.setStart(pageModel.getiDisplayStart());
 		params.setRows(pageModel.getiDisplayLength());
 		params.setSort("on_time_date", SolrQuery.ORDER.desc);
@@ -126,7 +122,6 @@ public class LoginInfoController extends BaseController {
 
 	/**
 	 * @Description:一品用户登陆明细
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -138,16 +133,14 @@ public class LoginInfoController extends BaseController {
 		logger.info("进入用户登陆明细列表！！！");
 		return mv;
 	}
-	
+
 	/**
 	 * @Description:获取一品用户活跃统计
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年12月11日 下午3:28:27
 	 */
 	@RequestMapping(value = "date/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String getLoginDate(HttpServletRequest request)
-			throws Exception {
+	public @ResponseBody String getLoginDate(HttpServletRequest request) throws Exception {
 
 		// 获取查询关键参数
 		String aoData = request.getParameter("aoData");
@@ -169,11 +162,18 @@ public class LoginInfoController extends BaseController {
 		String loginType = getParamFromAodata(aoData, "loginType");
 
 		SolrQuery parameters = new SolrQuery("*:*").setFacet(true)
-				.addDateRangeFacet("on_time_date", start, end, statType)
-				.setFacetLimit(1000);
-		if (!loginType.equals("全部"))
-			parameters.addFilterQuery("login_type:" + loginType);
-		
+				.addDateRangeFacet("on_time_date", start, end, statType).setFacetLimit(1000);
+		if (!loginType.equals("全部")) {
+			if (loginType.equals("其他")) {
+				parameters.addFilterQuery("NOT login_type:web");
+				parameters.addFilterQuery("NOT login_type:wap");
+				parameters.addFilterQuery("NOT login_type:app");
+			} else {
+				parameters.addFilterQuery("login_type:" + loginType);
+			}
+
+		}
+
 		// 日期根据统计类型截取
 		int endIndex = 10;
 		if (statType.contains("YEAR")) {
@@ -181,18 +181,16 @@ public class LoginInfoController extends BaseController {
 		} else if (statType.contains("MONTH")) {
 			endIndex = 7;
 		}
-		
-		//去重
-		if("1".equals(distinct)){
+
+		// 去重
+		if ("1".equals(distinct)) {
 			parameters.setParam(GroupParams.GROUP_FACET, true);
 			parameters.setParam(GroupParams.GROUP_FIELD, "uid");
 		}
-		QueryResponse response = SolrUtils.getSolrServer("login")
-				.query(parameters);
-		
-		List<Map<String, Object>> list = StatUtils.getFacetRangeList(
-				response.getFacetRanges(), 0, endIndex);
-		
+		QueryResponse response = SolrUtils.getSolrServer("login").query(parameters);
+
+		List<Map<String, Object>> list = StatUtils.getFacetRangeList(response.getFacetRanges(), 0, endIndex);
+
 		// 搜索结果数
 		pageModel.setiTotalDisplayRecords(list.size());
 		pageModel.setiTotalRecords(list.size());
@@ -202,10 +200,54 @@ public class LoginInfoController extends BaseController {
 
 		return json.toString();
 	}
-	
+
+	/**
+	 * @Description:获取一品用户登陆次数统计
+	 * @author 吴小平
+	 * @version 创建时间：2015年12月11日 下午3:28:27
+	 */
+	@RequestMapping(value = "times/get", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getLoginTimes(HttpServletRequest request) throws Exception {
+
+		// 获取查询关键参数
+		String aoData = request.getParameter("aoData");
+		logger.info(aoData);
+		// 解析查询关键参数
+		PageModel<Map<String, Object>> pageModel = parsePageParamFromJson(aoData);
+
+		// 时间
+		String startString = getParamFromAodata(aoData, "start");
+		startString = (!"".equals(startString)) ? startString + "T00:00:00Z" : "*";
+		String endString = getParamFromAodata(aoData, "end");
+		endString = (!"".equals(endString)) ? endString + "T23:59:59Z" : "*";
+
+		// 最少登录数
+		String minCount = getParamFromAodata(aoData, "minCount");
+		// 登陆设备
+		String loginType = getParamFromAodata(aoData, "loginType");
+
+		SolrQuery parameters = new SolrQuery("*:*").setFacet(true).addFacetField("username")
+				.setFacetLimit(Integer.MAX_VALUE).setFacetMinCount(Integer.parseInt(minCount));
+		if (!loginType.equals("全部"))
+			parameters.addFilterQuery("login_type:" + loginType);
+
+		parameters.addFilterQuery("on_time_date:[" + startString + " TO " + endString + "]");
+
+		QueryResponse response = SolrUtils.getSolrServer("login").query(parameters);
+
+		List<Map<String, Object>> list = StatUtils.getFacetList(response.getFacetFields(), "");
+
+		// 搜索结果数
+		pageModel.setiTotalDisplayRecords(list.size());
+		pageModel.setiTotalRecords(list.size());
+		pageModel.setAaData(list);
+		JSONObject json = JSONObject.fromObject(pageModel);
+
+		return json.toString();
+	}
+
 	/**
 	 * @Description:一品用户活跃统计
-	 * 
 	 * @author 吴小平
 	 * @version 创建时间：2015年6月10日 下午3:28:27
 	 */
@@ -215,6 +257,19 @@ public class LoginInfoController extends BaseController {
 		ModelAndView mv = new ModelAndView("solr/loginInfo/login_date");
 		mv.addObject("sourceList", getFacetList("login", "login_type", 10));
 		logger.info("进入用户登陆明细列表！！！");
+		return mv;
+	}
+
+	/**
+	 * @Description:一品用户活跃统计
+	 * @author 吴小平
+	 * @version 创建时间：2015年6月10日 下午3:28:27
+	 */
+	@RequestMapping(value = { "stat/times" })
+	public ModelAndView times() throws SolrServerException, IOException {
+		// 返回视图
+		ModelAndView mv = new ModelAndView("solr/loginInfo/login_times");
+		mv.addObject("sourceList", getFacetList("login", "login_type", 10));
 		return mv;
 	}
 }

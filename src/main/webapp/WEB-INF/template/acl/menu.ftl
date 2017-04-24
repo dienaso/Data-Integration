@@ -75,7 +75,6 @@
 			})
 			
 	});
-	
 	checkMenus($("#role option:selected").val());
 	
 	//角色下拉框事件监听
@@ -89,7 +88,7 @@
 		
 		$.get('/acl/getAceByRole', { 'role' : role})
 			.done(function (d) {
-				for(var i=0; i<d.length; i++){  
+				for(var i=0; i<d.length; i++){
 					if(d[i].hasChild == 0){
 						$('#jstree_menu').jstree('check_node',d[i].id);
 					}
@@ -103,9 +102,8 @@
 		var role = $("#role option:selected").val();
 		//2、获取选中菜单id
 		var menu_ids = $('#jstree_menu').jstree(true).get_bottom_checked();
-		
 		var menu_parent_ids = $('#jstree_menu').jstree(true).get_bottom_checked('full');
-		$.each(menu_parent_ids,function(n,value) {  
+		$.each(menu_parent_ids,function(n,value) {
 			if(value.parent != '0' && menu_ids.indexOf(value.parent) == '-1'){
 				menu_ids = menu_ids + ',' +value.parent
 			} 
